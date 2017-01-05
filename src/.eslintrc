@@ -1,0 +1,13 @@
+{
+    "extends": ["airbnb", "plugin:flowtype/recommended"],
+    "plugins": [
+        "flowtype"
+    ],
+    "rules": {
+        "flow-vars/define-flow-type": 0,
+        "flow-vars/use-flow-type": 0,
+        "import/no-extraneous-dependencies": 0,
+        "eqeqeq": [2, "smart"],
+        "semi": 2
+    }
+}
