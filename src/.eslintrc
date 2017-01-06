@@ -8,6 +8,8 @@
         "flow-vars/use-flow-type": 0,
         "import/no-extraneous-dependencies": 0,
         "eqeqeq": [2, "smart"],
-        "semi": 2
+        "semi": 2,
+        "indent": "off",
+        "arrow-body-style": "off"
     }
 }
