@@ -1,35 +1,35 @@
 {
-  "name": "vivid",
-  "version": "0.0.0",
-  "private": true,
-  "dependencies": {
-    "apollo-client": "^0.6.0",
-    "async": "^1.5.0",
-    "dotenv": "^2.0.0",
-    "keystone": "^0.3.19",
-    "lodash": "^4.13.1",
-    "next": "^1.2.3",
-    "node-sass": "^3.3.2",
-    "node-sass-middleware": "^0.9.7",
-    "react-redux": "^5.0.1",
-    "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "eslint": "^3.12.2",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-config-keystone": "^2.3.1",
-    "eslint-plugin-flowtype": "^2.29.2",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.8.0",
-    "flow-bin": "^0.37.4"
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "cms": "sh dev.sh",
-    "dev": "next ./src",
-    "seed": ""
-  }
+    "name": "vivid",
+    "version": "0.0.0",
+    "private": true,
+    "dependencies": {
+        "apollo-client": "^0.6.0",
+        "async": "^1.5.0",
+        "dotenv": "^2.0.0",
+        "keystone": "^0.3.19",
+        "lodash": "^4.17.4",
+        "next": "^1.2.3",
+        "node-sass": "^3.3.2",
+        "node-sass-middleware": "^0.9.7",
+        "react-redux": "^5.0.1",
+        "redux": "^3.6.0",
+        "redux-thunk": "^2.1.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "^7.1.1",
+        "eslint": "^3.12.2",
+        "eslint-config-airbnb": "^13.0.0",
+        "eslint-config-keystone": "^2.3.1",
+        "eslint-plugin-flowtype": "^2.29.2",
+        "eslint-plugin-import": "^2.2.0",
+        "eslint-plugin-jsx-a11y": "^2.2.3",
+        "eslint-plugin-react": "^6.8.0",
+        "flow-bin": "^0.37.4"
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "cms": "sh dev.sh",
+        "dev": "next ./src",
+        "seed": ""
+    }
 }
