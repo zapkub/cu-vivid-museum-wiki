@@ -6,22 +6,20 @@ const Query = `
 `;
 
 const Mutation = `
-    type Mutation {
-        
-    }
+    
 `;
 
 const Typed = `
     type Image {
         url: String
-        width: Number
-        height: Number
+        width: Int
+        height: Int
     }
     
     type Herbarium {
-        cuid: Int
+        cuid: String
         name: String
-        blockNo: Number
+        blockNo: Int
         slotNo: String
         images: [Image]
     }
@@ -31,7 +29,6 @@ const Typed = `
 const Schema = `
     schema {
         query: Query
-        mutation: Mutation
     }
 `;
 
