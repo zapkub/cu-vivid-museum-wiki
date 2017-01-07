@@ -1,35 +1,49 @@
-var keystone = require('keystone');
-var Types = keystone.Field.Types;
+let keystone = require('keystone');
+let Types = keystone.Field.Types;
 
 /**
  * Gallery Model
  * =============
  */
 
-var Gallery = new keystone.List('Garden', {
+let Gallery = new keystone.List('Garden', {
 	autokey: { from: 'name', path: 'key', unique: true },
 });
 
-Gallery.add({
+export const dataField = {
 	name: { type: String, required: true },
-	publishedDate: { type: Date, default: Date.now },
-	heroImage: { type: Types.CloudinaryImage },
-	images: { type: Types.CloudinaryImages },
-	cuid: { type: String },
-	blockNo: { type: Number },
-	slotNo: { type: String },
-	scientificName: { type: String },
 	localName: { type: String },
 	otherName: { type: String },
-	duplicateAmount: { type: Number, default: 0 },
-	family: { type: String },
-	collector_en: { type: String },
-	collector_th: { type: String },
-	locationName: { type: String },
-	habit: { type: String },
-	altitude: { type: String },
-	date: { type: Date },
-	note: { type: String },
-});
+	scientificName: { type: String },
+	synonym: { type: String },
+	family: { type: String, label: 'Family' },
+	new_family: { type: String, label: 'Family (ใหม่)' },
+	type: { type: String, label: 'ประเภท' },
+	locationName: { type: String, label: 'สถานที่' },
+	display: { type: Types.Select, options: 'Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
+	recipe: { type: String, label: 'วิธีการได้มา' },
+	property: { type: String },
+	localProperty: { type: String, label: 'สรรพคุณพื้นบ้าน' },
+	minorBenefit: { type: String, label: 'สรรพคุณประโยชน์อื่นๆ' },
+	anatomy: { type: Types.TextArray, label: 'ลักษณะทางวิทยาศาสตร์' },
+	toxicDetail: { type: String, label: 'ความเป็นพิษ' },
+	adr: { type: String },
+
+	caution: { type: String, label: 'ข้อห้ามใช้' },
+	warning: { type: String, label: 'ข้อควรระวังอื่น' },
+	images: { type: Types.CloudinaryImages },
+
+	characteristic: { type: String, label: 'ความแตกต่างของพืชสมุนไพร'},
+
+	chem_structure: { type: String, label: 'ส่วนประกอบทางเคมี' },
+	prod_dev: { type: String, label: 'Product Development' },
+	slotNo: { type: String, label: 'Museum location' },
+	herbarium_location: { type: String, label: 'Herbarium location' },
+	donor: { type: String, label: 'Donor' },
+
+};
+
+
+Gallery.add(dataField);
 
 Gallery.register();

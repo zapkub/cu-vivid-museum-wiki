@@ -21,6 +21,17 @@ const Typed = `
         name: String
         blockNo: Int
         slotNo: String
+        scientificName: String
+        collector_en: String
+        collector_th: String
+        altitude: String
+        date: String 
+        family: String
+        locationName: String
+        otherName: String
+        duplicateAmount: Int
+        habit: String
+        note: String
         images: [Image]
     }
 `;

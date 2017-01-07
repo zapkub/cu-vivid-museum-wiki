@@ -2,8 +2,10 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate';
 
+
 const HerbariumSchema = new mongoose.Schema({
     cuid: String,
+    key: String,
     name: String,
     blockNo: Number,
     slotNo: String,

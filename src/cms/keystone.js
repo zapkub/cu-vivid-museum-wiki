@@ -44,7 +44,7 @@ keystone.set('routes', require('./routes'));
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
 	posts: ['posts', 'post-categories'],
-	Herbium: 'galleries',
+	category: ['herbaria', 'gardens', 'museums'],
 	users: 'users',
 });
 

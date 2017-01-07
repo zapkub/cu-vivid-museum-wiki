@@ -8,7 +8,7 @@ block content
 	.container
 		if galleries.length
 			each gallery in galleries
-				h2= gallery.name
+				h2= gallery.cuid
 					if gallery.publishedDate
 						.pull-right.text-muted= gallery._.publishedDate.format('Do MMM YYYY')
 				

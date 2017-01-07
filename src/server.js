@@ -4,12 +4,18 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import express from 'express';
 import mongoose from 'mongoose';
-
+import path from 'path';
+import Logdown from 'logdown';
 import Schema from './schema';
 import resolvers from './resolvers';
 
 
-mongoose.connect('mongodb://localhost/cms');
+const logger = new Logdown({ prefix: 'core' });
+
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
+
+logger.info(`connect to db ${process.env.MONGO_URL}`);
+mongoose.connect(process.env.MONGO_URL);
 
 const app = express();
 
@@ -21,13 +27,13 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({
     }),
 }));
 
-
-
 app.listen(1337, () => {
-    console.log('API Start');
+    logger.info('API Start');
 });
 
 
+
+// NextJS next version will support this
 // const next = require('next');
 
 // const dev = process.env.NODE_ENV !== 'production';

@@ -6,20 +6,20 @@ let Types = keystone.Field.Types;
  * =============
  */
 
-let Gallery = new keystone.List('Gallery', {
-	autokey: { from: 'name', path: 'key', unique: true },
+let Gallery = new keystone.List('Herbarium', {
+	autokey: { from: 'name', path: 'key' },
+	defaultSort: '-cuid',
 });
 
 Gallery.add({
+	cuid: { type: String },
 	name: { type: String, required: true },
 	publishedDate: { type: Date, default: Date.now },
-	heroImage: { type: Types.CloudinaryImage },
 	images: { type: Types.CloudinaryImages },
-	cuid: { type: String },
+
 	blockNo: { type: Number },
 	slotNo: { type: String },
 	scientificName: { type: String },
-	localName: { type: String },
 	otherName: { type: String },
 	duplicateAmount: { type: Number, default: 0 },
 	family: { type: String },
