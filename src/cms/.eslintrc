@@ -1,7 +1,0 @@
-{
-    "extends": "keystone",
-    "rules": {
-        "no-mixed-spaces-and-tabs": "off",
-        "on-tabs": "off"
-    }
-}

@@ -1,19 +1,20 @@
 let keystone = require('keystone');
-let Types = keystone.Field.Types;
+
+const Types = keystone.Field.Types;
 
 /**
  * Gallery Model
  * =============
  */
 
-let Gallery = new keystone.List('Garden', {
+const Gallery = new keystone.List('Garden', {
 	autokey: { from: 'name', path: 'key', unique: true },
 });
 
-export const dataField = {
+const dataField = {
 	name: { type: String, required: true },
 	localName: { type: String },
-	otherName: { type: String },
+	otherName: { type: Types.TextArray },
 	scientificName: { type: String },
 	synonym: { type: String },
 	family: { type: String, label: 'Family' },
@@ -33,7 +34,7 @@ export const dataField = {
 	warning: { type: String, label: 'ข้อควรระวังอื่น' },
 	images: { type: Types.CloudinaryImages },
 
-	characteristic: { type: String, label: 'ความแตกต่างของพืชสมุนไพร'},
+	characteristic: { type: String, label: 'ความแตกต่างของพืชสมุนไพร' },
 
 	chem_structure: { type: String, label: 'ส่วนประกอบทางเคมี' },
 	prod_dev: { type: String, label: 'Product Development' },

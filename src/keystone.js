@@ -1,32 +1,38 @@
 // Simulate config options from your production environment by
 // customising the .env file in your project's root folder.
-require('dotenv').config();
+
+
+
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // Require keystone
-var keystone = require('keystone');
+const keystone = require('keystone');
 
 // Initialise Keystone with your project's configuration.
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
 
 keystone.init({
-	'name': 'cms',
-	'brand': 'cms',
-
-	'sass': 'public',
-	'static': 'public',
-	'favicon': 'public/favicon.ico',
-	'views': 'templates/views',
+	name: 'cms',
+	brand: 'cms',
+	sass: 'cms/public',
+	static: 'cms/public',
+	favicon: 'cms/public/favicon.ico',
+	views: 'cms/templates/views',
 	'view engine': 'jade',
-	'port': 3001,
+	port: 3001,
+	updates: 'cms/updates',
 	'auto update': true,
-	'session': true,
-	'auth': true,
+	session: true,
+	auth: true,
 	'user model': 'User',
 });
 
 // Load your project's Models
 keystone.import('models');
+
 
 // Setup common locals for your templates. The following are required for the
 // bundled templates and layouts. Any runtime locals (that should be set uniquely
@@ -39,7 +45,7 @@ keystone.set('locals', {
 });
 
 // Load your project's Routes
-keystone.set('routes', require('./routes'));
+keystone.set('routes', require('./cms/routes'));
 
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
@@ -49,5 +55,5 @@ keystone.set('nav', {
 });
 
 // Start Keystone to connect to your database and initialise the web server
-
+require('./server.js');
 keystone.start();

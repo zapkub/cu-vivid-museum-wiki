@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-cd ./src/cms
-node keystone
+cd ./src
+babel-node keystone

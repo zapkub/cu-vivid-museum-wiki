@@ -47,10 +47,9 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "cms": "sh dev.sh",
-        "dev": "next ./src",
+        "server": "nodemon --exec npm run babel-node -- src/keystone.js",
+        "start": "next ./src",
         "babel-node": "babel-node ",
-        "server": "nodemon --exec npm run babel-node -- src/server.js",
         "seed": "babel-node ./seed"
     }
 }

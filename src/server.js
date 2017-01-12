@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import express from 'express';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 import path from 'path';
 import Logdown from 'logdown';
 import Schema from './schema';
@@ -14,8 +14,8 @@ const logger = new Logdown({ prefix: 'core' });
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-logger.info(`connect to db ${process.env.MONGO_URL}`);
-mongoose.connect(process.env.MONGO_URL);
+// logger.info(`connect to db ${process.env.MONGO_URL}`);
+// mongoose.connect(process.env.MONGO_URL);
 
 const app = express();
 

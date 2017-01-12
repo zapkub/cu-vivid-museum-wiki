@@ -1,7 +1,7 @@
 
 const Query = `
     type Query {
-        getHerbariums(page: Int, limit: Int): [Herbarium]
+        getHerbariums(page: Int, limit: Int): Herbariums
     }
 `;
 
@@ -15,7 +15,7 @@ const Typed = `
         width: Int
         height: Int
     }
-    
+
     type Herbarium {
         cuid: String
         name: String
@@ -33,6 +33,13 @@ const Typed = `
         habit: String
         note: String
         images: [Image]
+    }
+
+    type Herbariums {
+        results: [Herbarium]
+        total: Int
+        currentPage: Int
+        totalPages: Int
     }
 `;
 

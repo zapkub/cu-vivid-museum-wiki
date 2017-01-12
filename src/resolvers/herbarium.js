@@ -1,15 +1,11 @@
-import Herbarium from '../models/herbarium';
+// @flow
+import Herbarium from '../models/Herbarium';
 
 export default {
     Query: {
-        async getHerbariums(_, args, context) {
-            const result = await Herbarium.paginate({}, {
-                page: args.page || 0,
-                limit: args.limit || 10,
-            });
-            return result.docs.map(
-                item => item.toObject(),
-            );
+        async getHerbariums(_: any, args: { page: number; limit: number }) {
+            const query = await Herbarium.getLatestByPage(args);
+            return query;
         },
     },
 };
