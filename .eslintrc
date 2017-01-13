@@ -12,6 +12,9 @@
         "indent": "off",
         "no-tabs": "off",
         "arrow-body-style": "off",
-        "react/jsx-filename-extension": "off"
+        "react/jsx-filename-extension": "off",
+        "react/jsx-indent": [0, 5],
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-indent-props": "off"
     }
 }

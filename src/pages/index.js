@@ -1,4 +1,46 @@
 // @flow
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import gql from 'graphql-tag';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import connectLayout from './../components/HOC/Layout';
+import Landing from './../components/Landing';
 
-export default (props: string) => <div>Hello world!!</div>;
+
+
+const query = gql`
+    query{
+        getHerbariums(page: 1) {
+            total
+            currentPage
+            totalPages,
+            results {
+            cuid
+            name
+            blockNo
+            slotNo
+            scientificName
+            collector_en
+            collector_th
+            altitude
+            date
+            family
+            locationName
+            otherName
+            duplicateAmount
+            habit
+            note
+            }
+        }
+    }
+`;
+
+const IndexPage = compose(
+    graphql(query, {
+        name: 'Lists',
+    }),
+    connect((store) => store.searchbar)
+)(Landing);
+
+export default connectLayout(IndexPage);
