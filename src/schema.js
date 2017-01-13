@@ -2,6 +2,9 @@
 const Query = `
     type Query {
         getHerbariums(page: Int, limit: Int): Herbariums
+
+        categoryList: [CategoryItem]
+        searchItem(text: String, categories: [String]): SearchPayload
     }
 `;
 
@@ -40,6 +43,28 @@ const Typed = `
         total: Int
         currentPage: Int
         totalPages: Int
+         
+    }
+
+
+    # Searching
+    type CategoryItem {
+        name: String
+        value: String
+    }
+    type SearchResultItem {
+        cuid: String
+        name: String
+        blockNo: Int
+        slotNo: String
+        scientificName: String
+        family: String
+    }
+    type SearchPayload {
+        results: [SearchResultItem]
+        total: Int
+        totalPages: Int
+        currentPage: Int
     }
 `;
 

@@ -16,7 +16,7 @@ export default {
         CATEGORY_LIST: [
             {
                 name: 'All',
-                value: 'all',
+                value: 'ALL',
             },
             {
                 name: 'Museum',
