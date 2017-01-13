@@ -1,18 +1,47 @@
 // @flow
 import React from 'react';
-import SearchDialog from './SearchDialog';
 import Link from 'next/link';
+import ResultList from './ResultList';
+import SearchDialog from './SearchDialog';
 
-export default () => (
-    <div className="container">
-        <div className="search-wrap" >
-            <SearchDialog currentCategoryIndexes={[0]} />
-        </div>
-        <Link href="/result"> Result </Link>
-        <style jsx>
-            {
-                `
+type LandingPropsType = {
+    Results: {
+        loading: boolean;
+        getHerbariums: {
+            results: any[];
+            totalPages: number;
+            currentPage: number;
+            total: number;
+        }
+    },
+}
+export default (props: LandingPropsType) => {
+
+    return (
+        <div className="container">
+            <div className="background-wrap">
+                <div className="search-wrap" >
+                    <SearchDialog currentCategoryIndexes={[0]} />
+                </div>
+            </div>
+            <h2>{'ข้อมูลล่าสุด'}</h2>
+            <div>
+                {
+                    props.Results.loading ? 'Loading...' :
+                        <ResultList results={props.Results.getHerbariums ? props.Results.getHerbariums.results : []} />
+                }
+            </div>
+            <Link href="/result"> Result </Link>
+            <style jsx>
+                {
+                    `
                 .container {
+                    
+                }
+                h2 {
+                    text-align: center;
+                } 
+                .background-wrap {
                     margin-top: -80px;
                     padding-top: 80px;
                     background: url('./../static/images/landing-image.jpg') center center / cover
@@ -25,7 +54,8 @@ export default () => (
                     justify-content: center;
                 }
            `
-            }
-        </style>
-    </div>
-);
+                }
+            </style>
+        </div>
+    );
+}

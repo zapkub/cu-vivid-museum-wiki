@@ -5,6 +5,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import express from 'express';
 // import mongoose from 'mongoose';
 import path from 'path';
+import cors from 'cors';
 import Logdown from 'logdown';
 import Schema from './schema';
 import resolvers from './resolvers';
@@ -18,6 +19,8 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 // mongoose.connect(process.env.MONGO_URL);
 
 const app = express();
+
+app.use(cors());
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 app.use('/graphql', bodyParser.json(), graphqlExpress({

@@ -8,29 +8,28 @@ import connectLayout from './../components/HOC/Layout';
 import Landing from './../components/Landing';
 
 
-
 const query = gql`
     query{
-        getHerbariums(page: 1) {
+        getHerbariums(page: 2) {
             total
             currentPage
             totalPages,
             results {
-            cuid
-            name
-            blockNo
-            slotNo
-            scientificName
-            collector_en
-            collector_th
-            altitude
-            date
-            family
-            locationName
-            otherName
-            duplicateAmount
-            habit
-            note
+                cuid
+                name
+                blockNo
+                slotNo
+                scientificName
+                collector_en
+                collector_th
+                altitude
+                date
+                family
+                locationName
+                otherName
+                duplicateAmount
+                habit
+                note
             }
         }
     }
@@ -38,9 +37,9 @@ const query = gql`
 
 const IndexPage = compose(
     graphql(query, {
-        name: 'Lists',
+        name: 'Results',
     }),
-    connect((store) => store.searchbar)
+    connect(store => store.searchbar),
 )(Landing);
 
 export default connectLayout(IndexPage);
