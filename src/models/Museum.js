@@ -7,7 +7,7 @@ var Types = keystone.Field.Types;
  */
 
 var Gallery = new keystone.List('Museum', {
-	autokey: { from: 'name', path: 'key', unique: true },
+	autokey: { from: 'name', path: 'key' },
 });
 
 Gallery.add({
