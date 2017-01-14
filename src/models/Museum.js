@@ -8,6 +8,7 @@ var Types = keystone.Field.Types;
 
 var Gallery = new keystone.List('Museum', {
 	autokey: { from: 'name', path: 'key' },
+	defaultSort: '-cuid',
 });
 
 Gallery.add({

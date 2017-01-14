@@ -8,7 +8,8 @@ const Types = keystone.Field.Types;
  */
 
 const Gallery = new keystone.List('Garden', {
-	autokey: { from: 'name' },
+	autokey: { from: 'name', path: 'key' },
+	defaultSort: '-cuid',
 });
 
 const dataField = {

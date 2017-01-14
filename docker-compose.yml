@@ -1,5 +1,14 @@
+nginx:
+  image: nginx
+  volumes: 
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  ports:
+    - "80:80"
+  links:
+    - cems-museum:web
+
 mongo:
-  image: mongo:3.0.8 # ref. https://github.com/ParsePlatform/parse-server/issues/1913
+  image: mongo:3.0.8 
   ports:
     - "27017:27017"
 
