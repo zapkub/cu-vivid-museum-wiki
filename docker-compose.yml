@@ -1,9 +1,10 @@
+
 cems-museum:
     image: museum
     ports:
         - "3000:3000"
     environment: 
-        MONGO_URL: "mongodb"
+        MONGO_URI: "mongo"
     links:
         - mongo
 mongo:

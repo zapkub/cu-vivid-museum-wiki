@@ -18,8 +18,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src', dev });
 const handle = app.getRequestHandler();
 
-
 const logger = new Logdown({ prefix: 'core' });
+logger.info(`start server db => ${process.env.MONGO_URI}`);
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -35,9 +35,10 @@ app.prepare()
             }),
         }));
 
-
+        // Start keystone server
         keystone(server).start();
-        
+
+        // fallback to next
         server.get('*', (req, res) => {
             return handle(req, res);
         });

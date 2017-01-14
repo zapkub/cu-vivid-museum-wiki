@@ -1,7 +1,15 @@
 {
     "presets": [
         "es2015",
-        "react"
+        "react",
+        "stage-0"
     ],
-    "plugins": ["transform-flow-strip-types", "syntax-async-functions", "transform-regenerator"]
+    "plugins": [
+        "transform-flow-strip-types",
+        "syntax-async-functions",
+        "transform-regenerator", ["transform-runtime", {
+            "polyfill": false,
+            "regenerator": true
+        }]
+    ]
 }

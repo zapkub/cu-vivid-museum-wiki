@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/pages/result.js"],"names":[],"mappings":";;;;;;AAAA;;;;;;kBAEe;AAAA,WACX;AAAA;AAAA;AAAA;AAEI;AAAA;AAAA,cAAM,MAAK,GAAX;AAAA;AAAA;AAFJ,KADW;AAAA,C","file":"result.js","sourcesContent":["import Link from 'next/link';\n\nexport default () => (\n    <div>\n        Result\n        <Link href=\"/\"> Back </Link>\n    </div>\n)"]}

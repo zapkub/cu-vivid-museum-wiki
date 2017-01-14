@@ -11,8 +11,8 @@ const herbariumSheet = XLSX.parse(path.join(__dirname, './Herbarium.xlsx'));
 const gardenSheet = XLSX.parse(path.join(__dirname, './Garden.xls'));
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
-logger.info(`connect to db ${process.env.MONGO_URL}`);
-mongoose.connect(process.env.MONGO_URL);
+logger.info(`connect to db ${process.env.MONGO_URI}`);
+mongoose.connect(`mongodb://${process.env.MONGO_URI}/cms`);
 
 /**
  * Backup DB before re-seeding
@@ -129,3 +129,5 @@ Herbarium.collection.insert(herbs, (err, docs) => {
     if (err) logger.error(err);
     logger.info('done');
 });
+
+
