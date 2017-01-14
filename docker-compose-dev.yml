@@ -1,0 +1,15 @@
+
+cems-museum:
+    image: museum
+    ports:
+        - "3000:3000"
+    environment: 
+        MONGO_URI: "mongo"
+    links:
+        - mongo
+    volumes:
+        - ./build:/app/build
+mongo:
+  image: mongo:3.0.8 # ref. https://github.com/ParsePlatform/parse-server/issues/1913
+  ports:
+    - "27017:27017"
