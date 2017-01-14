@@ -12,7 +12,7 @@ import Footer from '../common/Footer';
 import configureStore from '../../store/configStore';
 
 const client = new ApolloClient({
-    networkInterface: createNetworkInterface({ uri: 'http://localhost:1337/graphql' }),
+    // networkInterface: createNetworkInterface(),
 });
 
 // export default ({ req, children, title = 'This is the default title' }) =>

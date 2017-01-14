@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-cd ./src
-babel-node keystone
+
+MONGO_URI=mongodb://localhost/cms npm run dev

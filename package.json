@@ -29,8 +29,6 @@
         "mongoose": "^4.7.6",
         "mongoose-paginate": "^5.0.3",
         "next": "^2.0.0-beta",
-        "node-sass": "^3.3.2",
-        "node-sass-middleware": "^0.9.7",
         "node-xlsx": "^0.7.4",
         "react": "^15.4.2",
         "react-apollo": "^0.8.1",
@@ -40,7 +38,9 @@
         "redux-actions": "^1.2.0",
         "redux-logger": "^2.7.4",
         "redux-promise-middleware": "^4.2.0",
-        "redux-thunk": "^2.1.0"
+        "redux-thunk": "^2.1.0",
+        "node-sass": "^3.3.2",
+        "node-sass-middleware": "^0.9.7"
     },
     "devDependencies": {
         "@kadira/react-storybook-addon-info": "^3.3.0",
@@ -58,7 +58,11 @@
     "scripts": {
         "lint": "eslint .",
         "server": "nodemon --exec npm run babel-node -- src/keystone.js",
-        "start": "next ./src",
+        "dev": "babel-node ./src/server.js",
+        "build": "next build ./src",
+        "clean": "rm -rf build && mkdir build",
+        "build-server": "babel -d ./build ./src -s",
+        "start": "PRODUCTION=true babel-node ./src/server.js",
         "storybook": "start-storybook -p 9001 -c .storybook",
         "babel-node": "babel-node ",
         "seed": "babel-node ./seed"

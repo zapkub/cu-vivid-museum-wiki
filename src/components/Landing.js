@@ -21,7 +21,7 @@ export default (props: LandingPropsType) => {
         <div className="container">
             <div className="background-wrap">
                 <div className="search-wrap" >
-                    <SearchDialog currentCategoryIndexes={[0]} />
+                    <SearchDialog currentCategoryIndexes={[]} />
                 </div>
             </div>
             <h2>{'ข้อมูลล่าสุด'}</h2>

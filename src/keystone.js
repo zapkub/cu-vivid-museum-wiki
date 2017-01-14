@@ -22,7 +22,8 @@ keystone.init({
 	favicon: 'cms/public/favicon.ico',
 	views: 'cms/templates/views',
 	'view engine': 'jade',
-	port: 3001,
+	mongo: process.env.MONGO_URI,
+	port: 3000,
 	updates: 'cms/updates',
 	'auto update': true,
 	session: true,
@@ -37,6 +38,8 @@ keystone.import('models');
 // Setup common locals for your templates. The following are required for the
 // bundled templates and layouts. Any runtime locals (that should be set uniquely
 // for each request) should be added to ./routes/middleware.js
+
+
 keystone.set('locals', {
 	_: require('lodash'),
 	env: keystone.get('env'),
@@ -54,6 +57,7 @@ keystone.set('nav', {
 	users: 'users',
 });
 
-// Start Keystone to connect to your database and initialise the web server
-require('./server.js');
-keystone.start();
+export default (app) => {
+	keystone.app = app;
+	return keystone;
+};
