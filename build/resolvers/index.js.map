@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/resolvers/index.js"],"names":[],"mappings":";;;;;;AAAA;;AACA;;;;AACA;;;;;;kBAEe,yD","file":"index.js","sourcesContent":["import { merge } from 'lodash';\nimport HerbariumResolver from './herbarium';\nimport SearchResolver from './search';\n\nexport default merge(HerbariumResolver, SearchResolver);\n"]}

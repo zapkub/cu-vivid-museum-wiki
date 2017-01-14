@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/reducers/index.js"],"names":["searchbar"],"mappings":";;;;;;AAAA;;;;;;kBAEe;AACXA;AADW,C","file":"index.js","sourcesContent":["import searchbar from './searchbar';\n\nexport default {\n    searchbar,\n};\n"]}
