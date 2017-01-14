@@ -8,8 +8,11 @@ cems-museum:
     links:
         - mongo
     volumes:
-        - ./build:/app/build
+        - .:/app/build
+
 mongo:
-  image: mongo:3.0.8 # ref. https://github.com/ParsePlatform/parse-server/issues/1913
+  image: mongo:3.0.8
   ports:
     - "27017:27017"
+  volumes: 
+    - ./db/:/data/db

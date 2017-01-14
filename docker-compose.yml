@@ -9,8 +9,17 @@ nginx:
 
 mongo:
   image: mongo:3.0.8 
+  volumes_from:
+    - mongo-data
   ports:
     - "27017:27017"
+  command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
+
+mongo-data:
+  image: mongo
+  volumes:
+    - ./db/:/data/db
+  command: "--break-mongo" # break mongod command and use it as data-volume-container
 
 cems-museum:
     image: museum
@@ -20,4 +29,3 @@ cems-museum:
         MONGO_URI: "mongo"
     links:
         - mongo
-
