@@ -1,18 +1,15 @@
-
-cems-museum:
-    image: museum
-    ports:
-        - "3000:3000"
-    environment: 
-        MONGO_URI: "mongo"
-    links:
-        - mongo
-    volumes:
-        - .:/app/build
-
+# run only DB
 mongo:
-  image: mongo:3.0.8
+  image: mongo:3.0.8 
+  volumes_from:
+    - mongo-data
   ports:
     - "27017:27017"
-  volumes: 
+  command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
+
+mongo-data:
+  image: mongo
+  volumes:
     - ./db/:/data/db
+  command: "--break-mongo" # break mongod command and use it as data-volume-container
+

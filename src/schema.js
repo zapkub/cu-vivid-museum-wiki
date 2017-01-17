@@ -1,7 +1,10 @@
 
 const Query = `
     type Query {
-        getHerbariums(page: Int, limit: Int): Herbariums
+        queryHerbariums(page: Int, limit: Int): Herbariums
+
+
+        queryGardens(page: Int, limit: Int): Gardens
 
         categoryList: [CategoryItem]
         searchItem(text: String, categories: [String]): SearchPayload
@@ -37,13 +40,43 @@ const Typed = `
         note: String
         images: [Image]
     }
-
+    type Garden {
+        cuid: String
+        localName: String
+        otherName: [String]
+        scientificName: String
+        synonym: String
+        family: String
+        type: String
+        locationName: String
+        display: String
+        recipe: String
+        property: String
+        localProperty: String 
+        minorBenefit: String 
+        anatomy: String
+        toxicDetail: String
+        adr: String
+        caution: String
+        warning: String
+        images: [Image]
+        characteristic: String 
+        chem_structure: String
+        prod_dev: String
+        slotNo: String
+        donor: String
+    }
+    type Gardens {
+        results: [Garden]
+        total: Int
+        currentPage: Int
+        totalPages: Int
+    }
     type Herbariums {
         results: [Herbarium]
         total: Int
         currentPage: Int
-        totalPages: Int
-         
+        totalPages: Int   
     }
 
 

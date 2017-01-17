@@ -31,6 +31,9 @@ Gallery.add({
 	altitude: { type: String },
 	date: { type: Date },
 	note: { type: String },
+
+
+
 });
 
 Gallery.getLatestByPage = (args) => {

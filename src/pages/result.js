@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default () => (
     <div>
-        Result
+        Results
         <Link href="/"> Back </Link>
     </div>
-)
+);

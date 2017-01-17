@@ -18,6 +18,7 @@ keystone.init({
 	name: 'cms',
 	brand: 'cms',
 	sass: 'cms/public',
+	// app,
 	static: 'cms/public',
 	favicon: 'cms/public/favicon.ico',
 	views: 'cms/templates/views',
@@ -59,6 +60,8 @@ keystone.set('nav', {
 });
 
 export default (app) => {
+
 	keystone.app = app;
+
 	return keystone;
 };

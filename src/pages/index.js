@@ -10,7 +10,7 @@ import Landing from './../components/Landing';
 
 const query = gql`
     query{
-        getHerbariums(page: 2) {
+        queryHerbariums(page: 2) {
             total
             currentPage
             totalPages,

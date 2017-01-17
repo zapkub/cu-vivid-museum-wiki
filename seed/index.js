@@ -13,7 +13,8 @@ const gardenSheet = XLSX.parse(path.join(__dirname, './Garden.xls'));
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 logger.info(`connect to db ${process.env.MONGO_URI}`);
 mongoose.connect(`mongodb://${process.env.MONGO_URI}/cms`);
-
+const plantSchema = new mongoose.Schema({}, { strict: false});
+const Plant = mongoose.model('Plant', gardenSchema);
 /**
  * Backup DB before re-seeding
  * data from excel
@@ -56,6 +57,7 @@ function parseDate(str) {
 
 function letterToColumns(input) { return input.charCodeAt(0) - 65; }
 
+
 const gardens = gardenSheet[0].data
     .filter((item, i) => i > 0)
     .map(
@@ -92,42 +94,43 @@ const gardens = gardenSheet[0].data
         }
     });
 
-const gardenSchema = new mongoose.Schema({}, { strict: false});
-const Garden = mongoose.model('Garden', gardenSchema);
-
-Garden.collection.insert(gardens, (err, docs) => {
-    if (err) logger.error(err);
-    logger.info('done');
-});
 
 const herbs = herbariumSheet[0].data.filter((item, i) => i > 0).map(
     (columns, index) => {
         return {
-            cuid: columns[0],
-            name: columns[5],
-            blockNo: columns[1],
-            slotNo: columns[2],
-            labelNo: columns[3],
-            scientificName: columns[4],
-            collector_th: columns[10],
-            collector_en: columns[9],
-
-            duplicateAmount: columns[7],
-            family: columns[8],
-            locationName: columns[12],
-            habit: columns[13],
-            altitue: columns[14],
-            date: parseDate(columns[15]),
-            note: columns[16],
+            cuid: columns[letterToColumns('A')],
+            name: columns[letterToColumns('B')],
+            localName: columns[letterToColumns('F')],
+            otherName: columns[letterToColumns('G')] ? columns[letterToColumns('D')].split(';') : [],
+            duplicateAmount: columns[letterToColumns('H')],
+            scientificName: columns[letterToColumns('E')],
+            family: columns[letterToColumns('I')],
+            locationName: columns[letterToColumns('M')],
+            display: columns[letterToColumns('K')],
+            habit: columns[letterToColumns('N')],
+            altitude: columns[letterToColumns('O')],
+            collector_en: columns[letterToColumns('J')],
+            collector_th: columns[letterToColumns('K')],
+            collector_no: columns[letterToColumns('L')],
+            note: columns[letterToColumns('Q')],
+            blockNo: columns[letterToColumns('B')],
+            slotNo: columns[letterToColumns('C')],
+            collection: 'Herbarium'
         }
     }
 );
 
-const herbSchema = new mongoose.Schema({}, { strict: false});
-const Herbarium = mongoose.model('Herbarium', herbSchema);
-Herbarium.collection.insert(herbs, (err, docs) => {
+// const herbSchema = new mongoose.Schema({}, { strict: false});
+// const Herbarium = mongoose.model('Herbarium', herbSchema);
+// Herbarium.collection.insert(herbs, (err, docs) => {
+//     if (err) logger.error(err);
+//     logger.info('done');
+// });
+
+
+
+
+Plant.collection.insert(gardens, (err, docs) => {
     if (err) logger.error(err);
     logger.info('done');
 });
-
-

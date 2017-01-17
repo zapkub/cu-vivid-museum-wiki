@@ -31,8 +31,10 @@ export default (props: PropsType) => (
                             }
                             className="category-item"
                             key={i}
-                        >
-                            <i className={`fa ${!props.currentCategoryIndexes.indexOf(i) ? 'fa-check-square-o' : 'fa-square-o'}`} />
+                            >
+                            <i
+                                className={`fa ${!props.currentCategoryIndexes.indexOf(i) ? 'fa-check-square-o' : 'fa-square-o'}`}
+                                />
                             {item.name}
                         </div>
                     ),

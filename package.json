@@ -21,10 +21,11 @@
         "graphql-server-express": "^0.4.3",
         "graphql-tag": "^1.2.2",
         "graphql-tools": "^0.9.0",
-        "keystone": "^0.3.19",
+        "keystone": "v0.3.19",
         "lodash": "^4.17.4",
         "logdown": "^1.4.5",
         "moment": "^2.17.1",
+        "mongodb": "2.2.19",
         "mongodb-backup": "^1.6.9",
         "mongodb-restore": "^1.6.2",
         "mongoose": "^4.7.6",
@@ -59,14 +60,14 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "server": "nodemon --exec npm run babel-node -- src/keystone.js",
-        "dev": "babel-node ./src/server.js",
+        "dev": "nodemon --exec yarn run babel-node -- ./src/server.js",
         "build": "next build ./src ",
         "clean": "rm -rf build && mkdir build",
         "build-server": "babel -d ./build ./src -s",
         "start": "node ./build/server.js --production",
         "storybook": "start-storybook -p 9001 -c .storybook",
         "babel-node": "babel-node ",
-        "seed": "babel-node ./seed"
+        "seed": "babel-node ./seed",
+        "cms-only": "nodemon --exec npm run babel-node -- src/keystone.js"
     }
 }
