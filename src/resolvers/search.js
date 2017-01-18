@@ -1,7 +1,7 @@
 // @flow
 import __ from 'lodash';
-import Herbarium from '../models/Herbarium';
-import Garden from '../models/Garden';
+import Herbarium from '../models/Plant';
+import Garden from '../models/Plant';
 import Constants from './../constant';
 
 export default {

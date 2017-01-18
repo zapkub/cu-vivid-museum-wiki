@@ -7,7 +7,7 @@ import SearchDialog from './SearchDialog';
 type LandingPropsType = {
     Results: {
         loading: boolean;
-        getHerbariums: {
+        queryHerbariums: {
             results: any[];
             totalPages: number;
             currentPage: number;
@@ -28,7 +28,7 @@ export default (props: LandingPropsType) => {
             <div>
                 {
                     props.Results.loading ? 'Loading...' :
-                        <ResultList results={props.Results.getHerbariums ? props.Results.getHerbariums.results : []} />
+                        <ResultList results={props.Results.queryHerbariums ? props.Results.queryHerbariums.results : []} />
                 }
             </div>
             <Link href="/result"> Result </Link>

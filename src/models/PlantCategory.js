@@ -10,7 +10,7 @@ var PlantCategory = new keystone.List('PlantCategory', {
 });
 
 PlantCategory.add({
-	name: { type: String, required: true },
+	name: { type: String, required: true, unique: true },
 });
 
 PlantCategory.relationship({ ref: 'Plant', path: 'category' });

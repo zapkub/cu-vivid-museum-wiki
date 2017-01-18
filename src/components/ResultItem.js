@@ -27,10 +27,10 @@ export default (props: ResultItemProps) => (
                 </div>
                 <div className="footer">
                     <div>
-                        {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo}</span>
+                        {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo || 'ไม่ระบุ'}</span>
                     </div>
                     <div>
-                        <span>{`เลขรหัส : `}</span>{props.cuid}
+                        <span>{`เลขรหัส : `}</span>{props.cuid || 'ไม่ระบุ'}
                     </div>
                 </div>
             </div>
@@ -50,14 +50,14 @@ export default (props: ResultItemProps) => (
                     padding: 10px;
                 }
                 .thumbnail {
-                    width: 150px;
                     height: 130px;
                     padding-right: 10px;
                     display:flex;
+                    flex: 0 0 150px;
                     align-self: center;
                 }
                 .detail {
-                    flex:1 0 auto;
+                    flex:1 1 auto;
                 }
                 .detail-wrap {
                     padding-bottom: 20px;
@@ -72,15 +72,18 @@ export default (props: ResultItemProps) => (
                 }
                 .field {
                     display: flex;
-                    font-size: 16px;
+                    font-size:12px;
                 }
                 .field .value{
                     font-style: italic;
+                    font-size:12px;
                     margin-left: 5px;
                 }
                 .field .name {
+                    font-size:12px;
                     display: inline-block;
                     width: 120px;
+                    
                 }
                 .footer {
                     font-size: 12px;

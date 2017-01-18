@@ -1,5 +1,5 @@
 // @flow
-import Herbarium from '../models/Herbarium';
+import Herbarium from '../models/Plant';
 
 export default {
     Query: {

@@ -1,5 +1,5 @@
 // @flow
-import Garden from '../models/Garden';
+import Garden from '../models/Plant';
 
 export default {
     Query: {
