@@ -5,6 +5,7 @@ import PlantCategory from './../models/PlantCategory';
 export default {
     Query: {
         async searchItem(_: any, args: { text: string; categories: string[]; page: number; }) {
+            console.log(args);
             const results = await Plant.searchByText(args);
             return results;
         },

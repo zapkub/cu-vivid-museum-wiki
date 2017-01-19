@@ -12,7 +12,8 @@ type ResultItemProps = {
     imageURL: string;
     slotNo: string;
     cuid: string
-}
+};
+
 export default (props: ResultItemProps) => (
     <div className="container">
         <div className="wrap">

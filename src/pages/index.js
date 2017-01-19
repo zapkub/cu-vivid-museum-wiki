@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
-import Landing from './../components/Landing';
+import Landing from './../components/LandingPage';
 import update from 'immutability-helper';
 
 const query = gql`
@@ -51,8 +51,7 @@ const IndexPage = compose(
                 }
             }
         }
-    }),
-    connect(store => store.searchbar),
+    })
 )(Landing);
 
 export default connectLayout(IndexPage);

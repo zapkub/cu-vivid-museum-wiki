@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Constants from './../../constant';
-
+import Link from 'next/prefetch';
 
 export default class Header extends React.Component {
     props: {
@@ -11,7 +11,7 @@ export default class Header extends React.Component {
     render() {
         return (
             <header className="container">
-                <img className="logo" alt="" src={this.props.logoURL || '/../../static/images/logo.png'} />
+                <Link href="/"><img className="logo" alt="" src={this.props.logoURL || '/../../static/images/logo.png'} /></Link>
                 <div className="title">
                     {`${Constants.HEADER.TITLE}`}
                 </div>

@@ -39,7 +39,6 @@ app.prepare()
 
         // Start keystone server
         keystone(server).start();
-
         // fallback to next
         server.get('*', (req, res) => {
             return handle(req, res);
