@@ -7,28 +7,30 @@ import SearchDialog from './SearchDialog';
 type LandingPropsType = {
     Results: {
         loading: boolean;
-        queryHerbariums: {
+        searchItem: {
             results: any[];
             totalPages: number;
             currentPage: number;
             total: number;
-        }
+        },
+        queryCategory: any;
     },
 }
 export default (props: LandingPropsType) => {
-
+    console.log(props);
     return (
         <div className="container">
+            <button onClick={() => props.dispatch({type: 'A'})}>Dispatch</button>
             <div className="background-wrap">
                 <div className="search-wrap" >
-                    <SearchDialog currentCategoryIndexes={[]} />
+                    <SearchDialog currentCategoryIndexes={[]} categories={props.Results.queryCategory || []} />
                 </div>
             </div>
             <h2>{'ข้อมูลล่าสุด'}</h2>
             <div>
                 {
                     props.Results.loading ? 'Loading...' :
-                        <ResultList results={props.Results.queryHerbariums ? props.Results.queryHerbariums.results : []} />
+                        <ResultList results={props.Results.searchItem ? props.Results.searchItem.results : []} />
                 }
             </div>
             <Link href="/result"> Result </Link>

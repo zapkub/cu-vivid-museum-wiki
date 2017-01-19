@@ -5,6 +5,10 @@ type ResultItemProps = {
     name: string;
     scientificName: string;
     family: string;
+    localName: string;
+    locationName: string;
+    blockNo: string;
+    otherName: string;
     imageURL: string;
     slotNo: string;
     cuid: string
@@ -17,17 +21,17 @@ export default (props: ResultItemProps) => (
             </div>
             <div className="detail">
                 <div className="detail-wrap">
-                    <h2>{props.name || 'ไม่ระบุ'}</h2>
+                    <h2>{props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'}</h2>
                     <div className="field">
                         <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">{props.scientificName || 'ไม่ระบุ'}</span>
                     </div>
                     <div className="field">
-                        <span className="name">{`ชื่อวงศ์`}</span>:<span className="value">{props.scientificName || 'ไม่ระบุ'}</span>
+                        <span className="name">{`ชื่อวงศ์`}</span>:<span className="value">{props.family || 'ไม่ระบุ'}</span>
                     </div>
                 </div>
                 <div className="footer">
                     <div>
-                        {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo || 'ไม่ระบุ'}</span>
+                        {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo || props.locationName || 'ไม่ระบุ'}</span>
                     </div>
                     <div>
                         <span>{`เลขรหัส : `}</span>{props.cuid || 'ไม่ระบุ'}

@@ -4,12 +4,17 @@ import Constants from './../constant';
 const categoryList = Constants.SEARCH.CATEGORY_LIST;
 type PropsType = {
     currentCategoryIndexes: number[];
+    categories: {
+        name: string;
+        value: string;
+    }[];
     value: string;
     onCategorySelected(): void;
     onFocus(): void;
     onChange(e: any): void;
     onSubmit(): void
 };
+
 export default (props: PropsType) => (
     <div className="container">
         <div className="input-wrap">
@@ -18,7 +23,7 @@ export default (props: PropsType) => (
         </div>
         <div className="category-wrap">
             {
-                categoryList.map(
+                props.categories.map(
                     (item, i) => (
                         <div
                             onClick={

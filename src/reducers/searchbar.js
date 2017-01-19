@@ -2,11 +2,11 @@
 import * as SearchbarActions from './../actions/searchbar';
 
 type SearchbarState = {
-    selectedCategoryIndexes: number[];
+    selectedCategoryIndexes: { isSelected: boolean }[];
     searchInputValue: string;
 }
 export default (state: SearchbarState, action: any) => {
-    let nextState;
+    let nextState: SearchbarState;
     if (!state) {
         nextState = {
             selectedCategoryIndexes: [],
@@ -17,6 +17,9 @@ export default (state: SearchbarState, action: any) => {
     }
 
     switch (action.type) {
+        case SearchbarActions.SET_CATEGORIES:
+            nextState.selectedCategoryIndexes = action.payload;
+            break;
         case SearchbarActions.SELECTED_CATEGORY_AT_INDEX:
             nextState.selectedCategoryIndexes = action.payload;
             break;

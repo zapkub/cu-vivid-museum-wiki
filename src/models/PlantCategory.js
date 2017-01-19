@@ -16,3 +16,5 @@ PlantCategory.add({
 PlantCategory.relationship({ ref: 'Plant', path: 'category' });
 
 PlantCategory.register();
+
+export default PlantCategory;

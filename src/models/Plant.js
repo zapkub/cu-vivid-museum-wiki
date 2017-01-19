@@ -25,7 +25,7 @@ Plant.add({
 	locationName: { type: String, label: 'สถานที่' },
 	display: { type: Types.Select, label: 'ส่วน', options: 'Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
 
-    category: { type: Types.Relationship, ref: 'PlantCategory', many: true },
+	category: { type: Types.Relationship, ref: 'PlantCategory', many: true },
 
 	recipe: { type: String, label: 'วิธีการได้มา' },
 	property: { type: String },
@@ -55,6 +55,21 @@ Plant.add({
 	note: { type: String },
 
 });
+Plant.searchByText = (args: { text: string; categories: string[]; page: number; }) => {
+	return new Promise((resolve, reject) => {
+		Plant.paginate({
+			page: args.page || 1,
+			perPage: 20,
+		})
+			.find()
+			.exec((err, data) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(data);
+			});
+	});
+};
 
 Plant.getLatestByPage = (args) => {
 	return new Promise((resolve, reject) => {

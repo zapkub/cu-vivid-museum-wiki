@@ -1,13 +1,8 @@
 
 const Query = `
-    type Query {
-        queryHerbariums(page: Int, limit: Int): Herbariums
-
-
-        queryGardens(page: Int, limit: Int): Gardens
-
-        categoryList: [CategoryItem]
-        searchItem(text: String, categories: [String]): SearchPayload
+    type Query { 
+        queryCategory(key: String): [Category]
+        searchItem(text: String, categories: [String], page: Int): SearchPayload
     }
 `;
 
@@ -22,26 +17,9 @@ const Typed = `
         height: Int
     }
 
-    type Herbarium {
+    type Plant {
         cuid: String
         name: String
-        blockNo: Int
-        slotNo: String
-        scientificName: String
-        collector_en: String
-        collector_th: String
-        altitude: String
-        date: String 
-        family: String
-        locationName: String
-        otherName: String
-        duplicateAmount: Int
-        habit: String
-        note: String
-        images: [Image]
-    }
-    type Garden {
-        cuid: String
         localName: String
         otherName: [String]
         scientificName: String
@@ -53,10 +31,17 @@ const Typed = `
         recipe: String
         property: String
         localProperty: String 
+        collector_en: String
+        collector_th: String
         minorBenefit: String 
         anatomy: String
+        habit: String
+        altitude: String
+        duplicateAmount: String
+        blockNo: String
         toxicDetail: String
         adr: String
+        note: String
         caution: String
         warning: String
         images: [Image]
@@ -65,36 +50,17 @@ const Typed = `
         prod_dev: String
         slotNo: String
         donor: String
+        category: Category
     }
-    type Gardens {
-        results: [Garden]
-        total: Int
-        currentPage: Int
-        totalPages: Int
-    }
-    type Herbariums {
-        results: [Herbarium]
-        total: Int
-        currentPage: Int
-        totalPages: Int   
+    type Category {
+        name: String
+        key: String
     }
 
 
     # Searching
-    type CategoryItem {
-        name: String
-        value: String
-    }
-    type SearchResultItem {
-        cuid: String
-        name: String
-        blockNo: Int
-        slotNo: String
-        scientificName: String
-        family: String
-    }
     type SearchPayload {
-        results: [SearchResultItem]
+        results: [Plant]
         total: Int
         totalPages: Int
         currentPage: Int

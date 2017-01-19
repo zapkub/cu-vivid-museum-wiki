@@ -1,19 +1,16 @@
 // @flow
-import __ from 'lodash';
-import Herbarium from '../models/Plant';
-import Garden from '../models/Plant';
-import Constants from './../constant';
+import Plant from '../models/Plant';
+import PlantCategory from './../models/PlantCategory';
 
 export default {
     Query: {
-        async searchItem(_: any, args: { text: string; categories: string[] }) {
-            const herbariumQuery = await Herbarium.getLatestByPage(args);
-            const gardenQuery = await Garden.getLatestByPage(args);
-
-            return __.merge(herbariumQuery, gardenQuery);
+        async searchItem(_: any, args: { text: string; categories: string[]; page: number; }) {
+            const results = await Plant.searchByText(args);
+            return results;
         },
-        categoryList() {
-            return Constants.SEARCH.CATEGORY_LIST;
+        queryCategory(_: any, args: {key: string}) {
+            const results = PlantCategory.model.find().exec();
+            return results;
         },
     },
 };
