@@ -1,0 +1,11 @@
+{
+    "verbose": true,
+    "ignore": ["*.test.js", "fixtures/*"],
+    "watch": [
+        "src/cms/",
+        "src/resolvers/",
+        "src/schema.js",
+        "src/server.js",
+        "src/models"
+    ]
+}
