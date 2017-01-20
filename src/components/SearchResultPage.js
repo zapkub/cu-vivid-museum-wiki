@@ -17,11 +17,14 @@ export default ({text, categories, Results}) => {
 			</div>
 			<div>
 				{Results.loading ? 'Loading...' :
-					<ResultList results={Results.searchItem ? Results.searchItem.results : []} />}
+					<ResultList searchWords={[text]} results={Results.searchItem ? Results.searchItem.results : []} />}
 			</div>
 			<style jsx>
 			{
 				`
+					.containe {
+						flex: 1 0 auto;
+					}
 					.search-container {
 						display:flex;
 						flexDirection: row;

@@ -2,6 +2,7 @@
 const Query = `
     type Query { 
         queryCategory(key: String): [Category]
+        queryLatestPlant(page: Int): SearchPayload
         searchItem(text: String, categories: [String], page: Int): SearchPayload
     }
 `;
@@ -50,7 +51,7 @@ const Typed = `
         prod_dev: String
         slotNo: String
         donor: String
-        category: Category
+        category: [Category]
     }
     type Category {
         name: String

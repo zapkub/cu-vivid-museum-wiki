@@ -41,17 +41,17 @@ const query = gql`
 const IndexPage = compose(
     graphql(query, {
         name: 'Results',
-        options({params}) {
+        options({ params }) {
             return {
                 reducer: (state, action) => {
                     console.log(action);
                     return update(state, {
 
-                    })
-                }
-            }
-        }
-    })
+                    });
+                },
+            };
+        },
+    }),
 )(Landing);
 
 export default connectLayout(IndexPage);

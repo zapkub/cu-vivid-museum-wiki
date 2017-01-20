@@ -2,13 +2,13 @@
 
 import ResultItem from './ResultItem';
 
-export default ({ results }: { results: [] }) => (
+export default ({ results, searchWords }: { results: [], searchWords: string }) => (
     <div className="container">
         <div className="listWrap">
             {
                 results.map(
                     (item, i) =>
-                        <ResultItem {...item} key={i} />,
+                        <ResultItem searchWords={searchWords} {...item} key={i} />,
                 )
             }
         </div>

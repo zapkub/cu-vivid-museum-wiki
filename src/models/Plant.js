@@ -56,12 +56,22 @@ Plant.add({
 
 });
 Plant.searchByText = (args: { text: string; categories: string[]; page: number; }) => {
+	const searchWord = new RegExp(args.text, 'i');
 	return new Promise((resolve, reject) => {
 		Plant.paginate({
 			page: args.page || 1,
 			perPage: 20,
 		})
-			.find()
+			.find({
+				$or: [
+					{ family: searchWord },
+					{ localName: searchWord },
+					{ otherName: searchWord },
+					{ scientificName: searchWord },
+					{ synonym: searchWord },
+					{ new_family: searchWord },
+				],
+			})
 			.exec((err, data) => {
 				if (err) {
 					reject(err);

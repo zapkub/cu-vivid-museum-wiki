@@ -1,4 +1,5 @@
 // @flow
+import Text from 'react-highlight-words';
 import Image from './common/Image';
 
 type ResultItemProps = {
@@ -11,7 +12,8 @@ type ResultItemProps = {
     otherName: string;
     imageURL: string;
     slotNo: string;
-    cuid: string
+    cuid: string;
+    searchWords: string[];
 };
 
 export default (props: ResultItemProps) => (
@@ -22,12 +24,20 @@ export default (props: ResultItemProps) => (
             </div>
             <div className="detail">
                 <div className="detail-wrap">
-                    <h2>{props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'}</h2>
+                    <h2>
+                        <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
+                    </h2>
                     <div className="field">
-                        <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">{props.scientificName || 'ไม่ระบุ'}</span>
+                        <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">
+                         <Text searchWords={props.searchWords || []} textToHighlight={props.scientificName || 'ไม่ระบุ'} />
+                        
+                        </span>
                     </div>
                     <div className="field">
-                        <span className="name">{`ชื่อวงศ์`}</span>:<span className="value">{props.family || 'ไม่ระบุ'}</span>
+                        <span className="name">{`ชื่อวงศ์`}</span>:
+                        <span className="value">
+                            <Text searchWords={props.searchWords || []} textToHighlight={props.family || 'ไม่ระบุ'} />
+                        </span>
                     </div>
                 </div>
                 <div className="footer">
@@ -35,7 +45,7 @@ export default (props: ResultItemProps) => (
                         {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo || props.locationName || 'ไม่ระบุ'}</span>
                     </div>
                     <div>
-                        <span>{`เลขรหัส : `}</span>{props.cuid || 'ไม่ระบุ'}
+                        <span>{`เลขรหัส : `}</span> <Text searchWords={props.searchWords || []} textToHighlight={props.cuid || 'ไม่ระบุ'} />
                     </div>
                 </div>
             </div>
