@@ -1,15 +1,23 @@
 // @flow
-import Herbarium from '../models/Herbarium';
-import Constants from './../constant';
+import Plant from '../models/Plant';
+import PlantCategory from './../models/PlantCategory';
 
 export default {
     Query: {
-        async searchItem(_: any, args: { text: string; categories: string[] }) {
-            const query = await Herbarium.getLatestByPage(args);
-            return query;
+        async queryLatestPlant(_, args, context) {
+            return await Plant.getLatestByPage();
         },
-        categoryList() {
-            return Constants.SEARCH.CATEGORY_LIST;
+        async searchItem(_: any, args: { text: string; categories: string[]; page: number; }) {
+            const results = await Plant.searchByText(args);
+            return results;
         },
     },
+    Plant: {
+        category(root, args) {
+            console.log(root);
+            return [
+
+            ]
+        }
+    }
 };

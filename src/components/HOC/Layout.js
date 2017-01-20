@@ -71,7 +71,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                                 <Component {...this.props} />
                             </ApolloProvider>
                         </div>
-                        <Footer />
+                        
                         <style jsx>
                             {
                                 `
@@ -87,6 +87,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                             }
                         </style>
                     </div>
+                    <Footer />
                 </div>
             );
         }

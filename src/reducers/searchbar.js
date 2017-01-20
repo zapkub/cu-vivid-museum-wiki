@@ -2,14 +2,15 @@
 import * as SearchbarActions from './../actions/searchbar';
 
 type SearchbarState = {
-    selectedCategoryIndexes: number[];
+    selectedCategory: string[];
     searchInputValue: string;
-}
+};
+
 export default (state: SearchbarState, action: any) => {
-    let nextState;
+    let nextState: SearchbarState;
     if (!state) {
         nextState = {
-            selectedCategoryIndexes: [],
+            selectedCategory: [],
             searchInputValue: '',
         };
     } else {
@@ -17,12 +18,19 @@ export default (state: SearchbarState, action: any) => {
     }
 
     switch (action.type) {
-        case SearchbarActions.SELECTED_CATEGORY_AT_INDEX:
-            nextState.selectedCategoryIndexes = action.payload;
+        case SearchbarActions.TOGGLE_CATEGORY:
+            const isToggle = nextState.selectedCategory.indexOf(action.payload);
+            if(isToggle > -1) {
+                nextState.selectedCategory = nextState.selectedCategory.filter((key) => key !== action.payload);
+            } else {
+                nextState.selectedCategory = [...nextState.selectedCategory, action.payload]
+            }
+            break;
+        case SearchbarActions.UDPATE_SEARCH_VALUE:
+            nextState.searchInputValue = action.payload;
             break;
         default:
             break;
     }
-
     return nextState;
 };

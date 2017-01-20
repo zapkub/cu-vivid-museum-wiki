@@ -1,10 +1,9 @@
 
 const Query = `
-    type Query {
-        getHerbariums(page: Int, limit: Int): Herbariums
-
-        categoryList: [CategoryItem]
-        searchItem(text: String, categories: [String]): SearchPayload
+    type Query { 
+        queryCategory(key: String): [Category]
+        queryLatestPlant(page: Int): SearchPayload
+        searchItem(text: String, categories: [String], page: Int): SearchPayload
     }
 `;
 
@@ -19,49 +18,50 @@ const Typed = `
         height: Int
     }
 
-    type Herbarium {
+    type Plant {
         cuid: String
         name: String
-        blockNo: Int
-        slotNo: String
+        localName: String
+        otherName: [String]
         scientificName: String
+        synonym: String
+        family: String
+        type: String
+        locationName: String
+        display: String
+        recipe: String
+        property: String
+        localProperty: String 
         collector_en: String
         collector_th: String
-        altitude: String
-        date: String 
-        family: String
-        locationName: String
-        otherName: String
-        duplicateAmount: Int
+        minorBenefit: String 
+        anatomy: String
         habit: String
+        altitude: String
+        duplicateAmount: String
+        blockNo: String
+        toxicDetail: String
+        adr: String
         note: String
+        caution: String
+        warning: String
         images: [Image]
+        characteristic: String 
+        chem_structure: String
+        prod_dev: String
+        slotNo: String
+        donor: String
+        category: [Category]
     }
-
-    type Herbariums {
-        results: [Herbarium]
-        total: Int
-        currentPage: Int
-        totalPages: Int
-         
+    type Category {
+        name: String
+        key: String
     }
 
 
     # Searching
-    type CategoryItem {
-        name: String
-        value: String
-    }
-    type SearchResultItem {
-        cuid: String
-        name: String
-        blockNo: Int
-        slotNo: String
-        scientificName: String
-        family: String
-    }
     type SearchPayload {
-        results: [SearchResultItem]
+        results: [Plant]
         total: Int
         totalPages: Int
         currentPage: Int

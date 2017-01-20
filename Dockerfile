@@ -1,17 +1,22 @@
 # build prod image
 FROM arhea/yarn:6
 
-RUN mkdir /app
+
+## cache node_modules
+ADD ./package.json /tmp/package.json
+RUN cd /tmp && yarn install
+RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
+
+## copy meta
 WORKDIR /app
-
-
-ADD ./src /app/src
-ADD ./package.json /app 
+ADD ./package.json /app/package.json
+ADD ./seed /app/seed
 ADD .babelrc /app
 ADD .env /app
 ADD ./build.sh /app
 
-RUN yarn install
+## build
+ADD ./src /app/src
 RUN sh build.sh
 
 EXPOSE 3000

@@ -18,6 +18,7 @@ keystone.init({
 	name: 'cms',
 	brand: 'cms',
 	sass: 'cms/public',
+	// app,
 	static: 'cms/public',
 	favicon: 'cms/public/favicon.ico',
 	views: 'cms/templates/views',
@@ -53,12 +54,13 @@ keystone.set('routes', require('./cms/routes'));
 
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
-	posts: ['posts', 'post-categories'],
-	category: ['herbaria', 'gardens', 'museums'],
+	Plant: ['plants', 'plant-categories' ],
 	users: 'users',
 });
 
 export default (app) => {
+
 	keystone.app = app;
+
 	return keystone;
 };

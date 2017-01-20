@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-MONGO_URI=mongodb://localhost/cms npm run dev
+set -e
+function cleanup {
+    docker-compose stop
+}
+trap cleanup EXIT
+
+docker-compose stop
+docker-compose -f docker-compose-dev.yml up -d --no-recreate
+MONGO_URI=localhost yarn run dev

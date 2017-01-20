@@ -5,6 +5,8 @@ import { makeExecutableSchema } from 'graphql-tools';
 import express from 'express';
 
 import next from 'next';
+
+
 import keystone from './keystone';
 
 import path from 'path';
@@ -37,7 +39,6 @@ app.prepare()
 
         // Start keystone server
         keystone(server).start();
-
         // fallback to next
         server.get('*', (req, res) => {
             return handle(req, res);

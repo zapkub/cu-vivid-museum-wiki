@@ -5,25 +5,28 @@ import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
-import Landing from './../components/Landing';
-
+import Landing from './../components/LandingPage';
+import update from 'immutability-helper';
 
 const query = gql`
     query{
-        getHerbariums(page: 2) {
+        queryCategory {
+            name
+            key
+        }
+        searchItem(page: 1) {
             total
             currentPage
             totalPages,
             results {
                 cuid
-                name
-                blockNo
+                localName
                 slotNo
+                blockNo
                 scientificName
                 collector_en
                 collector_th
                 altitude
-                date
                 family
                 locationName
                 otherName
@@ -38,8 +41,17 @@ const query = gql`
 const IndexPage = compose(
     graphql(query, {
         name: 'Results',
+        options({ params }) {
+            return {
+                reducer: (state, action) => {
+                    console.log(action);
+                    return update(state, {
+
+                    });
+                },
+            };
+        },
     }),
-    connect(store => store.searchbar),
 )(Landing);
 
 export default connectLayout(IndexPage);
