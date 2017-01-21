@@ -32,7 +32,30 @@ const mapToDispatch = (dispatch) => {
 };
 
 export const SearchInputText = connect(mapToState, mapToDispatch)(SearchDialog);
-
+export const SearchbarComponent = ({height}) => (
+	<div className="search-container" style={{height}}>
+		<SearchInputText fontSize={16} />
+		<SearchCategory
+			style={{ marginLeft: 20 }} fontSize={16}
+			/>
+		<style jsx>
+			{
+				`
+				.search-container {
+					background: rgba(50,84,26,0.4);
+					margin-top: -80px;
+					padding-top: 80px;
+					padding-left: 30px;
+					display:flex;
+					flexDirection: row;
+					align-items: center;
+					height: 200px;
+				}
+				`
+			}
+		</style>
+	</div>
+)
 
 const query = gql`
 	query Results {
@@ -41,7 +64,7 @@ const query = gql`
             key
             _id
         }
-	}	
+	}
 `;
 
 export const SearchCategory = compose(

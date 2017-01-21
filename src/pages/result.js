@@ -8,10 +8,10 @@ import ResultList from '../components/ResultList';
 import Loading from './../components/Loading';
 import * as SearchActions from './../actions/searchbar';
 
-import { SearchInputText, SearchCategory } from '../containers/Searchbar';
+import { SearchbarComponent } from '../containers/Searchbar';
 
 const query = gql`
-    query ($text: String, $categories: [String]) {
+    query ($text: String!, $categories: [String]!) {
         searchItem(page: 1, text: $text, categories: $categories) {
             total
             currentPage
@@ -130,31 +130,15 @@ class ResultPage extends React.Component {
 	render() {
 		return (
 			<div className="container">
-				<div className="search-container">
-					<SearchInputText fontSize={16} />
-					<SearchCategory
-						style={{ marginLeft: 20 }} fontSize={16}
-						/>
-				</div>
+				<SearchbarComponent />
 				<SearchResultList text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{
 						`
-					.container {
-						flex: 1 0 auto;
-					}
-					.search-container {
-						background: rgba(50,84,26,0.4);
-						margin-top: -80px;
-						padding-top: 80px;
-						padding-left: 30px;
-						display:flex;
-						flexDirection: row;
-						align-items: center;
-						height: 200px;
-					}
-
-				`
+  					.container {
+  						flex: 1 0 auto;
+  					}
+				    `
 					}
 				</style>
 			</div>

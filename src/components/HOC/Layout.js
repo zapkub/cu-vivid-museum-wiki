@@ -48,6 +48,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                         <link href="/static/fonts/chula-narak/stylesheet.css" rel="stylesheet" />
                         <link href="/static/fonts/supermarket/stylesheet.css" rel="stylesheet" />
                         <link href="/static/fonts/superspace/stylesheet.css" rel="stylesheet" />
+                        <link href="/static/react-image-gallery.css" rel="stylesheet" />
                         <link href="/static/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
                         <style global>
                             {
@@ -71,7 +72,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                                 <Component {...this.props} />
                             </ApolloProvider>
                         </div>
-                        
+
                         <style jsx>
                             {
                                 `
@@ -95,4 +96,3 @@ export default function connectLayout(Component, title = 'พิพิธภั�
 
     return Layout;
 }
-

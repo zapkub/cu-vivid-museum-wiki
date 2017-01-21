@@ -1,16 +1,18 @@
 
 const Query = `
-    type Query { 
+    type Query {
         queryCategory: [Category]
         queryLatestPlant(page: Int): SearchPayload
         getPlantFieldsList: [Field]
         getPlantById(id: String): Plant
-        searchItem(text: String, categories: [String], page: Int): SearchPayload
+
+        searchItem(text: String!, categories: [String]!, page: Int): SearchPayload
+        suggestItemByCategory(category_id: String!): [Plant]
     }
 `;
 
 const Mutation = `
-    
+
 `;
 
 const Typed = `
@@ -18,6 +20,7 @@ const Typed = `
         url: String
         width: Int
         height: Int
+        public_id: String
     }
     type Field {
         label: String
@@ -37,10 +40,10 @@ const Typed = `
         display: String
         recipe: String
         property: String
-        localProperty: String 
+        localProperty: String
         collector_en: String
         collector_th: String
-        minorBenefit: String 
+        minorBenefit: String
         anatomy: String
         habit: String
         altitude: String
@@ -52,7 +55,7 @@ const Typed = `
         caution: String
         warning: String
         images: [Image]
-        characteristic: String 
+        characteristic: String
         chem_structure: String
         prod_dev: String
         slotNo: String
