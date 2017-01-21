@@ -1,7 +1,7 @@
 
 const Query = `
     type Query { 
-        queryCategory(key: String): [Category]
+        queryCategory: [Category]
         queryLatestPlant(page: Int): SearchPayload
         searchItem(text: String, categories: [String], page: Int): SearchPayload
     }
@@ -54,6 +54,7 @@ const Typed = `
         category: [Category]
     }
     type Category {
+        _id: String
         name: String
         key: String
     }

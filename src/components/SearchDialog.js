@@ -24,8 +24,10 @@ export default (props: PropsType) => {
                     onFocus={props.onFocus}
                     style={{ fontSize: props.fontSize || 28 }}
                     className="search-input"
-                    type="text" value={props.searchInputValue}
-                    onChange={e => props.onSearchValueChange(e.target.value)}
+                    type="text" defaultValue={props.searchInputValue}
+                    onChange={e => {
+                        props.onSearchValueChange(e.target.value);
+                    }}
                     />
                 <button
                     onClick={() => {

@@ -13,8 +13,9 @@ const query = gql`
         queryCategory {
             name
             key
+            _id
         }
-        searchItem(page: 1) {
+        queryLatestPlant(page: 1) {
             total
             currentPage
             totalPages,
@@ -43,12 +44,7 @@ const IndexPage = compose(
         name: 'Results',
         options({ params }) {
             return {
-                reducer: (state, action) => {
-                    console.log(action);
-                    return update(state, {
 
-                    });
-                },
             };
         },
     }),

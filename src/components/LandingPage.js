@@ -7,33 +7,33 @@ import { SearchInputText, SearchCategory } from '../containers/Searchbar';
 type LandingPropsType = {
     Results: {
         loading: boolean,
-            searchItem: {
-                results: any[],
-                totalPages: number,
-                currentPage: number,
-                total: number,
-            },
-            queryCategory: any,
+        queryLatestPlant: {
+            results: any[],
+            totalPages: number,
+            currentPage: number,
+            total: number,
         },
+        queryCategory: any,
+    },
 };
 
 export default (props: LandingPropsType) => {
-  return (
-    <div className="container">
-      <div className="background-wrap">
-        <div className="search-wrap">
-          <SearchInputText categories={ props.Results.queryCategory || [] } />
-          <SearchCategory categories={ props.Results.queryCategory || [] } />
-        </div>
-      </div>
-      <h2>{ 'ข้อมูลล่าสุด' }</h2>
-      <div>
-        { props.Results.loading ? 'Loading...' :
-          <ResultList results={ props.Results.searchItem ? props.Results.searchItem.results : [] } /> }
-      </div>
-      <Link href="/result"> Result </Link>
-      <style jsx>
-        { `
+    return (
+        <div className="container">
+            <div className="background-wrap">
+                <div className="search-wrap">
+                    <SearchInputText categories={props.Results.queryCategory || []} />
+                    <SearchCategory style={{ marginTop: 15 }} categories={props.Results.queryCategory || []} />
+                </div>
+            </div>
+            <h2>{'ข้อมูลล่าสุด'}</h2>
+            <div>
+                {props.Results.loading ? 'Loading...' :
+                    <ResultList results={props.Results.queryLatestPlant ? props.Results.queryLatestPlant.results : []} />}
+            </div>
+            <Link href="/result"> Result </Link>
+            <style jsx>
+                {`
                 .container {
                     
                 }
@@ -53,7 +53,7 @@ export default (props: LandingPropsType) => {
                     justify-content: center;
                 }
            ` }
-      </style>
-    </div>
+            </style>
+        </div>
     );
 }

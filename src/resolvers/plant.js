@@ -4,13 +4,12 @@ import PlantCategory from './../models/PlantCategory';
 
 export default {
     Plant: {
-        category(root, args) {
-            console.log(root);
-            return [
-                {
-                    key: root.category[0],
-                }
-            ];
+        async category(root, args) {
+            return await PlantCategory.model.find({
+                _id: {
+                    $in: root.category,
+                },
+            }).exec();
         },
     },
 };

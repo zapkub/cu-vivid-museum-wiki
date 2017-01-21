@@ -17,9 +17,10 @@ export default ({ results, searchWords }: { results: [], searchWords: string }) 
                 `
                     .container {
                         width: 100%;
+                        max-width: 1024px;
                         display: flex;
                         flex-direction: column;
-                        align-items: center;
+                        align-items: stretch;
                     }
                     .listWrap {
                         max-width: 1024px;

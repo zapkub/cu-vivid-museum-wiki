@@ -1,31 +1,34 @@
 import React from 'react';
 
 
-export default ({onToggleCategory, categories, selectedCategory, fontSize}) => (<div className="category-wrap">
-    {
-        categories.map(
-            (item, i) => (
-                <div
-                    style={{ fontSize: fontSize || 20 }}
-                    onClick={
-                        onToggleCategory.bind(this, item.key)
-                    }
-                    className="category-item"
-                    key={i}
-                    >
-                    <i
-                        className={`fa ${selectedCategory.indexOf(item.key) > -1 ? 'fa-check-square-o' : 'fa-square-o'}`}
-                        />
-                    {item.name}
-                </div>
-            ),
-        )
-    }
-    <style jsx>
-        {
-            `
+export default ({style, onToggleCategory, Results, selectedCategory, fontSize}) => {
+    const categories =[];
+
+    return (
+        <div className="category-wrap" style={style}>
+            {
+                Results.loading ? null : Results.queryCategory.map(
+                    (item, i) => (
+                        <div
+                            style={{ fontSize: fontSize || 20 }}
+                            onClick={
+                                onToggleCategory.bind(this, item._id)
+                            }
+                            className="category-item"
+                            key={i}
+                            >
+                            <i
+                                className={`fa ${selectedCategory.indexOf(item._id) > -1 ? 'fa-check-square-o' : 'fa-square-o'}`}
+                                />
+                            {item.name}
+                        </div>
+                    ),
+                )
+            }
+            <style jsx>
+                {
+                    `
                     .category-wrap {
-                        margin-top: 15px;
                         padding: 5px 15px;
                         border-radius: 5px;
                         background: rgba(0, 0, 0, 0.3);
@@ -43,6 +46,7 @@ export default ({onToggleCategory, categories, selectedCategory, fontSize}) => (
                         margin:0;
                     }
             	`
-        }
-    </style>
-</div>)
+                }
+            </style>
+        </div>);
+} ;
