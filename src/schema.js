@@ -3,6 +3,8 @@ const Query = `
     type Query { 
         queryCategory: [Category]
         queryLatestPlant(page: Int): SearchPayload
+        getPlantFieldsList: [Field]
+        getPlantById(id: String): Plant
         searchItem(text: String, categories: [String], page: Int): SearchPayload
     }
 `;
@@ -17,8 +19,12 @@ const Typed = `
         width: Int
         height: Int
     }
-
+    type Field {
+        label: String
+        path: String
+    }
     type Plant {
+        _id: String
         cuid: String
         name: String
         localName: String

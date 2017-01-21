@@ -24,9 +24,9 @@ type PropsType = {
 }
 export default function connectLayout(Component, title = 'พิพิธภัณฑ์ เภสัชศาสตร์') {
     class Layout extends React.Component {
-        static getInitialProps({ req }) {
-            const isServer = !!req;
-            return {
+        static getInitialProps(props) {
+            const isServer = !!props.req;
+            return Component.getInitialProps ? Component.getInitialProps(props) : {
                 isServer,
             };
         }

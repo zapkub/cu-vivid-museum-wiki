@@ -1,18 +1,18 @@
 import React from 'react';
 
 
-export default ({style, onToggleCategory, Results, selectedCategory, fontSize}) => {
-    const categories =[];
+export default ({style, onToggleCategory, Results, selectedCategory, fontSize, clearSelectedCategory}) => {
+    const categories = [];
 
-    return (
+    return Results.loading ? null : (
         <div className="category-wrap" style={style}>
             {
-                Results.loading ? null : Results.queryCategory.map(
+                Results.queryCategory.map(
                     (item, i) => (
                         <div
                             style={{ fontSize: fontSize || 20 }}
                             onClick={
-                                onToggleCategory.bind(this, item._id)
+                                () => onToggleCategory(item._id)
                             }
                             className="category-item"
                             key={i}
@@ -25,9 +25,25 @@ export default ({style, onToggleCategory, Results, selectedCategory, fontSize}) 
                     ),
                 )
             }
+            {
+                selectedCategory ? <div className="select-all" onClick={
+                    () => {
+                        clearSelectedCategory();
+                        if (selectedCategory.length !== Results.queryCategory.length) {
+                            Results.queryCategory.forEach(item => onToggleCategory(item._id));
+                        }
+                    }} >
+                    {selectedCategory.length === Results.queryCategory.length ? 'Deselect all' : `select all`}
+                </div> : null
+            }
+
             <style jsx>
                 {
                     `
+                    .select-all {
+                        font-size: 14px;
+                        cursor: pointer;
+                    }
                     .category-wrap {
                         padding: 5px 15px;
                         border-radius: 5px;
@@ -35,6 +51,7 @@ export default ({style, onToggleCategory, Results, selectedCategory, fontSize}) 
                         display: flex;
                         font-size: 20px;
                         color: white;
+                        align-items: center;
                     }
                     .fa {
                         margin-right: 4px;
@@ -49,4 +66,4 @@ export default ({style, onToggleCategory, Results, selectedCategory, fontSize}) 
                 }
             </style>
         </div>);
-} ;
+};

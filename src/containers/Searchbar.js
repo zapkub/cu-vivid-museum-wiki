@@ -21,7 +21,12 @@ const mapToDispatch = (dispatch) => {
 	return {
 		...bindActionCreators(SearchActions, dispatch),
 		confirmSearch: (text, categories) => {
-			Router.push(`/result?text=${text}&categories=${categories.join(',')}`);
+			if (categories.length === 0) {
+				alert('กรุณาเลือกอย่างน้อย 1 หมวด');
+			} else {
+				Router.push(`/result?text=${text}&categories=${categories.join(',')}`);
+
+			}
 		},
 	};
 };

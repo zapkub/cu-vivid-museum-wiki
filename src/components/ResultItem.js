@@ -1,8 +1,11 @@
 // @flow
 import Text from 'react-highlight-words';
+import Router from 'next/router';
 import Image from './common/Image';
 
+
 type ResultItemProps = {
+    _id: string;
     name: string;
     scientificName: string;
     family: string;
@@ -24,13 +27,15 @@ export default (props: ResultItemProps) => (
             </div>
             <div className="detail">
                 <div className="detail-wrap">
-                    <h2>
-                        <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
-                    </h2>
+                    <div onClick={() => Router.push(`/detail?id=${props._id}`)}>
+                        <h2>
+                            <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
+                        </h2>
+                    </div>
                     <div className="field">
                         <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">
-                         <Text searchWords={props.searchWords || []} textToHighlight={props.scientificName || 'ไม่ระบุ'} />
-                        
+                            <Text searchWords={props.searchWords || []} textToHighlight={props.scientificName || 'ไม่ระบุ'} />
+
                         </span>
                     </div>
                     <div className="field">
@@ -53,6 +58,9 @@ export default (props: ResultItemProps) => (
         <style jsx>
             {
                 `
+                .link {
+                  text-decoration: none;
+                }
                 .container {
                     padding: 3px;
                     box-sizing: border-box;
@@ -98,7 +106,7 @@ export default (props: ResultItemProps) => (
                     font-size:12px;
                     display: inline-block;
                     width: 120px;
-                    
+
                 }
                 .footer {
                     font-size: 12px;

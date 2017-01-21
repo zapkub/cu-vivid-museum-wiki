@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
 import ResultList from '../components/ResultList';
- import Loading from './../components/Loading';
- import * as SearchActions from './../actions/searchbar';
+import Loading from './../components/Loading';
+import * as SearchActions from './../actions/searchbar';
 
 import { SearchInputText, SearchCategory } from '../containers/Searchbar';
 
@@ -17,6 +17,8 @@ const query = gql`
             currentPage
             totalPages,
             results {
+				        _id
+                name
                 cuid
                 localName
                 slotNo
@@ -41,19 +43,19 @@ const SearchResult = ({ Results, text }) => (
 	<div>
 		{
 			Results.loading ? <Loading /> :
-				<div>
+				Results.searchItem ? <div>
 					<div className="result-info-wrap">
 						{
 							Results.searchItem.results.length > 0 ? <div>{'พบ'}<span className="result-number">{Results.searchItem.total}</span> {'ผลลัพธ์การค้นหา'}</div>
-							: 'ไม่พบผลลัพธ์'
+								: 'ไม่พบผลลัพธ์'
 						}
 					</div>
 					<div className="result-wrap">
 						<ResultList
 							searchWords={[text]} results={Results.searchItem ? Results.searchItem.results : []}
-						/>
+							/>
 					</div>
-				</div>
+				</div> : null
 		}
 		<style jsx>
 			{
@@ -84,7 +86,7 @@ const SearchResultList = compose(
 			return {
 				variables: {
 					text: props.text,
-					categories: props.categories || [],
+					categories: props.categories.filter(item => item.length) || [],
 				},
 			};
 		},
@@ -95,20 +97,22 @@ const SearchResultList = compose(
 type PropsType = {
 	text: string;
 	categories: any[];
+	isServer: boolean;
 }
 
 class ResultPage extends React.Component {
 
 	static async getInitialProps({ req, query }) {
+		const isServer = !!req;
 		return req
-			? { userAgent: req.headers['user-agent'], text: query.text, categories: query.categories.split(',') }
-			: { userAgent: navigator.userAgent };
+			? { userAgent: req.headers['user-agent'], text: query.text, categories: query.categories.split(','), isServer }
+			: { userAgent: navigator.userAgent, isServer };
 	}
 	constructor(props) {
 		super(props);
 		this.state = {
 			text: props.url.query.text,
-			categories: props.url.query.categories,
+			categories: props.url.query.categories.split(','),
 		};
 		Router.onRouteChangeComplete = (url: string) => {
 			this.setState({
@@ -116,6 +120,11 @@ class ResultPage extends React.Component {
 				categories: Router.query.categories.split(','),
 			});
 		};
+	}
+	componentDidMount() {
+		if (this.props.isServer) {
+			this.props.updateSearchState(this.state.text, this.state.categories);
+		}
 	}
 	props: PropsType;
 	render() {
@@ -125,9 +134,9 @@ class ResultPage extends React.Component {
 					<SearchInputText fontSize={16} />
 					<SearchCategory
 						style={{ marginLeft: 20 }} fontSize={16}
-					/>
+						/>
 				</div>
-				<SearchResultList text={this.state.text} categories={this.state.categories} />
+				<SearchResultList text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{
 						`
@@ -144,7 +153,7 @@ class ResultPage extends React.Component {
 						align-items: center;
 						height: 200px;
 					}
-					
+
 				`
 					}
 				</style>
@@ -157,8 +166,9 @@ const mapToStore = ({searchbar}) => ({
 	text: searchbar.searchInputValue,
 });
 const mapToDispatch = (dispatch) => ({
-	updateSearchState(text, categories) {
-	}
-})
+	updateSearchState(text, categories: any[]) {
+		dispatch(SearchActions.onSearchValueChange(text));
+		categories.forEach(category => dispatch(SearchActions.onToggleCategory(category)));
+	},
+});
 export default connectLayout(connect(mapToStore, mapToDispatch)(ResultPage));
-

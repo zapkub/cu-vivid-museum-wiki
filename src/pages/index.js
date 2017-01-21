@@ -20,7 +20,9 @@ const query = gql`
             currentPage
             totalPages,
             results {
+                _id
                 cuid
+                name
                 localName
                 slotNo
                 blockNo

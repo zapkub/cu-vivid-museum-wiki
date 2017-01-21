@@ -18,6 +18,7 @@ export default ({ results, searchWords }: { results: [], searchWords: string }) 
                     .container {
                         width: 100%;
                         max-width: 1024px;
+                        margin: auto;
                         display: flex;
                         flex-direction: column;
                         align-items: stretch;
