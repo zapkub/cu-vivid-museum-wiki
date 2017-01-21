@@ -25,7 +25,9 @@ export default (props: PropsType) => {
                     style={{ fontSize: props.fontSize || 28 }}
                     className="search-input"
                     type="text" value={props.searchInputValue}
-                    onChange={e => props.onSearchValueChange(e.target.value)}
+                    onChange={e => {
+                        props.onSearchValueChange(e.target.value);
+                    }}
                     />
                 <button
                     onClick={() => {

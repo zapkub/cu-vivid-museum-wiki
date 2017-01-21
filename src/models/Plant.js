@@ -1,4 +1,5 @@
-const keystone = require('keystone');
+const keystone = require('keystone'),
+	mongoose = require('mongoose');
 
 const Types = keystone.Field.Types;
 
@@ -55,7 +56,7 @@ Plant.add({
 	note: { type: String },
 
 });
-Plant.searchByText = (args: { text: string; categories: string[]; page: number; }) => {
+Plant.searchByText = async (args: { text: string; categories: string[]; page: number; }) => {
 	const searchWord = new RegExp(args.text, 'i');
 	return new Promise((resolve, reject) => {
 		Plant.paginate({
@@ -72,6 +73,8 @@ Plant.searchByText = (args: { text: string; categories: string[]; page: number; 
 					{ new_family: searchWord },
 				],
 			})
+			.where('category')
+			.in(args.categories.map(_id => mongoose.Types.ObjectId(_id)))
 			.exec((err, data) => {
 				if (err) {
 					reject(err);

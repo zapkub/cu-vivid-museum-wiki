@@ -1,3 +1,11 @@
+cems-museum:
+    image: museum
+    ports:
+        - "3000:3000"
+    environment: 
+        MONGO_URI: "mongo"
+    links:
+        - mongo
 nginx:
   image: nginx
   volumes: 
@@ -6,7 +14,6 @@ nginx:
     - "80:80"
   links:
     - cems-museum:web
-
 mongo:
   image: mongo:3.0.8 
   volumes_from:
@@ -21,11 +28,3 @@ mongo-data:
     - ./db/:/data/db
   command: "--break-mongo" # break mongod command and use it as data-volume-container
 
-cems-museum:
-    image: museum
-    ports:
-        - "3000:3000"
-    environment: 
-        MONGO_URI: "mongo"
-    links:
-        - mongo

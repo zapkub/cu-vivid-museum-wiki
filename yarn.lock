@@ -5233,6 +5233,10 @@ lodash.restparam@^3.0.0:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
 
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+
 lodash.uniq@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
@@ -6992,6 +6996,13 @@ react-hot-loader@3.0.0-beta.6:
     redbox-react "^1.2.5"
     source-map "^0.4.4"
 
+react-image-gallery:
+  version "0.7.10"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-0.7.10.tgz#7462ef38424950211c2aea608a105b2161553dcd"
+  dependencies:
+    lodash.throttle "^4.1.1"
+    react-swipeable "^3.5.1"
+
 react-input-autosize@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-0.5.3.tgz#5e02b935f3d688466caab519e93e6600194865cb"
@@ -7066,6 +7077,10 @@ react-stubber@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-stubber/-/react-stubber-1.0.0.tgz#41ee2cac72d4d4fd70a63896da98e13739b84628"
   dependencies:
     babel-runtime "^6.5.0"
+
+react-swipeable@^3.5.1:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-3.8.0.tgz#8ed905fefa217bf6a96421b3d9b1f4bd1d3ec250"
 
 react@^0.13.3:
   version "0.13.3"

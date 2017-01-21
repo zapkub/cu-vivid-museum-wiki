@@ -29,6 +29,9 @@ export default (state: SearchbarState, action: any) => {
         case SearchbarActions.UDPATE_SEARCH_VALUE:
             nextState.searchInputValue = action.payload;
             break;
+        case SearchbarActions.CLEAR_SELECTED_CATEGORY:
+            nextState.selectedCategory = [];
+            break;
         default:
             break;
     }
