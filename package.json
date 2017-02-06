@@ -71,6 +71,7 @@
         "storybook": "start-storybook -p 9001 -c .storybook",
         "babel-node": "babel-node ",
         "seed": "babel-node ./seed",
+        "test": "babel-node ./src/cms/__test__/common.spec.js",
         "cms-only": "nodemon --exec npm run babel-node -- src/keystone.js"
     }
 }

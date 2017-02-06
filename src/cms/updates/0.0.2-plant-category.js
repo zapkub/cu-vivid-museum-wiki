@@ -1,13 +1,14 @@
+
 exports.create = {
     PlantCategory: [
         {
-            name: 'Herbarium',
+            name: 'Herbarium'
         },
         {
-            name: 'Garden',
+            name: 'Garden'
         },
         {
-            name: 'Museum',
+            name: 'Museum'
         },
-    ],
+    ]
 };
