@@ -20,11 +20,17 @@ export default (props: PropsType) => {
         <div className="container">
             <div className="input-wrap">
                 <input
+                    id="mainInput"
                     placeholder={Constants.SEARCH.PLACEHOLDER}
                     onFocus={props.onFocus}
                     style={{ fontSize: props.fontSize || 28 }}
                     className="search-input"
                     type="text" value={props.searchInputValue}
+                    onKeyPress={(e) => {
+                        if(e.key === 'Enter') {
+                            props.confirmSearch(props.searchInputValue, props.selectedCategory);
+                        }
+                    }}
                     onChange={e => {
                         props.onSearchValueChange(e.target.value);
                     }}
@@ -59,7 +65,13 @@ export default (props: PropsType) => {
                         background: #006ba5;
                         border:none;
                         padding: 8px 15px 8px 17px;
+                        cursor: pointer;
                         font-size: 24px;
+                        opacity: 0.8;
+                        transition: 0.33s linear opacity;
+                    }
+                    .search-submit:hover {
+                        opacity: 1;
                     }
                     .search-input {
                         font-size: 24px;

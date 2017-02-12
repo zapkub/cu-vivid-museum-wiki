@@ -53,7 +53,7 @@ const SearchResult = ({ Results, text }) => (
 					<div className="result-wrap">
 						<ResultList
 							searchWords={[text]} results={Results.searchItem ? Results.searchItem.results : []}
-							/>
+						/>
 					</div>
 				</div> : null
 		}
@@ -146,10 +146,10 @@ class ResultPage extends React.Component {
 	}
 }
 
-const mapToStore = ({searchbar}) => ({
+const mapToStore = ({ searchbar }) => ({
 	text: searchbar.searchInputValue,
 });
-const mapToDispatch = (dispatch) => ({
+const mapToDispatch = dispatch => ({
 	updateSearchState(text, categories: any[]) {
 		dispatch(SearchActions.onSearchValueChange(text));
 		categories.forEach(category => dispatch(SearchActions.onToggleCategory(category)));

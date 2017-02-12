@@ -27,7 +27,7 @@ export default (props: ResultItemProps) => (
             </div>
             <div className="detail">
                 <div className="detail-wrap">
-                    <div onClick={() => Router.push(`/detail?id=${props._id}`)}>
+                    <div style={{ cursor: 'pointer' }} onClick={() => Router.push(`/detail?id=${props._id}`)}>
                         <h2>
                             <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
                         </h2>
@@ -68,8 +68,10 @@ export default (props: ResultItemProps) => (
                 }
                 .wrap {
                     display: flex;
-                    background: #f9f9f9;
+                    background: #F9F9F9;
+                    border: 1px solid #EEEEEE;
                     box-sizing: border-box;
+                    height: 100%;
                     padding: 10px;
                 }
                 .thumbnail {
@@ -81,10 +83,14 @@ export default (props: ResultItemProps) => (
                 }
                 .detail {
                     flex:1 1 auto;
+                    display: flex;
+                    flex-direction: column;
+
                 }
                 .detail-wrap {
                     padding-bottom: 20px;
                     border-bottom: 1px #eaeaea solid;
+                    flex: 1 0 auto;
                 }
                 h2 {
                     color: #4d876d;
@@ -92,6 +98,9 @@ export default (props: ResultItemProps) => (
                     font-size: 28px;
                     margin: 10px 0;
                     font-family: supermarketregular, Helvetica Neue,Helvetica,Arial,sans-serif;
+                }
+                h2:hover {
+                    
                 }
                 .field {
                     display: flex;
@@ -105,8 +114,7 @@ export default (props: ResultItemProps) => (
                 .field .name {
                     font-size:12px;
                     display: inline-block;
-                    width: 120px;
-
+                    flex: 0 0 120px;
                 }
                 .footer {
                     font-size: 12px;

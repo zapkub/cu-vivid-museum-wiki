@@ -63,7 +63,8 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "dev": "nodemon --exec yarn run babel-node -- ./src/server.js",
+        "dev": "sh dev.sh",
+        "start-dev-server": "nodemon --exec yarn run babel-node -- ./src/server.js",
         "build": "next build ./src ",
         "clean": "rm -rf build && mkdir build",
         "build-server": "babel -d ./build ./src -s",

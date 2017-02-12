@@ -7,7 +7,7 @@ import ResultItem from '../components/ResultItem';
 import Loading from '../components/Loading';
 
 const query = gql`
-  query ($category_id: String!) {
+  query ($category_id: [String]!) {
     suggestItemByCategory(category_id: $category_id){
       _id
       name
@@ -15,20 +15,31 @@ const query = gql`
       family
     }
   }
-`
+`;
 
 
 
 const SuggestItemsComponent = ({ Results }) => (
-  <div>
+  <div className="container">
     {
       Results.loading ? <Loading /> :
         Results.suggestItemByCategory.map( (item, i) => {
           return <ResultItem  {...item} />
         })
     }
+    <style jsx>
+    {
+      `
+        .container {
+          display: flex;
+          flex-direction: row;
+          align-items: strech;
+        } 
+      `
+    }
+    </style>
   </div>
-)
+);
 
 export default compose(
   graphql(query,  {

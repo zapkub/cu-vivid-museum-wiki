@@ -59,7 +59,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                         body {
                             margin: 0;
                             padding: 0;
-                            font-family: Thonburi, Tahoma, Helvetica Neue,Helvetica,Arial,sans-serif;
+                            font-family: Helvetica Neue,Helvetica, Thonburi, Tahoma, Arial,sans-serif;
                         }
                         `
                             }

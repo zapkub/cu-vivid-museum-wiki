@@ -6,8 +6,10 @@ const Query = `
         getPlantFieldsList: [Field]
         getPlantById(id: String): Plant
 
+        queryHeroImages(amount: Int): [HeroImage]
+
         searchItem(text: String!, categories: [String]!, page: Int): SearchPayload
-        suggestItemByCategory(category_id: String!): [Plant]
+        suggestItemByCategory(category_id: [String]!): [Plant]
     }
 `;
 
@@ -21,6 +23,10 @@ const Typed = `
         width: Int
         height: Int
         public_id: String
+    }
+    type HeroImage {
+        name: String
+        image: Image
     }
     type Field {
         label: String

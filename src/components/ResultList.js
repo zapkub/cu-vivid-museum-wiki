@@ -27,6 +27,7 @@ export default ({ results, searchWords }: { results: [], searchWords: string }) 
                         max-width: 1024px;
                         display: flex;
                         flex-wrap: wrap;
+                        align-items: stretch;
                     }
                 `
             }
