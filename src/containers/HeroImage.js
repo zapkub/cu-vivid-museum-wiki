@@ -8,10 +8,10 @@ type HeroImagePropsType = {
     children: any;
 }
 const HeroImage = (props: HeroImagePropsType) => {
-    const { HeroImageURL, children } = props;
-    console.log(props);
-    return (
-        <div className="background-wrap" style={HeroImageURL ? { backgroundImage: `url())`, backgroundPosition: 'cover', backgroundOrigin: 'center center' } : null}>
+    const { HeroImageURL, children, loading } = props;
+    const style = { backgroundImage: `url(${HeroImageURL})`, backgroundPosition: 'cover', backgroundOrigin: 'center center' };
+    return loading ? <div /> : (
+        <div className="background-wrap" style={style}>
             {children}
             <style jsx>
                 {
@@ -26,7 +26,8 @@ const HeroImage = (props: HeroImagePropsType) => {
             </style>
         </div>
     );
-}
+};
+
 
 
 const query = gql`
@@ -43,13 +44,15 @@ const query = gql`
 export default compose(
     graphql(query, {
         props: ({data: {loading, queryHeroImages}}) => {
-            if (!loading) {
+            if (loading) {
                 return {
-                    HeroImageURL: queryHeroImages.length > 0 ? queryHeroImages[0].image.url : null,
-                };
-            } else {
-                return { loading }
+                    loading,
+                }
             }
+            return {
+                loading,
+                HeroImageURL: queryHeroImages.length > 0 ? queryHeroImages[0].image.url : null,
+            };
         },
     }),
 )(HeroImage);

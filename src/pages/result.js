@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
 import ResultList from '../components/ResultList';
+import HeroImage from '../containers/HeroImage';
 import Loading from './../components/Loading';
 import * as SearchActions from './../actions/searchbar';
 
@@ -130,7 +131,9 @@ class ResultPage extends React.Component {
 	render() {
 		return (
 			<div className="container">
-				<SearchbarComponent />
+				<HeroImage className="background-wrap">
+					<SearchbarComponent />
+				</HeroImage>
 				<SearchResultList text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{

@@ -18,14 +18,13 @@ const query = gql`
 `;
 
 
-
-const SuggestItemsComponent = ({ Results }) => (
+const SuggestItemsComponent = ({ Results, plant_id }) => (
   <div className="container">
     {
       Results.loading ? <Loading /> :
-        Results.suggestItemByCategory.map( (item, i) => {
-          return <ResultItem  {...item} />
-        })
+        Results.suggestItemByCategory ? Results.suggestItemByCategory.map((item, i) => {
+          return <ResultItem {...item} key={i} />;
+        }) : null
     }
     <style jsx>
     {
@@ -42,14 +41,14 @@ const SuggestItemsComponent = ({ Results }) => (
 );
 
 export default compose(
-  graphql(query,  {
+  graphql(query, {
     name: 'Results',
     options: (props) => {
       return {
         variables: {
           category_id: props.category_id,
-        }
-      }
-    }
-  })
+        },
+      };
+    },
+  }),
 )(SuggestItemsComponent);

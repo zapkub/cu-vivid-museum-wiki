@@ -25,6 +25,7 @@ export default ({images} : {images: Image[]}) => (
                 border:#efefef 1px solid;
                 width: 400px;
                 padding: 10px;
+                flex: 0 0 400px;
               }
               .placeholder {
                 pointer-events: none;

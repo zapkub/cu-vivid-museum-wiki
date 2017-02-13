@@ -41,6 +41,7 @@
         "react-highlight-words": "^0.6.0",
         "react-image-gallery": "^0.7.10",
         "react-redux": "^5.0.1",
+        "recompose": "^0.22.0",
         "redux": "^3.6.0",
         "redux-actions": "^1.2.0",
         "redux-logger": "^2.7.4",
