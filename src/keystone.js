@@ -15,8 +15,8 @@ const keystone = require('keystone');
 // and documentation.
 
 keystone.init({
-	name: 'cms',
-	brand: 'cms',
+	name: 'VividMuseum',
+	brand: 'CU',
 	sass: 'cms/public',
 	// app,
 	static: 'cms/public',

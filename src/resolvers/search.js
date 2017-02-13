@@ -11,10 +11,10 @@ export default {
             return results;
         },
         async suggestItemByCategory(_: any, args: any ) {
-          const count = await Plant.model.where('category').in([args.category_id]).count().exec();
+          const count = await Plant.model.where('category').in(args.category_id).count().exec();
           const random = Math.floor(Math.random() * count);
           const result = Plant.model.find({}).skip(random).limit(2).exec();
           return result;
-        }
+        },
     },
 };

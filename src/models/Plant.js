@@ -15,7 +15,7 @@ const Plant = new keystone.List('Plant', {
 
 Plant.add({
 	cuid: { type: String },
-	name: { type: String, required: true },
+	name: { type: String, required: true, default: 'ไม่ระบุ' },
 	localName: { type: String },
 	otherName: { type: Types.TextArray },
 	scientificName: { type: String },
@@ -23,10 +23,10 @@ Plant.add({
 	family: { type: String, label: 'Family' },
 	new_family: { type: String, label: 'Family (ใหม่)' },
 	type: { type: String, label: 'ประเภท' },
-	locationName: { type: String, label: 'สถานที่' },
-	display: { type: Types.Select, label: 'ส่วน', options: 'Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
+	display: { type: Types.Select, label: 'ส่วน', options: 'Other, Fungi, Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
 
-	category: { type: Types.Relationship, ref: 'PlantCategory', many: true },
+	category: { type: Types.Relationship, ref: 'PlantCategory', many: true, label: 'ชนิด' },
+	displayLocation: { type: Types.Relationship, ref: 'Location', label: 'สถานที่จัดแสดง', many: true, },
 
 	recipe: { type: String, label: 'วิธีการได้มา' },
 	property: { type: String },
@@ -51,9 +51,10 @@ Plant.add({
 	prod_dev: { type: String, label: 'Product Development' },
 	slotNo: { type: String, label: 'Museum location' },
 	blockNo: { type: Number },
-	herbarium_location: { type: String, label: 'Herbarium location' },
 	donor: { type: String, label: 'Donor' },
 	note: { type: String },
+	discoverLocation: { type: String, label: 'สถานที่ค้นพบ'},
+	reference: { type: Types.Relationship, ref: 'Reference', label: 'อ้างอิง', many: true }
 
 });
 Plant.searchByText = async (args: { text: string; categories: string[]; page: number; }) => {
@@ -100,6 +101,8 @@ Plant.getLatestByPage = (args) => {
 	});
 };
 
+
+Plant.defaultColumns = 'category, name, cuid, scientificName';
 Plant.register();
 export default Plant;
 

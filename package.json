@@ -41,6 +41,7 @@
         "react-highlight-words": "^0.6.0",
         "react-image-gallery": "^0.7.10",
         "react-redux": "^5.0.1",
+        "recompose": "^0.22.0",
         "redux": "^3.6.0",
         "redux-actions": "^1.2.0",
         "redux-logger": "^2.7.4",
@@ -63,7 +64,8 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "dev": "nodemon --exec yarn run babel-node -- ./src/server.js",
+        "dev": "sh dev.sh",
+        "start-dev-server": "nodemon --exec yarn run babel-node -- ./src/server.js",
         "build": "next build ./src ",
         "clean": "rm -rf build && mkdir build",
         "build-server": "babel -d ./build ./src -s",
@@ -71,6 +73,7 @@
         "storybook": "start-storybook -p 9001 -c .storybook",
         "babel-node": "babel-node ",
         "seed": "babel-node ./seed",
+        "test": "babel-node ./src/cms/__test__/common.spec.js",
         "cms-only": "nodemon --exec npm run babel-node -- src/keystone.js"
     }
 }

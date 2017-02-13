@@ -58,6 +58,7 @@ export default ({style, onToggleCategory, Results, selectedCategory, fontSize, c
                     }
                     .category-item {
                         margin-right: 15px;
+                        cursor: pointer;
                     }
                     .category-item:nth-last-child(1) {
                         margin:0;

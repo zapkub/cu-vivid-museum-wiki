@@ -25,6 +25,7 @@ logger.info(`start server db => ${process.env.MONGO_URI}`);
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
+
 app.prepare()
     .then(() => {
         const server = express();

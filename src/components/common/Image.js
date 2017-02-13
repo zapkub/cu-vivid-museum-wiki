@@ -23,6 +23,7 @@ export default (props: Props) => (
                         align-items: stretch;
                     }
                     .placeholder {
+                        pointer-events: none;
                         flex:1 0 100%;
                         background: #ccc;
                         color: #979797;

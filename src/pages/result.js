@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
 import ResultList from '../components/ResultList';
+import HeroImage from '../containers/HeroImage';
 import Loading from './../components/Loading';
 import * as SearchActions from './../actions/searchbar';
 
@@ -53,7 +54,7 @@ const SearchResult = ({ Results, text }) => (
 					<div className="result-wrap">
 						<ResultList
 							searchWords={[text]} results={Results.searchItem ? Results.searchItem.results : []}
-							/>
+						/>
 					</div>
 				</div> : null
 		}
@@ -130,7 +131,9 @@ class ResultPage extends React.Component {
 	render() {
 		return (
 			<div className="container">
-				<SearchbarComponent />
+				<HeroImage className="background-wrap">
+					<SearchbarComponent />
+				</HeroImage>
 				<SearchResultList text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{
@@ -146,10 +149,10 @@ class ResultPage extends React.Component {
 	}
 }
 
-const mapToStore = ({searchbar}) => ({
+const mapToStore = ({ searchbar }) => ({
 	text: searchbar.searchInputValue,
 });
-const mapToDispatch = (dispatch) => ({
+const mapToDispatch = dispatch => ({
 	updateSearchState(text, categories: any[]) {
 		dispatch(SearchActions.onSearchValueChange(text));
 		categories.forEach(category => dispatch(SearchActions.onToggleCategory(category)));
