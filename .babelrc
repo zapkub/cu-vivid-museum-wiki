@@ -6,6 +6,7 @@
     ],
     "plugins": [
         "transform-flow-strip-types",
+        "react-require",
         "syntax-async-functions",
         "transform-regenerator", ["transform-runtime", {
             "polyfill": false,
