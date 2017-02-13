@@ -17,10 +17,14 @@ import resolvers from './resolvers';
 
 // init next
 const dev = process.env.NODE_ENV !== 'production';
+
 const app = next({ dir: './src', dev });
 const handle = app.getRequestHandler();
 
 const logger = new Logdown({ prefix: 'core' });
+if (!process.env.MONGO_URI) {
+    process.env.MONGO_URI = 'localhost';
+}
 logger.info(`start server db => ${process.env.MONGO_URI}`);
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });

@@ -2,6 +2,7 @@
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import _ from 'lodash';
+import React from 'react';
 
 type HeroImagePropsType = {
     HeroImageURL: any;
