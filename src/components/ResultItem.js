@@ -23,7 +23,7 @@ export default (props: ResultItemProps) => (
     <div className="container">
         <div className="wrap">
             <div className="thumbnail">
-                <Image source={props.imageURL} />
+                <Image source={props.images} />
             </div>
             <div className="detail">
                 <div className="detail-wrap">

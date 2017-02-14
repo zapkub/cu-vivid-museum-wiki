@@ -88,6 +88,9 @@ const query = gql`
                 name
                 localName
                 slotNo
+                images {
+                    url
+                }
                 blockNo
                 scientificName
                 collector_en

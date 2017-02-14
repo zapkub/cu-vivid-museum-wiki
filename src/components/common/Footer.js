@@ -2,6 +2,23 @@
 import React from 'react';
 import Constants from './../../constant';
 const { COLOR, STYLE } = Constants;
+
+
+export default () => (
+    <div className="container">
+        footer
+        <style jsx>
+            {
+                `
+                    .container {
+                        background:red;
+                    }
+                `
+            }
+            </style>
+    </div>
+)
+/*
 export default class Footer extends React.Component {
 
     props: {
@@ -40,7 +57,7 @@ export default class Footer extends React.Component {
     }
     render() {
         return (
-            <div className="container">
+            <div className="footer-container">
                 <div className="wrap">
                     <div className="info-wrap" >
                         <img alt="" className="logo" src="/static/images/logo.png" width="40" />
@@ -78,7 +95,7 @@ export default class Footer extends React.Component {
                 <style jsx>
                     {
                         `
-                        .container {
+                        .footer-container {
                             background-color: #252627;
                             color: #848586;
                             margin-top: 30px;
@@ -123,7 +140,7 @@ export default class Footer extends React.Component {
                         .social-wrap{ 
                             display: flex;
                             flex-direction: row;
-                            margin:10px 0;
+                            margin:10px 10px;
                         }
                         .social-item {
                             height:40px;
@@ -168,4 +185,4 @@ export default class Footer extends React.Component {
             </div>
         );
     }
-}
+}*/
