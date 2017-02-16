@@ -10,8 +10,8 @@ type HeroImagePropsType = {
 }
 const HeroImage = (props: HeroImagePropsType) => {
     const { HeroImageURL, children, loading } = props;
-    const style = { backgroundImage: `url(${HeroImageURL})`, backgroundPosition: 'cover', backgroundOrigin: 'center center' };
-    return loading ? <div /> : (
+    const style = { backgroundImage: `url(${HeroImageURL})`, backgroundSize: 'cover', backgroundPosition: 'center center' };
+    return (
         <div className="background-wrap" style={style}>
             {children}
             <style jsx>

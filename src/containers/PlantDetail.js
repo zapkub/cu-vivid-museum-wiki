@@ -1,7 +1,8 @@
-
+// @flow
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import _ from 'lodash';
+import CategorySearch from '../containers/AlternativeCategorySearch';
 import Loading from './../components/Loading';
 import ImageGallery from '../components/ImageGallery';
 import HeroImage from '../containers/HeroImage';
@@ -16,46 +17,53 @@ type PropsType = {
 };
 
 
-const PlantInformation = ({ Plant, fields = {} }) => (
-    <div className="container">
-        <HeroImage className="background-wrap">
-            <SearchbarComponent />
-        </HeroImage>
-        {
-            Plant ? (
-                <div className="wrap">
-                    <div className="category-name">
-                        {
-                            Plant.category.map(item => item.name).join(',')
-                        }
-                    </div>
-                    <div className="plant-container">
-                        <ImageGallery images={Plant.images} />
-                        <div className="detail-wrap">
-                            <h2>{Plant.name}</h2>
-                            <p>
-                                รหัส : {Plant.cuid || 'ไม่ระบุ'}
-                            </p>
-                            <div>
-                                <div className="basic-field"><span>{fields.name}</span>{Plant.name} {Plant.localName} {Plant.otherName.join(',')}</div>
-                                <div className="basic-field"><span>{fields.scientificName}</span>{Plant.scientificName}</div>
-                                <div className="basic-field"><span>{fields.family}</span>{Plant.family}</div>
-                                <div className="basic-field"><span>{fields.localName}</span>{Plant.localName}</div>
-                                <div className="basic-field"><span>{fields.note}</span>{Plant.note || '-'}</div>
-                            </div>
-                            <div><span>{fields.displayLocation}</span> : {Plant.displayLocation ? Plant.displayLocation.join(',') : '-'} </div>
-                            <div><span>{fields.slotNo}</span> : {Plant.slotNo || '-'} </div>
-                            <div><span>{fields.blockNo}</span> : {Plant.blockNo || '-'} </div>
-                        </div>
-                    </div>
-                    <div className='suggest-title' >{`อื่นๆในหมวดเดียวกัน`}</div>
-                    <SuggestItems plant_id={Plant._id} category_id={Plant.category.map(item => item._id)} />
-                </div>
-            ) : null
-        }
-        <style jsx>
+const PlantInformation = ({ Plant, fields = {} }) => {
+    let displayLocation;
+    if (Plant.displayLocation) {
+        displayLocation = Plant.displayLocation.length > 0 ? Plant.displayLocation.map(item => item.name).join(',') : null;
+    }
+    return (
+        <div className="container">
+            <HeroImage className="background-wrap">
+                <SearchbarComponent />
+            </HeroImage>
             {
-                `
+                Plant ? (
+                    <div className="wrap">
+                        <div className="plant-container">
+                            <ImageGallery images={Plant.images} />
+                            <div className="detail-wrap">
+                                <h2>{Plant.name}</h2>
+                                <p>
+                                    รหัส : {Plant.cuid || 'ไม่ระบุ'}
+                                </p>
+                                <div>
+                                    <div className="basic-field"><span>{fields.name}</span>{Plant.name || '-'}</div>
+                                    <div className="basic-field"><span>{fields.scientificName}</span>{Plant.scientificName}</div>
+                                    <div className="basic-field"><span>{fields.family}</span>{Plant.family}</div>
+                                    <div className="basic-field"><span>{fields.localName}</span>{Plant.localName} {Plant.otherName.join(' ')}</div>
+                                </div>
+                                <div className="basic-field"> <span>{fields.note} </span></div>
+                                <div style={{ padding: 15, margin: 10, border: '1px solid #efefef' }}>
+                                    {Plant.note || '-'}
+                                </div>
+                                <div className="basic-field"><span>{fields.displayLocation}</span>{displayLocation || 'ไม่ระบุ'} </div>
+                                <div className="basic-field"><span>{fields.slotNo}</span>{Plant.slotNo || '-'} </div>
+                                <div className="basic-field"><span>{fields.blockNo}</span>{Plant.blockNo || '-'} </div>
+                                <div>
+                                    <CategorySearch id={Plant.category.map(item => item._id).join(',')} scientificName={Plant.scientificName} />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className='suggest-title' >{`อื่นๆในหมวดเดียวกัน`}</div>
+                        <SuggestItems plant_id={Plant._id} category_id={Plant.category.map(item => item._id)} />
+                    </div>
+                ) : null
+            }
+            <style jsx>
+                {
+                    `
                 .suggest-title {
                     font-weight: normal;
                     font-family: supermarketregular, Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -94,7 +102,6 @@ const PlantInformation = ({ Plant, fields = {} }) => (
                   justify-content: center;
                   display: flex;
                   padding: 10px;
-                  border: 1px solid #efefef;
                   margin-bottom: 30px;
                 }
                 @media (max-width:750px) {
@@ -105,7 +112,7 @@ const PlantInformation = ({ Plant, fields = {} }) => (
                 }
                 .detail-wrap{
                   margin-left: 30px;
-                  flex:0 1 auto;
+                  flex:1 1 auto;
                 }
                 .basic-field {
                     display: flex;
@@ -113,15 +120,16 @@ const PlantInformation = ({ Plant, fields = {} }) => (
                     padding-bottom: 8px;
                 }
                 .basic-field span{
-                    flex: 0 0 130px;
+                    flex: 0 0 140px;
                     display: block;
                     color: #808080;
                 }
                 `
-            }
-        </style>
-    </div>
-);
+                }
+            </style>
+        </div>
+    );
+}
 
 
 const PlantDetail = (props: PropsType) => (
@@ -157,6 +165,9 @@ const query = gql`
       }
       localName
       otherName
+      displayLocation {
+          name
+      }
       scientificName
       synonym
       family

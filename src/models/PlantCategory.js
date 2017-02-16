@@ -1,4 +1,5 @@
 var keystone = require('keystone');
+const Types = keystone.Field.Types;
 
 /**
  * PostCategory Model
@@ -11,6 +12,7 @@ var PlantCategory = new keystone.List('PlantCategory', {
 
 PlantCategory.add({
 	name: { type: String, required: true, unique: true },
+	image: { type: Types.CloudinaryImage },
 });
 
 PlantCategory.relationship({ ref: 'Plant', path: 'category' });

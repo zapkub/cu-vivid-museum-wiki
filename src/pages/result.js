@@ -18,10 +18,15 @@ const query = gql`
             currentPage
             totalPages,
             results {
-				        _id
+				_id
                 name
                 cuid
                 localName
+				displayLocation {
+					name
+    				label
+    				discription
+				}
                 slotNo
                 blockNo
                 scientificName
@@ -40,11 +45,14 @@ const query = gql`
 `;
 
 
-const SearchResult = ({ Results, text }) => (
+const SearchResult = ({ Results, text, url }) => (
 	<div>
 		{
 			Results.loading ? <Loading /> :
 				Results.searchItem ? <div>
+					{
+						url.query.text ? '' : <h3 style={{ textAlign: 'center' }}>{'ผลลัพธ์ล่าสุดในหมวด'}</h3>
+					}
 					<div className="result-info-wrap">
 						{
 							Results.searchItem.results.length > 0 ? <div>{'พบ'}<span className="result-number">{Results.searchItem.total}</span> {'ผลลัพธ์การค้นหา'}</div>
@@ -67,6 +75,7 @@ const SearchResult = ({ Results, text }) => (
 						font-size: 24px;
 					}
 					.result-info-wrap {
+						margin: 20px;
 						display:flex;
 						justify-content: center;
 						align-items: center;
@@ -115,16 +124,25 @@ class ResultPage extends React.Component {
 			text: props.url.query.text,
 			categories: props.url.query.categories.split(','),
 		};
-		Router.onRouteChangeComplete = (url: string) => {
-			this.setState({
-				text: Router.query.text,
-				categories: Router.query.categories.split(','),
-			});
-		};
-	}
+	};
+
 	componentDidMount() {
+		if (window) {
+			window.scrollTo(0, 0);
+		}
+		Router.onRouteChangeComplete = (url: string) => {
+			if (Router.query.categories) {
+				this.setState({
+					text: Router.query.text || '',
+					categories: Router.query.categories.split(','),
+				});
+				this.props.clearSelectedCategory();
+				this.props.updateSearchState(Router.query.text || '', Router.query.categories.split(','));
+			}
+		};
+
 		if (this.props.isServer) {
-			this.props.updateSearchState(this.state.text, this.state.categories);
+			this.props.updateSearchState(this.state.text || '', this.state.categories);
 		}
 	}
 	props: PropsType;
@@ -134,7 +152,7 @@ class ResultPage extends React.Component {
 				<HeroImage className="background-wrap">
 					<SearchbarComponent />
 				</HeroImage>
-				<SearchResultList text={this.state.text} categories={this.state.categories || []} />
+				<SearchResultList {...this.props} text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{
 						`
@@ -157,5 +175,6 @@ const mapToDispatch = dispatch => ({
 		dispatch(SearchActions.onSearchValueChange(text));
 		categories.forEach(category => dispatch(SearchActions.onToggleCategory(category)));
 	},
+	clearSelectedCategory: () => dispatch(SearchActions.clearSelectedCategory()),
 });
 export default connectLayout(connect(mapToStore, mapToDispatch)(ResultPage));

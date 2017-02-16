@@ -18,16 +18,16 @@ class DetailPage extends React.Component {
         this.state = {
             id: props.url.query.id,
         };
-        Router.onRouteChangeComplete = (url: string) => {
-    			this.setState({
-    				id: Router.query.id,
-    			});
-    		};
     }
     componentDidMount() {
-      if(window){
-        window.scrollTo(0, 0);
-      };
+        if (window) {
+            window.scrollTo(0, 0);
+        }
+        Router.onRouteChangeComplete = (url: string) => {
+            this.setState({
+                id: Router.query.id,
+            });
+        };
     }
     render() {
         return (

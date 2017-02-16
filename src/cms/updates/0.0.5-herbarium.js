@@ -34,8 +34,6 @@ const herbs = herbariumSheet[0]
 			duplicateAmount: columns[letterToColumns('H')],
 			scientificName: columns[letterToColumns('E')],
 			family: columns[letterToColumns('I')],
-			displayLocation: columns[letterToColumns('J')],
-			// display: columns[letterToColumns('K')],
 			habit: columns[letterToColumns('N')],
 			altitude: columns[letterToColumns('O')],
 			collector_en: columns[letterToColumns('J')],
@@ -74,7 +72,6 @@ function createItem(plants, done) {
 					default:
 						break;
 				}
-				plant.displayLocation = [_.find(locationResult, plant.displayLocation)];
 				return plant;
 			}), (err, result) => {
 				if (err) {

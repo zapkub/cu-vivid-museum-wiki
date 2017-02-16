@@ -31,6 +31,7 @@ export default ({images} : {images: Image[]}) => (
                 pointer-events: none;
                 flex:1 0 100%;
                 height: 100%;
+                max-height: 300px;
                 background: #ccc;
                 color: #979797;
                 display: flex;

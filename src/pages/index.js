@@ -7,7 +7,7 @@ import { graphql, compose } from 'react-apollo';
 import connectLayout from './../components/HOC/Layout';
 import update from 'immutability-helper';
 
-import Link from 'next/link';
+import Router from 'next/router';
 import ResultList from '../components/ResultList';
 import Loading from '../components/Loading';
 import HeroImage from '../containers/HeroImage';
@@ -36,6 +36,25 @@ const LandingPage = (props: LandingPropsType) => {
                     <SearchCategory style={{ marginTop: 15 }} categories={props.Results.queryCategory || []} />
                 </div>
             </HeroImage>
+            <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                <h3>{`ค้นหาตามหมวดหมู่`}</h3>
+                <div className="category-container" >
+                    {
+                        props.Results.queryCategory ? props.Results.queryCategory.map(
+                            (item, i) => {
+                                return (
+                                    <div
+                                        onClick={() => Router.push(`/result?categories=${item._id}&text=`)}
+                                        className="category-item" key={i}>
+                                        <div style={{ border: '1px #eeeeee solid', backgroundColor: '#f9f9f9', backgroundImage: `url(${item.image.url})`, width: 200, height: 150 }} />
+                                        <div className="category-name">{item.name}</div>
+                                    </div>
+                                );
+                            },
+                        ) : null
+                    }
+                </div>
+            </div>
             <h2>{'ข้อมูลล่าสุด'}</h2>
             <div>
                 {props.Results.loading ? <Loading /> :
@@ -65,6 +84,24 @@ const LandingPage = (props: LandingPropsType) => {
                     align-items: center;
                     justify-content: center;
                 }
+                .category-container {
+                    display:flex;
+                }
+                .category-item {
+                    margin: 5px;
+                    cursor: pointer;
+                    transition: 0.111s linear all;
+                    transform: scale(.95);
+                }
+                .category-item:hover {
+                    transform-origin: center center;
+                    transform: scale(1);
+                }
+                .category-name {
+                    margin: 10px 0;
+                    text-align:center;
+                    font-size: 18px;
+                }
            ` }
             </style>
         </div>
@@ -77,6 +114,9 @@ const query = gql`
             name
             key
             _id
+            image {
+                url
+            }
         }
         queryLatestPlant(page: 1) {
             total

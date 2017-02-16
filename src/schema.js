@@ -32,10 +32,16 @@ const Typed = `
         label: String
         path: String
     }
+    type Location {
+        name: String
+        label: String
+        discription: String
+    }
     type Plant {
         _id: String
         cuid: String
         name: String
+        displayLocation: [Location]
         localName: String
         otherName: [String]
         scientificName: String
@@ -72,6 +78,7 @@ const Typed = `
         _id: String
         name: String
         key: String
+        image: Image
     }
 
 

@@ -19,45 +19,57 @@ type ResultItemProps = {
     searchWords: string[];
 };
 
-export default (props: ResultItemProps) => (
-    <div className="container">
-        <div className="wrap">
-            <div className="thumbnail">
-                <Image source={props.images} />
-            </div>
-            <div className="detail">
-                <div className="detail-wrap">
-                    <div style={{ cursor: 'pointer' }} onClick={() => Router.push(`/detail?id=${props._id}`)}>
-                        <h2>
-                            <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
-                        </h2>
-                    </div>
-                    <div className="field">
-                        <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">
-                            <Text searchWords={props.searchWords || []} textToHighlight={props.scientificName || 'ไม่ระบุ'} />
+export default (props: ResultItemProps) => {
 
-                        </span>
-                    </div>
-                    <div className="field">
-                        <span className="name">{`ชื่อวงศ์`}</span>:
-                        <span className="value">
-                            <Text searchWords={props.searchWords || []} textToHighlight={props.family || 'ไม่ระบุ'} />
-                        </span>
-                    </div>
+    let image;
+    if (props.images) {
+        image = props.images[0]
+    }
+
+    let displayLocation;
+    if (props.displayLocation) {
+        displayLocation = props.displayLocation.length > 0 ? props.displayLocation.map( item => item.name).join(',') : null;
+    }
+
+    return (
+        <div className="container">
+            <div className="wrap">
+                <div className="thumbnail">
+                    <Image source={image ? image.url : null} />
                 </div>
-                <div className="footer">
-                    <div>
-                        {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{props.slotNo || props.locationName || 'ไม่ระบุ'}</span>
+                <div className="detail">
+                    <div className="detail-wrap">
+                        <div style={{ cursor: 'pointer' }} onClick={() => Router.push(`/detail?id=${props._id}`)}>
+                            <h2>
+                                <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
+                            </h2>
+                        </div>
+                        <div className="field">
+                            <span className="name">{`ชื่อวิทยาศาสตร์`}</span>:<span className="value">
+                                <Text searchWords={props.searchWords || []} textToHighlight={props.scientificName || 'ไม่ระบุ'} />
+
+                            </span>
+                        </div>
+                        <div className="field">
+                            <span className="name">{`ชื่อวงศ์`}</span>:
+                        <span className="value">
+                                <Text searchWords={props.searchWords || []} textToHighlight={props.family || 'ไม่ระบุ'} />
+                            </span>
+                        </div>
                     </div>
-                    <div>
-                        <span>{`เลขรหัส : `}</span> <Text searchWords={props.searchWords || []} textToHighlight={props.cuid || 'ไม่ระบุ'} />
+                    <div className="footer">
+                        <div>
+                            {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{displayLocation || props.slotNo || 'ไม่ระบุ'}</span>
+                        </div>
+                        <div>
+                            <span>{`เลขรหัส : `}</span> <Text searchWords={props.searchWords || []} textToHighlight={props.cuid || 'ไม่ระบุ'} />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <style jsx>
-            {
-                `
+            <style jsx>
+                {
+                    `
                 .link {
                   text-decoration: none;
                 }
@@ -123,7 +135,8 @@ export default (props: ResultItemProps) => (
                     justify-content: space-between;
                 }
                 `
-            }
-        </style>
-    </div>
-);
+                }
+            </style>
+        </div>
+    );
+}

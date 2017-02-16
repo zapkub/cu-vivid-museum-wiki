@@ -26,16 +26,15 @@ const gardens = gardenSheet[0]
 	.data
 	.filter((item, i) => i > 0)
 	.map((columns, i) => {
-		
-		let anatomy = [];
-		if(columns[letterToColumns('Q')]) {
-			anatomy.push(columns[letterToColumns('Q')])
+		const anatomy = [];
+		if (columns[letterToColumns('Q')]) {
+			anatomy.push(columns[letterToColumns('Q')]);
 		}
-		if(columns[letterToColumns('P')]) {
-			anatomy.push(columns[letterToColumns('P')])
+		if (columns[letterToColumns('P')]) {
+			anatomy.push(columns[letterToColumns('P')]);
 		}
-		if(columns[letterToColumns('R')]){
-			anatomy.push(columns[letterToColumns('R')])
+		if (columns[letterToColumns('R')]) {
+			anatomy.push(columns[letterToColumns('R')]);
 		}
 
 		return {
@@ -56,7 +55,7 @@ const gardens = gardenSheet[0]
 			anatomy,
 			// toxicDetail: columns[2],
 			// adr: columns[2],
-			category: 'garden',
+			category: columns[letterToColumns('Z') + 1] ? 'garden' : 'museum',
 			// caution: columns[2],
 			// warning: columns[2],
 
@@ -97,7 +96,11 @@ function createItem(plants, done) {
 					default:
 						break;
 				}
-				plant.displayLocation = [_.find(locationResult, plant.displayLocation)];
+				plant.displayLocation = [];
+				if(_.find(locationResult, plant.displayLocation)) {
+					plant.displayLocation.push(_.find(locationResult, plant.displayLocation));
+				}
+
 				return plant;
 			}), (err, result) => {
 				if (err) {

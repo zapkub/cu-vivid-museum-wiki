@@ -15,12 +15,12 @@ const Plant = new keystone.List('Plant', {
 
 Plant.add({
 	cuid: { type: String },
-	name: { type: String, required: true, default: 'ไม่ระบุ' },
-	localName: { type: String },
+	name: { type: String, required: true,label: 'ชื่อไทย', default: 'ไม่ระบุ' },
+	localName: { type: String, label: 'ชื่อท้องถิ่น' },
 	otherName: { type: Types.TextArray },
-	scientificName: { type: String },
+	scientificName: { type: String, label: "ชื่อวิทยาศาสตร์" },
 	synonym: { type: String },
-	family: { type: String, label: 'Family' },
+	family: { type: String, label: 'Family', label: "ชื่อวงศ์" },
 	new_family: { type: String, label: 'Family (ใหม่)' },
 	type: { type: String, label: 'ประเภท' },
 	display: { type: Types.Select, label: 'ส่วน', options: 'Other, Fungi, Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
@@ -71,10 +71,14 @@ Plant.searchByText = async (args: { text: string; categories: string[]; page: nu
 					{ otherName: searchWord },
 					{ scientificName: searchWord },
 					{ synonym: searchWord },
+					{ name: searchWord },
 					{ new_family: searchWord },
 				],
 			})
+			.sort('-_id')
 			.where('category')
+			
+			.populate('displayLocation')
 			.in(args.categories.map(_id => mongoose.Types.ObjectId(_id)))
 			.exec((err, data) => {
 				if (err) {
@@ -92,6 +96,7 @@ Plant.getLatestByPage = (args) => {
 				page: args.page || 0,
 				perPage: args.limit || 10,
 			})
+			.sort('-_id')
 			.exec((err, data) => {
 				if (err) {
 					reject(err);

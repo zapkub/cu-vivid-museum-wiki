@@ -3,7 +3,7 @@ import React from 'react';
 import Constants from './../../constant';
 const { COLOR, STYLE } = Constants;
 
-
+/*
 export default () => (
     <div className="container">
         footer
@@ -17,15 +17,9 @@ export default () => (
             }
             </style>
     </div>
-)
-/*
-export default class Footer extends React.Component {
+)*/
 
-    props: {
-
-    }
-    renderExternalLink() {
-        return (
+/*const ExternalLink = () =>  (
             <div className="external-link-wrap">
                 <h2>{'เว็บไซต์ด้านเภสัชกรรม'}</h2>
                 <div className="link-list">
@@ -38,9 +32,7 @@ export default class Footer extends React.Component {
                 <style jsx>
                     {
                         `
-                        a {
-                            color: #848586;
-                        }
+                       
                         h2 {
                             font-weight: normal;
                             font-family: supermarketregular, Helvetica Neue,Helvetica,Arial,sans-serif; 
@@ -53,8 +45,14 @@ export default class Footer extends React.Component {
                     }
                 </style>
             </div>
-        );
+        );*/
+
+export default class Footer extends React.Component {
+
+    props: {
+
     }
+
     render() {
         return (
             <div className="footer-container">
@@ -84,7 +82,7 @@ export default class Footer extends React.Component {
                         <div><img alt="" src="/static/icon/website.svg" width="10" />{'www.pharm-ce-chula.com'}</div>
                     </div>
                     {
-                        this.renderExternalLink()
+                        // external link
                     }
                 </div>
                 <div className="bottom-row">
@@ -185,4 +183,4 @@ export default class Footer extends React.Component {
             </div>
         );
     }
-}*/
+}
