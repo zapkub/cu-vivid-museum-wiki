@@ -1,10 +1,10 @@
 # build prod image
-FROM arhea/yarn:6
+FROM mhart/alpine-node:6
 
 
 ## cache node_modules
 ADD ./package.json /tmp/package.json
-RUN cd /tmp && yarn install
+RUN cd /tmp && npm install
 RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
 
 ## copy meta
@@ -20,4 +20,4 @@ ADD ./src /app/src
 RUN sh build.sh
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

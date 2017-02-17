@@ -26,6 +26,7 @@ export default function connectLayout(Component, title = 'พิพิธภั�
     class Layout extends React.Component {
         static getInitialProps(props) {
             const isServer = !!props.req;
+            console.log(props.error);
             return Component.getInitialProps ? Component.getInitialProps(props) : {
                 isServer,
             };
@@ -38,21 +39,22 @@ export default function connectLayout(Component, title = 'พิพิธภั�
         store: any;
 
         render() {
-            return (
-                <div id="Vivid-app">
-                    <Head>
-                        <title>{title}</title>
-                        <meta charSet="utf-8" />
-                        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                        <link href="/static/fonts/circular/stylesheet.css" rel="stylesheet" />
-                        <link href="/static/fonts/chula-narak/stylesheet.css" rel="stylesheet" />
-                        <link href="/static/fonts/supermarket/stylesheet.css" rel="stylesheet" />
-                        <link href="/static/fonts/superspace/stylesheet.css" rel="stylesheet" />
-                        <link href="/static/react-image-gallery.css" rel="stylesheet" />
-                        <link href="/static/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
-                        <style global>
-                            {
-                                `
+            try {
+                return (
+                    <div id="Vivid-app">
+                        <Head>
+                            <title>{title}</title>
+                            <meta charSet="utf-8" />
+                            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                            <link href="/static/fonts/circular/stylesheet.css" rel="stylesheet" />
+                            <link href="/static/fonts/chula-narak/stylesheet.css" rel="stylesheet" />
+                            <link href="/static/fonts/supermarket/stylesheet.css" rel="stylesheet" />
+                            <link href="/static/fonts/superspace/stylesheet.css" rel="stylesheet" />
+                            <link href="/static/react-image-gallery.css" rel="stylesheet" />
+                            <link href="/static/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+                            <style global>
+                                {
+                                    `
                         * {
                             -webkit-font-smoothing: antialiased;
                         }
@@ -62,20 +64,20 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                             font-family: Helvetica Neue,Helvetica, Thonburi, Tahoma, Arial,sans-serif;
                         }
                         `
-                            }
-                        </style>
-                    </Head>
-                    <div className="container">
-                        <Header />
-                        <div className="content">
-                            <ApolloProvider store={this.store} client={client}>
-                                <Component {...this.props} />
-                            </ApolloProvider>
-                        </div>
+                                }
+                            </style>
+                        </Head>
+                        <div className="container">
+                            <Header />
+                            <div className="content">
+                                <ApolloProvider store={this.store} client={client}>
+                                    <Component {...this.props} />
+                                </ApolloProvider>
+                            </div>
 
-                        <style jsx>
-                            {
-                                `
+                            <style jsx>
+                                {
+                                    `
                         .container {
                             display: flex;
                             min-height: 100vh;
@@ -85,12 +87,15 @@ export default function connectLayout(Component, title = 'พิพิธภั�
                             flex: 2 0 auto;
                         }
                         `
-                            }
-                        </style>
+                                }
+                            </style>
+                        </div>
+                        <Footer />
                     </div>
-                    <Footer />
-                </div>
-            );
+                );
+            } catch (e) {
+                return <div> { `opps`} </div>
+            }
         }
     }
 

@@ -1622,6 +1622,13 @@ babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtim
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
+babel-runtime@^6.1.18:
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.10.0"
+
 babel-runtime@6.11.6:
   version "6.11.6"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.11.6.tgz#6db707fef2d49c49bfa3cb64efdb436b518b8222"
@@ -2180,7 +2187,7 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
-classnames@^2.1.3, classnames@^2.1.5, classnames@^2.2.3:
+classnames@^2.1.2, classnames@^2.1.3, classnames@^2.1.5, classnames@^2.2.3, classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -6807,6 +6814,25 @@ public-encrypt@^4.0.0:
     parse-asn1 "^5.0.0"
     randombytes "^2.0.1"
 
+pui-css-pagination@=7.5.4:
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/pui-css-pagination/-/pui-css-pagination-7.5.4.tgz#d0299854ee3ea3136031f0f8bba91963df82fd98"
+
+pui-react-helpers@=7.5.4:
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/pui-react-helpers/-/pui-react-helpers-7.5.4.tgz#f59b708542b88da8c74f4b68fa615458e6c58857"
+  dependencies:
+    babel-runtime "^6.1.18"
+    classnames "^2.1.2"
+
+pui-react-pagination:
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/pui-react-pagination/-/pui-react-pagination-7.5.4.tgz#a384c0c1912f78b5631d030ee6a1a2df3d5f118a"
+  dependencies:
+    babel-runtime "^6.1.18"
+    pui-css-pagination "=7.5.4"
+    pui-react-helpers "=7.5.4"
+
 punycode@^1.2.4, punycode@^1.3.2, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
@@ -6818,6 +6844,10 @@ punycode@1.3.2:
 q@^1.1.2, q@~1.4.0, q@1.4.x:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.4.1.tgz#55705bcd93c5f3673530c2c2cbc0c2b3addc286e"
+
+qs:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.1.tgz#918c0b3bcd36679772baf135b1acb4c1651ed79d"
 
 qs@^6.1.0, qs@^6.2.0, qs@~6.3.0:
   version "6.3.0"
@@ -7045,6 +7075,12 @@ react-modal@^1.2.0, react-modal@^1.2.1:
     element-class "^0.2.0"
     exenv "1.2.0"
     lodash.assign "^4.2.0"
+
+react-paginate:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-4.1.1.tgz#32a51b198669999604df23e34bab2f58273e7612"
+  dependencies:
+    classnames "^2.2.5"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"

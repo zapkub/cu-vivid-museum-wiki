@@ -19,9 +19,10 @@ type PropsType = {
 
 const PlantInformation = ({ Plant, fields = {} }) => {
     let displayLocation;
-    if (Plant.displayLocation) {
-        displayLocation = Plant.displayLocation.length > 0 ? Plant.displayLocation.map(item => item.name).join(',') : null;
-    }
+    if(Plant)
+        if (Plant.displayLocation) {
+            displayLocation = Plant.displayLocation.length > 0 ? Plant.displayLocation.map(item => item.name).join(',') : null;
+        }
     return (
         <div className="container">
             <HeroImage className="background-wrap">
@@ -59,7 +60,7 @@ const PlantInformation = ({ Plant, fields = {} }) => {
                         <div className='suggest-title' >{`อื่นๆในหมวดเดียวกัน`}</div>
                         <SuggestItems plant_id={Plant._id} category_id={Plant.category.map(item => item._id)} />
                     </div>
-                ) : null
+                ) : <h1 style={{textAlign: 'center'}}>{`ไม่พบข้อมูล`}</h1>
             }
             <style jsx>
                 {
@@ -210,7 +211,6 @@ export default compose(
                 _.forEach(props.Plant.getPlantFieldsList, item => props.fields[item.path] = item.label);
                 // .reduce((o, k) => (o[k] = obj[key], o), {});
             }
-            console.log(props);
             return props;
         },
         options: ({ plant_id }: { plant_id: string }) => {

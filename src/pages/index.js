@@ -57,8 +57,15 @@ const LandingPage = (props: LandingPropsType) => {
             </div>
             <h2>{'ข้อมูลล่าสุด'}</h2>
             <div>
-                {props.Results.loading ? <Loading /> :
-                    <ResultList results={props.Results.queryLatestPlant ? props.Results.queryLatestPlant.results : []} />}
+                {
+                    props.Results.loading ? <Loading /> :
+                        (
+                            <ResultList results={props.Results.queryLatestPlant ? props.Results.queryLatestPlant.results : []} />
+                        )
+                }
+                {
+                    props.Results.loading ? null : props.Results.queryLatestPlant.length ? null : <h3 style={{ textAlign: 'center' }} > {'ไม่มีข้อมูล'} </h3>
+                }
             </div>
             <style jsx>
                 {`

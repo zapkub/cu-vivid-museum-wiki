@@ -24,7 +24,7 @@ function letterToColumns(input) {
 
 const gardens = gardenSheet[0]
 	.data
-	.filter((item, i) => i > 0)
+	.filter((item, i) => i > 0 && item[letterToColumns('E')])
 	.map((columns, i) => {
 		const anatomy = [];
 		if (columns[letterToColumns('Q')]) {
@@ -87,11 +87,11 @@ function createItem(plants, done) {
 		Location.model.find({}).exec((err, locationResult) => {
 			Plant.model.create(plants.map((plant) => {
 				switch (plant.category) {
-					case 'herbarium':
-						plant.category = [herbariumCategoryId];
-						break;
 					case 'garden':
 						plant.category = [gardenCategoryId];
+						break;
+					case 'museum':
+						plant.category = [museumCategoryId];
 						break;
 					default:
 						break;

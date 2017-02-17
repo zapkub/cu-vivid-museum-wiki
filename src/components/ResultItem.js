@@ -3,7 +3,6 @@ import Text from 'react-highlight-words';
 import Router from 'next/router';
 import Image from './common/Image';
 
-
 type ResultItemProps = {
     _id: string;
     name: string;
@@ -39,7 +38,7 @@ export default (props: ResultItemProps) => {
                 </div>
                 <div className="detail">
                     <div className="detail-wrap">
-                        <div style={{ cursor: 'pointer' }} onClick={() => Router.push(`/detail?id=${props._id}`)}>
+                        <div style={{ cursor: 'pointer' }} onClick={() => Router.replace(`/detail?id=${props._id}`)}>
                             <h2>
                                 <Text searchWords={props.searchWords || []} textToHighlight={props.name || props.localName || props.otherName[0] || 'ไม่ระบุ'} />
                             </h2>
@@ -59,10 +58,7 @@ export default (props: ResultItemProps) => {
                     </div>
                     <div className="footer">
                         <div>
-                            {`พื้นที่จัดเก็บ : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{displayLocation || props.slotNo || 'ไม่ระบุ'}</span>
-                        </div>
-                        <div>
-                            <span>{`เลขรหัส : `}</span> <Text searchWords={props.searchWords || []} textToHighlight={props.cuid || 'ไม่ระบุ'} />
+                            {`พื้นที่จัดแสดง : `}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{displayLocation || props.slotNo || 'ไม่ระบุ'}</span>
                         </div>
                     </div>
                 </div>

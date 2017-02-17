@@ -8,12 +8,13 @@ import ResultList from '../components/ResultList';
 import HeroImage from '../containers/HeroImage';
 import Loading from './../components/Loading';
 import * as SearchActions from './../actions/searchbar';
-
+import qs from 'qs';
 import { SearchbarComponent } from '../containers/Searchbar';
+import { ResultPagination } from '../components/common/Pagination';
 
 const query = gql`
-    query ($text: String!, $categories: [String]!) {
-        searchItem(page: 1, text: $text, categories: $categories) {
+    query ($text: String!, $categories: [String]!, $page: Int!) {
+        searchItem(page: $page, text: $text, categories: $categories) {
             total
             currentPage
             totalPages,
@@ -64,12 +65,19 @@ const SearchResult = ({ Results, text, url }) => (
 							searchWords={[text]} results={Results.searchItem ? Results.searchItem.results : []}
 						/>
 					</div>
+					<div className="paginate-wrap">
+						<ResultPagination currentPage={Results.searchItem.currentPage} totalPages={Results.searchItem.totalPages} onPageChange={({ selected }) => {
+							const queryString = url.query;
+							queryString.page = selected;
+							Router.push(`/result?${qs.stringify(queryString)}`);
+						}} />
+					</div>
 				</div> : null
 		}
 		<style jsx>
 			{
 				`
-				.result-number {
+					.result-number {
 						font-weight: bold;
 						margin: 0 5px;
 						font-size: 24px;
@@ -82,6 +90,10 @@ const SearchResult = ({ Results, text, url }) => (
 					}
 					.result-wrap {
 
+					}
+					.paginate-wrap {
+						display:flex;
+						justify-content: center;
 					}
 			`
 			}
@@ -96,6 +108,7 @@ const SearchResultList = compose(
 			return {
 				variables: {
 					text: props.text,
+					page: props.url.query.page || 1,
 					categories: props.categories.filter(item => item.length) || [],
 				},
 			};
@@ -139,6 +152,9 @@ class ResultPage extends React.Component {
 				this.props.clearSelectedCategory();
 				this.props.updateSearchState(Router.query.text || '', Router.query.categories.split(','));
 			}
+			if (window) {
+				window.scrollTo(0, 0);
+			}
 		};
 
 		if (this.props.isServer) {
@@ -152,7 +168,8 @@ class ResultPage extends React.Component {
 				<HeroImage className="background-wrap">
 					<SearchbarComponent />
 				</HeroImage>
-				<SearchResultList {...this.props} text={this.state.text} categories={this.state.categories || []} />
+				<SearchResultList
+					{...this.props} text={this.state.text} categories={this.state.categories || []} />
 				<style jsx>
 					{
 						`

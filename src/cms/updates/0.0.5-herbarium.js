@@ -24,7 +24,7 @@ function letterToColumns(input) {
 
 const herbs = herbariumSheet[0]
 	.data
-	.filter((item, i) => i > 0)
+	.filter((item, i) => i > 0 && item[letterToColumns('E')])
 	.map((columns, index) => {
 		return {
 			cuid: columns[letterToColumns('A')],
