@@ -1,7 +1,6 @@
 const keystone = require('keystone');
 
 const Types = keystone.Field.Types;
-
 const User = new keystone.List('User');
 
 User.add({
@@ -13,7 +12,9 @@ User.add({
 });
 
 // Provide access to Keystone
-User.schema.virtual('canAccessKeystone').get(() => this.isAdmin);
+User.schema.virtual('canAccessKeystone').get(function getIsAdmin() {
+  return this.isAdmin;
+});
 
 
 /**
