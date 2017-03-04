@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "javascript.validate.enable": false,
-    "vsicons.presets.angular": false
+    "vsicons.presets.angular": false,
+    "editor.fontFamily": "SF Mono, Menlo, Monaco, 'Courier New', monospace"
 }
