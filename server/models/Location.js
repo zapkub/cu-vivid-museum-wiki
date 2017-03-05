@@ -1,9 +1,5 @@
 const keystone = require('keystone');
-
-/**
- * PostCategory Model
- * ==================
- */
+const composeWithMongoose = require('graphql-compose-mongoose').default;
 
 const Location = new keystone.List('Location', {
 });
@@ -17,3 +13,6 @@ Location.add({
 Location.relationship({ ref: 'Plant', path: 'displayLocation' });
 Location.register();
 
+const LocationTC = composeWithMongoose(Location.model, {});
+
+exports.LocationTC = LocationTC;

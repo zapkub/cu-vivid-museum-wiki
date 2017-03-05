@@ -10,6 +10,6 @@ mongo:
 mongo-data:
   image: mongo
   volumes:
-    - ./db/:/data/db
+    - ./.db/:/data/db
   command: "--break-mongo" # break mongod command and use it as data-volume-container
 

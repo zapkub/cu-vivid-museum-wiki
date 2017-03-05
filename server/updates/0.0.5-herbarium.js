@@ -15,10 +15,10 @@ function letterToColumns(input) {
 
 const herbs = herbariumSheet[0]
 .data
-.filter((item, i) => i > 0 && item[letterToColumns('E')] && i < 10)
+.filter((item, i) => i > 0 && item[letterToColumns('E')])
+.filter(item => item[letterToColumns('F')])
 .map(columns => ({
   cuid: columns[letterToColumns('A')],
-  name: columns[letterToColumns('F')] || 'ไม่ระบุ',
   localName: columns[letterToColumns('F')],
   otherName: columns[letterToColumns('G')] ? columns[letterToColumns('G')].split(';') : [],
   duplicateAmount: columns[letterToColumns('H')],

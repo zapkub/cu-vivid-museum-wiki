@@ -1,6 +1,9 @@
+// eslint "no-param-reassign": "off"
+
 const keystone = require('keystone');
-const mongoose = require('mongoose');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
+const { TypeComposer } = require('graphql-compose');
+const { GraphQLEnumType } = require('graphql');
 
 const Types = keystone.Field.Types;
 
@@ -16,8 +19,8 @@ const Plant = new keystone.List('Plant', {
 
 Plant.add({
   cuid: { type: String },
-  name: { type: String, required: true, label: 'ชื่อไทย', default: 'ไม่ระบุ' },
-  localName: { type: String, label: 'ชื่อท้องถิ่น' },
+  name: { type: String, label: 'ชื่อ อังกฤษ' },
+  localName: { type: String, label: 'ชื่อไทย' },
   otherName: { type: Types.TextArray },
   scientificName: { type: String, label: 'ชื่อวิทยาศาสตร์' },
   synonym: { type: String },
@@ -58,55 +61,8 @@ Plant.add({
   reference: { type: Types.Relationship, ref: 'Reference', label: 'อ้างอิง', many: true },
 
 });
-Plant.searchByText = async (args) => {
-  const searchWord = new RegExp(args.text, 'i');
-  return new Promise((resolve, reject) => {
-    Plant.paginate({
-      page: args.page || 1,
-      perPage: 20,
-    })
-            .find({
-              $or: [
-                    { family: searchWord },
-                    { localName: searchWord },
-                    { otherName: searchWord },
-                    { scientificName: searchWord },
-                    { synonym: searchWord },
-                    { name: searchWord },
-                    { new_family: searchWord },
-              ],
-            })
-            .sort('-_id')
-            .where('category')
 
-            .populate('displayLocation')
-            .in(args.categories.map(_id => mongoose.Types.ObjectId(_id)))
-            .exec((err, data) => {
-              if (err) {
-                reject(err);
-              }
-              resolve(data);
-            });
-  });
-};
-
-Plant.getLatestByPage = args => new Promise((resolve, reject) => {
-  Plant
-        .paginate({
-          page: args.page || 0,
-          perPage: args.limit || 10,
-        })
-        .sort('-_id')
-        .exec((err, data) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(data);
-        });
-});
-
-
-Plant.defaultColumns = 'name, cuid, scientificName';
+Plant.defaultColumns = 'localName, scientificName, family';
 Plant.register();
 
 const PlantTC = composeWithMongoose(Plant.model, {
@@ -121,10 +77,85 @@ const PlantTC = composeWithMongoose(Plant.model, {
   },
 });
 
-PlantTC.setResolver('findMany', PlantTC.getResolver('findMany').addSortArg({
+// Nested displayLocation
+PlantTC.removeField('displayLocation');
+PlantTC.addRelation('displayLocation', () => ({
+  resolver: require('./Location').LocationTC.getResolver('findById'),
+  args: {
+    _id: source => source.displayLocation,
+  },
+  projection: { displayLocation: 1 },
+}));
+
+// Resolve placeholder image
+TypeComposer.create(`
+  type PlantImages { secure_url: String, url: String, public_id: String }
+`);
+PlantTC.removeField('images');
+PlantTC.addFields({
+  thumbnailImage: {
+    type: 'PlantImages',
+    resolve: (source) => {
+      if (source.images.length === 0) {
+        return { secure_url: 'http://placehold.it/150x150' };
+      }
+      return source.images[0];
+    },
+    projection: { images: 1 },
+  },
+  images: {
+    type: '[PlantImages]',
+    resolve: (source) => {
+      if (source.images.length === 0) {
+        return [{ secure_url: 'http://placehold.it/150x150' }];
+      }
+      return source.images;
+    },
+  },
+});
+
+// const FieldSearchEnumType = new GraphQLEnumType({
+//   name: 'FieldSearchEnumType',
+//   values: {
+//     RED: { value: 0 },
+//     GREEN: { value: 1 },
+//     BLUE: { value: 2 },
+//   },
+// });
+
+// TypeComposer.create(FieldSearchEnumType);
+// console.log(TypeComposer)
+PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
+.addSortArg({
   name: 'PUBLISH_DATE_DESC',
   description: 'Sort by publish date.',
   value: { publishedDate: -1 },
+})
+.addFilterArg({
+  name: 'searchFieldsWithTexts',
+  type: `
+    input SearchFieldsWithTexts {
+      fields: [String]!
+      texts: [String]!
+    }
+  `,
+  description: 'Search with text match in array',
+  query: (rawQuery, { texts, fields }) => {
+    const test = new RegExp(texts.join('|'), 'i');
+    rawQuery.$or = [];
+    fields.forEach((field) => {
+      switch (Plant.model.schema.paths[field].instance) {
+        case 'String':
+          rawQuery.$or.push({ [field]: test });
+          break;
+        case 'Array':
+          rawQuery.$or.push({ [field]: { $in: [test] } });
+          break;
+        default:
+          break;
+      }
+    });
+  },
 }));
 
 exports.PlantTC = PlantTC;

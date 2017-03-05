@@ -5,6 +5,7 @@ flow-typed
 logs
 *.log
 .env
+.db/
 npm-debug.log*
 
 # Runtime data

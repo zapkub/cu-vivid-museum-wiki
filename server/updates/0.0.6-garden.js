@@ -16,7 +16,7 @@ function letterToColumns(input) {
 
 const gardens = gardenSheet[0]
 	.data
-	.filter((item, i) => i > 0 && item[letterToColumns('E')] && i < 100)
+	.filter((item, i) => i > 0 && item[letterToColumns('E')])
 	.map((columns) => {
   const anatomy = [];
   if (columns[letterToColumns('Q')]) {
@@ -30,8 +30,8 @@ const gardens = gardenSheet[0]
   }
 
   return {
-    name: columns[letterToColumns('B')] || 'ไม่ระบุ',
-    localName: columns[letterToColumns('C')],
+    name: columns[letterToColumns('C')],
+    localName: columns[letterToColumns('B')],
     otherName: columns[letterToColumns('D')] ? columns[letterToColumns('D')].split(';') : [],
     scientificName: columns[letterToColumns('E')],
     synonym: columns[letterToColumns('F')],
