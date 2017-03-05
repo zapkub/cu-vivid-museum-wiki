@@ -1,11 +1,14 @@
 // @flow
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
-import { compose, withReducer } from 'recompose';
+import { compose, withReducer, lifecycle } from 'recompose';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 
-const Component = ({ categories, dispatch, state }) => (
+const CHECKED = 'input/CHECKED';
+const CHECKED_ALL = 'input/CHECKED_ALL';
+
+const Component = ({ categories, dispatch, state, onTextChange, onCategoryChange }) => (
   <Form onSubmit={e => e.preventDefault()} >
     <Form.Input name="text" action={{ icon: 'search' }} placeholder="Search..." />
     <Form.Group inline id="size">
@@ -15,11 +18,11 @@ const Component = ({ categories, dispatch, state }) => (
                     key={category._id}
                     label={category.name}
                     checked={state[category._id]}
-                    onChange={(e, checked) => dispatch({ type: 'select/CHECKED', key: category._id, value: checked })}
+                    onChange={(e, checked) => dispatch({ type: CHECKED, payload: { key: category._id, value: checked } })}
                   />
                 ),
             ) : null }
-      <Label onClick={() => dispatch({ type: 'select/CHECKED_ALL' })} >{'Select all'}</Label>
+      <Label onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
     </Form.Group>
     <style jsx>{` .select-all {
                         font-size: 14px;
@@ -49,13 +52,13 @@ const Component = ({ categories, dispatch, state }) => (
 );
 
 
-const categoriesSelectorReducer = (state, { type, key, value }) => {
+const categoriesSelectorReducer = (state, { type, payload }) => {
   const nextState = Object.assign(state, {});
   switch (type) {
-    case 'select/CHECKED':
-      nextState[key] = value.checked;
+    case CHECKED:
+      nextState[payload.key] = payload.checked;
       break;
-    case 'select/CHECKED_ALL':
+    case CHECKED_ALL:
       Object.keys(nextState).forEach((id) => {
         nextState[id] = true;
       });

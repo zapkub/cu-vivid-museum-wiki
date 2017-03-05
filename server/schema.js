@@ -22,6 +22,7 @@ GQC.rootQuery().addFields(Object.assign({
   plant: PlantTC.getResolver('findById'),
   plants: PlantTC.getResolver('findMany'),
   categories: CategoryTC.getResolver('findMany'),
+  category: CategoryTC.getResolver('findOne'),
   categoriesCount: CategoryTC.getResolver('count'),
   location: LocationTC.getResolver('findById'),
   locations: LocationTC.getResolver('findMany'),

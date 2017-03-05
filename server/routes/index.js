@@ -2,8 +2,11 @@
 // custom keystone app
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const cors = require('cors');
-
+const cloudinary = require('cloudinary-core');
 const schema = require('../schema');
+
+const cl = cloudinary.Cloudinary.new();
+cl.fromEnvironment();
 
 module.exports = (app) => {
   app.use(cors());
@@ -18,6 +21,7 @@ module.exports = (app) => {
     schema,
     context: {
       isAdmin: req.isAdmin,
+      cl,
     },
   })));
 };

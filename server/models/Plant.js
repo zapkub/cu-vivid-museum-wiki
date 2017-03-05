@@ -95,36 +95,38 @@ PlantTC.removeField('images');
 PlantTC.addFields({
   thumbnailImage: {
     type: 'PlantImages',
-    resolve: (source) => {
+    resolve: (source, args, { cl }) => {
       if (source.images.length === 0) {
         return { secure_url: 'http://placehold.it/150x150' };
       }
-      return source.images[0];
+      // resize image for thumbnail
+      return Object.assign(source.images[0],
+        {
+          secure_url: cl.url(source.images[0].public_id,
+            {
+              gravity: 'center',
+              height: 150,
+              width: 150,
+              crop: 'fill',
+            }),
+        });
     },
     projection: { images: 1 },
   },
   images: {
     type: '[PlantImages]',
-    resolve: (source) => {
+    resolve: (source, args, { cl }) => {
       if (source.images.length === 0) {
         return [{ secure_url: 'http://placehold.it/150x150' }];
       }
-      return source.images;
+      return source.images.map((image) => {
+        image.url = cl.url(image.public_id);
+        return image;
+      });
     },
   },
 });
 
-// const FieldSearchEnumType = new GraphQLEnumType({
-//   name: 'FieldSearchEnumType',
-//   values: {
-//     RED: { value: 0 },
-//     GREEN: { value: 1 },
-//     BLUE: { value: 2 },
-//   },
-// });
-
-// TypeComposer.create(FieldSearchEnumType);
-// console.log(TypeComposer)
 PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
 .addSortArg({
   name: 'PUBLISH_DATE_DESC',
