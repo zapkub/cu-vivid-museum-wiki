@@ -2,8 +2,8 @@
 
 const keystone = require('keystone');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
-const { TypeComposer } = require('graphql-compose');
-const { GraphQLEnumType } = require('graphql');
+const { TypeComposer, InputTypeComposer } = require('graphql-compose');
+const { GraphQLEnumType, GraphQLList } = require('graphql');
 
 const Types = keystone.Field.Types;
 
@@ -91,6 +91,7 @@ PlantTC.addRelation('displayLocation', () => ({
 TypeComposer.create(`
   type PlantImages { secure_url: String, url: String, public_id: String }
 `);
+
 PlantTC.removeField('images');
 PlantTC.addFields({
   thumbnailImage: {
@@ -127,6 +128,26 @@ PlantTC.addFields({
   },
 });
 
+
+const searchFieldsInputType = InputTypeComposer.create(`
+    input SearchFieldsWithTexts {
+      texts: [String]!
+    }
+  `);
+
+searchFieldsInputType.addFields({
+  fields: {
+    type: new GraphQLList(new GraphQLEnumType({
+      name: 'AvaiableSearchFields',
+      values: {
+        localName: { value: 'localName' },
+        name: { value: 'name' },
+        scientificName: { value: 'scientificName' },
+      },
+    })),
+  },
+});
+
 PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
 .addSortArg({
   name: 'PUBLISH_DATE_DESC',
@@ -135,12 +156,7 @@ PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
 })
 .addFilterArg({
   name: 'searchFieldsWithTexts',
-  type: `
-    input SearchFieldsWithTexts {
-      fields: [String]!
-      texts: [String]!
-    }
-  `,
+  type: searchFieldsInputType,
   description: 'Search with text match in array',
   query: (rawQuery, { texts, fields }) => {
     const test = new RegExp(texts.join('|'), 'i');
