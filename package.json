@@ -29,6 +29,7 @@
     "mongoose": "^4.8.5",
     "next": "next",
     "node-xlsx": "^0.7.4",
+    "query-string": "^4.3.2",
     "react": "^15.4.2",
     "react-apollo": "^0.13.2",
     "react-highlight-words": "^0.6.0",

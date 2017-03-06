@@ -4,6 +4,7 @@ import { Form, Label } from 'semantic-ui-react';
 import { compose, withReducer, lifecycle } from 'recompose';
 import Router from 'next/router';
 import gql from 'graphql-tag';
+import queryString from 'query-string';
 
 const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
@@ -56,7 +57,7 @@ const categoriesSelectorReducer = (state, { type, payload }) => {
   const nextState = Object.assign(state, {});
   switch (type) {
     case CHECKED:
-      nextState[payload.key] = payload.checked;
+      nextState[payload.key] = payload.value;
       break;
     case CHECKED_ALL:
       Object.keys(nextState).forEach((id) => {
@@ -66,6 +67,12 @@ const categoriesSelectorReducer = (state, { type, payload }) => {
     default:
       break;
   }
+
+  console.log(nextState);
+  const { query, pathname } = Router.router;
+  // query.categories = Object.keys(nextState).map(key => nextState[key]._id);
+  // console.log(query);
+  // Router.replace(`${pathname}?${queryString.stringify(query)}`);
   return nextState;
 };
 
