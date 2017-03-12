@@ -18,6 +18,17 @@ PlantCategory.register();
 const CategoryTC = composeWithMongoose(PlantCategory.model, {
 
 });
+CategoryTC.addFields({
+  heroImageURL: {
+    type: 'String',
+    resolve: (source) => {
+      if (!source.heroImage) {
+        return null;
+      }
+      return source.heroImage.url;
+    },
+  },
+});
 CategoryTC.get('$findMany').removeArg('filter');
 CategoryTC.get('$findMany').removeArg('limit');
 CategoryTC.get('$findMany').removeArg('skip');

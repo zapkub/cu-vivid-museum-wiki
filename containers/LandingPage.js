@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import HeroImage from '../components/HeroImage';
-import withLoading from '../components/withLoading';
+import withLoading from '../lib/withLoading';
 import CategoryThumbnailList from '../components/CategoryThumbnailList';
 import SearchInputBar from '../components/SearchInputBar';
 
@@ -14,7 +14,7 @@ const LandingPage = ({ data, randomCategory }) => (
     {
         data.loading ? null : (
           <div>
-            <HeroImage heroImage={randomCategory.heroImage}>
+            <HeroImage heroImageURL={randomCategory.heroImageURL}>
               <SearchInputBar categories={data.categories} />
             </HeroImage>
             <CategoryThumbnailList categories={data.categories} />
@@ -26,16 +26,13 @@ const LandingPage = ({ data, randomCategory }) => (
 
 const query = gql`
     ${SearchInputBar.fragments.categories}
-    ${HeroImage.fragments.heroImage}
     ${CategoryThumbnailList.fragments.categories}
     query LandingPageQuery {
         categoriesCount
         categories {
             ...SearchInputBar
             ...CategoryThumbnailList
-            heroImage{
-                ...HeroImage
-            }
+            heroImageURL
         }
     }
 `;

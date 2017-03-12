@@ -4,10 +4,10 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { propType } from 'graphql-anywhere';
 
-const HeroImage = ({ heroImage, children }) => {
+const HeroImage = ({ heroImageURL, children }) => {
   let style = { };
-  if (heroImage) {
-    style = Object.assign(style, { backgroundImage: `url(${heroImage.secure_url})`, backgroundSize: 'cover', backgroundPosition: 'center center' });
+  if (heroImageURL) {
+    style = Object.assign(style, { backgroundImage: `url(${heroImageURL})`, backgroundSize: 'cover', backgroundPosition: 'center center' });
   }
   return (
     <div className="background-wrap" style={style}>
@@ -33,14 +33,14 @@ const HeroImage = ({ heroImage, children }) => {
   );
 };
 
-HeroImage.fragments = {
-  heroImage: gql`
-        fragment HeroImage on CategoryHeroImage {
-            secure_url
-        }
-    `,
-};
-HeroImage.propTypes = {
-  heroImage: propType(HeroImage.fragments.heroImage),
-};
+// HeroImage.fragments = {
+//   heroImage: gql`
+//         fragment HeroImage on CloudinaryImage {
+//             secure_url
+//         }
+//     `,
+// };
+// HeroImage.propTypes = {
+//   heroImage: propType(HeroImage.fragments.heroImage),
+// };
 export default HeroImage;

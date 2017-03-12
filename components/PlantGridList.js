@@ -1,28 +1,84 @@
 // @flow
 
 import gql from 'graphql-tag';
-import { compose } from 'recompose';
+import { compose, withProps } from 'recompose';
 import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
 import { Image } from 'semantic-ui-react';
+import _ from 'lodash';
 import HighlightText from 'react-highlight-words';
 
-const PlantGridList = compose()(
+const PlantGridList = compose(
+    // Flatten plantlist
+    withProps(({ plantList }) => {
+      const Herbariums = [];
+      const Museum = [];
+      const Garden = [];
+      plantList.forEach((plant) => {
+        const { scientificName, familyName, name } = plant;
+        plant.Herbarium.forEach(
+            (herb) => {
+              Herbariums.push({
+                type: 'herbarium',
+                scientificName,
+                familyName,
+                name,
+                ...herb,
+              });
+            },
+        );
+        plant.Museum.forEach(
+            (herb) => {
+              Museum.push({
+                type: 'museum',
+                scientificName,
+                familyName,
+                name,
+                ...herb,
+              });
+            },
+        );
+
+        plant.Garden.forEach(
+            (herb) => {
+              Garden.push({
+                type: 'garden',
+                scientificName,
+                familyName,
+                name,
+                ...herb,
+              });
+            },
+        );
+      });
+
+      return {
+        plantList: _.sortBy([
+          ...Herbariums,
+          ...Garden,
+          ...Museum,
+        ], item => item.scientificName),
+      };
+    }),
+)(
     ({ plantList, highlightTexts }) => (
-      <div>
+      <div className="list-wrap">
         { plantList.map(plant => (
           <div key={plant._id} className="container">
             <div className="wrap">
-              <Image style={{ marginRight: 10 }} width={150} height={150} src={plant.thumbnailImage.secure_url} />
+              <div className="thumbnail">
+                <Image style={{ marginRight: 10 }} width={150} height={150} src={plant.thumbnailImage} />
+              </div>
               <div className="detail">
                 <div className="detail-wrap">
+                  <div>{plant.type}</div>
                   <Link
                     href={'/detail'}
                     style={{ cursor: 'pointer' }}
                   >
                     <h2>
-                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.localName} ${plant.name ? plant.name : ''}`} />
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : ''}`} />
                     </h2>
                   </Link>
                   <div className="field">
@@ -34,7 +90,7 @@ const PlantGridList = compose()(
                   <div className="field">
                     <span className="name">{'ชื่อวงศ์'}</span>:
                         <span className="value">
-                          <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.family || 'ไม่ระบุ'} />
+                          <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.familyName || 'ไม่ระบุ'} />
                         </span>
                   </div>
                 </div>
@@ -46,6 +102,12 @@ const PlantGridList = compose()(
               </div>
             </div></div>))}
         <style jsx>{`
+            .list-wrap {
+                max-width: 1024px;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;
+            }
             .link {
                 text-decoration: none;
             }
@@ -63,7 +125,7 @@ const PlantGridList = compose()(
                 padding: 10px;
             }
             .thumbnail {
-                height: 130px;
+                height: 150px;
                 padding-right: 10px;
                 display:flex;
                 flex: 0 0 150px;
@@ -77,7 +139,7 @@ const PlantGridList = compose()(
             .detail-wrap {
                 padding-bottom: 20px;
                 border-bottom: 1px #eaeaea solid;
-                flex: 1 0 auto;
+                flex: 1 1 auto;
             }
             h2 {
                 color: #4d876d;
@@ -117,20 +179,25 @@ const PlantGridList = compose()(
 PlantGridList.fragments = {
   plantList: gql`
         fragment PlantGridList on Plant {
-            name
             _id
-            localName
-            family
-            otherName
             scientificName
-            thumbnailImage {
-                secure_url
-            }
-            displayLocation {
+            familyName
+            name
+            Herbarium(isSelected: $herbSelected) {
                 _id
-                name
-                label
-                description
+                displayLocation
+                collectedDate
+                thumbnailImage
+            }
+            Museum(isSelected: $museumSelected) {
+                _id
+                museumLocation
+                thumbnailImage
+            }
+            Garden(isSelected: $gardenSelected) {
+                _id
+                zone
+                thumbnailImage
             }
         }
     `,

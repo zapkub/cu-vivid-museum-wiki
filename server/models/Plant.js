@@ -2,66 +2,25 @@
 
 const keystone = require('keystone');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
-const { TypeComposer } = require('graphql-compose');
-const { GraphQLEnumType } = require('graphql');
-
-const Types = keystone.Field.Types;
-
-/**
- * Gallery Model
- * =============
- */
+const { Resolver, TypeComposer } = require('graphql-compose');
+const { GraphQLEnumType, GraphQLInputObjectType, GraphQLObjectType, GraphQLList, GraphQLString } = require('graphql');
+const { createStringMatchFilter } = require('../common');
+const HerbariumTC = require('./Herbarium').HerbariumTC;
+const GardenTC = require('./Garden').GardenTC;
+const MuseumTC = require('./Museum').MuseumTC;
 
 const Plant = new keystone.List('Plant', {
-  defaultSort: '-cuid',
+  defaultSort: 'scientificName',
   map: { name: 'scientificName' },
 });
 
 Plant.add({
-  cuid: { type: String },
-  name: { type: String, label: 'ชื่อ อังกฤษ' },
-  localName: { type: String, label: 'ชื่อไทย' },
-  otherName: { type: Types.TextArray },
-  scientificName: { type: String, label: 'ชื่อวิทยาศาสตร์' },
-  synonym: { type: String },
-  family: { type: String, label: 'ชื่อวงศ์' },
-  new_family: { type: String, label: 'Family (ใหม่)' },
-  type: { type: String, label: 'ประเภท' },
-  display: { type: Types.Select, label: 'ส่วน', options: 'Other, Fungi, Seed, Mineral, Fruit, Miscellaneous, Bark, Animal, Flower, Leaf' },
-
-  category: { type: Types.Relationship, ref: 'Category', many: true, label: 'ชนิด' },
-  displayLocation: { type: Types.Relationship, ref: 'Location', label: 'สถานที่จัดแสดง', many: false },
-
-  recipe: { type: String, label: 'วิธีการได้มา' },
-  property: { type: String },
-  localProperty: { type: String, label: 'สรรพคุณพื้นบ้าน' },
-  minorBenefit: { type: String, label: 'สรรพคุณประโยชน์อื่นๆ' },
-  anatomy: { type: Types.TextArray, label: 'ลักษณะทางวิทยาศาสตร์' },
-  toxicDetail: { type: String, label: 'ความเป็นพิษ' },
-  adr: { type: String },
-  publishedDate: { type: Date, default: Date.now },
-  duplicateAmount: { type: Number, default: 0 },
-  caution: { type: String, label: 'ข้อห้ามใช้' },
-  warning: { type: String, label: 'ข้อควรระวังอื่น' },
-  images: { type: Types.CloudinaryImages },
-
-  characteristic: { type: String, label: 'ความแตกต่างของพืชสมุนไพร' },
-
-  habit: { type: String },
-  altitude: { type: String },
-  collector_en: { type: String },
-  collector_th: { type: String },
-  chem_structure: { type: String, label: 'ส่วนประกอบทางเคมี' },
-  prod_dev: { type: String, label: 'Product Development' },
-  slotNo: { type: String, label: 'Museum location' },
-  blockNo: { type: Number },
-  donor: { type: String, label: 'Donor' },
-  note: { type: String },
-  discoverLocation: { type: String, label: 'สถานที่ค้นพบ' },
-  reference: { type: Types.Relationship, ref: 'Reference', label: 'อ้างอิง', many: true },
-
+  scientificName: { type: String, label: 'ชื่อวิทยาศาสตร์', unique: true },
+  familyName: { type: String, label: 'ชื่อวงศ์' },
+  name: { type: String, label: 'ชื่อ' },
 });
 
+Plant.relationship({ ref: 'Herbarium', path: 'plantId' });
 Plant.defaultColumns = 'localName, scientificName, family';
 Plant.register();
 
@@ -77,88 +36,127 @@ const PlantTC = composeWithMongoose(Plant.model, {
   },
 });
 
-// Nested displayLocation
-PlantTC.removeField('displayLocation');
-PlantTC.addRelation('displayLocation', () => ({
-  resolver: require('./Location').LocationTC.getResolver('findById'),
-  args: {
-    _id: source => source.displayLocation,
-  },
-  projection: { displayLocation: 1 },
-}));
 
-// Resolve placeholder image
-TypeComposer.create(`
-  type PlantImages { secure_url: String, url: String, public_id: String }
-`);
-PlantTC.removeField('images');
-PlantTC.addFields({
-  thumbnailImage: {
-    type: 'PlantImages',
-    resolve: (source, args, { cl }) => {
-      if (source.images.length === 0) {
-        return { secure_url: 'http://placehold.it/150x150' };
-      }
-      // resize image for thumbnail
-      return Object.assign(source.images[0],
-        {
-          secure_url: cl.url(source.images[0].public_id,
-            {
-              gravity: 'center',
-              height: 150,
-              width: 150,
-              crop: 'fill',
-            }),
-        });
-    },
-    projection: { images: 1 },
-  },
-  images: {
-    type: '[PlantImages]',
-    resolve: (source, args, { cl }) => {
-      if (source.images.length === 0) {
-        return [{ secure_url: 'http://placehold.it/150x150' }];
-      }
-      return source.images.map((image) => {
-        image.url = cl.url(image.public_id);
-        return image;
-      });
-    },
+const CategoryEnum = new GraphQLEnumType({
+  name: 'CategoryEnum',
+  values: {
+    HERBARIUM: { values: 'herbarium' },
+    GARDEN: { value: 'garden' },
+    MUSEUM: { value: 'museum' },
   },
 });
 
-PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
-.addSortArg({
-  name: 'PUBLISH_DATE_DESC',
-  description: 'Sort by publish date.',
-  value: { publishedDate: -1 },
-})
-.addFilterArg({
-  name: 'searchFieldsWithTexts',
-  type: `
-    input SearchFieldsWithTexts {
-      fields: [String]!
-      texts: [String]!
-    }
-  `,
-  description: 'Search with text match in array',
-  query: (rawQuery, { texts, fields }) => {
-    const test = new RegExp(texts.join('|'), 'i');
-    rawQuery.$or = [];
-    fields.forEach((field) => {
-      switch (Plant.model.schema.paths[field].instance) {
-        case 'String':
-          rawQuery.$or.push({ [field]: test });
-          break;
-        case 'Array':
-          rawQuery.$or.push({ [field]: { $in: [test] } });
-          break;
-        default:
-          break;
-      }
+PlantTC.addFields({
+  category: 'String',
+});
+PlantTC.setResolver('search', new Resolver({
+  name: 'search',
+  type: new GraphQLList(PlantTC.getType()),
+  args: {
+    text: { type: '[String]' },
+    categories: { type: new GraphQLList(CategoryEnum), defaultValue: ['garden', 'herbarium', 'museum'] },
+  },
+  resolve: async ({ source, args: { categories, text }, context: { Garden, Museum, Herbarium } }) => {
+    const test = new RegExp(text.join('|'), 'i');
+    const plants = await Plant.model.find({
+      $or: [
+        { scientificName: test },
+        { familyName: test },
+        { name: test },
+      ],
     });
+    const plantIds = plants.map(plant => plant.id);
+    const result = [];
+    const categoriesPromise = new Promise((rs, rj) => {
+      categories.forEach(async (category) => {
+        let model;
+        switch (category) {
+          case 'garden':
+            model = Garden;
+            break;
+          case 'herbarium':
+            model = Herbarium;
+            break;
+          case 'museum':
+            model = Museum;
+            break;
+          default:
+            model = Herbarium;
+            break;
+        }
+        const query = [];
+        Object.keys(model.schema.paths).forEach(
+        (path) => {
+          if (model.schema.paths[path].instance === 'String') {
+            query.push({
+              [path]: test,
+            });
+          }
+        });
+        const categoriesResults = await model.find({ plantId: { $in: plantIds } })
+        .populate('plantId');
+        categoriesResults.forEach((item) => {
+          const plant = item.plantId;
+          plant.id = item._id;
+          plant.category = category;
+          result.push(plant);
+        });
+        rs();
+      });
+    });
+    await categoriesPromise;
+
+    return result;
   },
 }));
+
+
+// MuseumTC.getResolver('findMany').addArgs({
+//   isSelected: { type: 'Boolean', defaultValue: true },
+// });
+// GardenTC.getResolver('findMany').addArgs({
+//   isSelected: { type: 'Boolean', defaultValue: true },
+// });
+// HerbariumTC.getResolver('findMany').addArgs({
+//   isSelected: { type: 'Boolean', defaultValue: true },
+// });
+// const PlantIdRelationArg = {
+//   filter: (source, args) => {
+//     if (args.isSelected) {
+//       return { plantId: source._id.toString() };
+//     }
+//     // disable search
+//     return { images: 'invalid' };
+//   },
+// };
+
+// PlantTC.addRelation('Museum', () => ({
+//   resolver: MuseumTC.getResolver('findMany'),
+//   args: PlantIdRelationArg,
+//   projection: { _id: 1, plantId: 1 },
+// }));
+// PlantTC.addRelation('Garden', () => ({
+//   resolver: GardenTC.getResolver('findMany'),
+//   args: PlantIdRelationArg,
+//   projection: { _id: 1, plantId: 1 },
+// }));
+// PlantTC.addRelation('Herbarium', () => ({
+//   resolver: HerbariumTC.getResolver('findMany'),
+//   args: PlantIdRelationArg,
+//   projection: { _id: 1, plantId: 1 },
+// }));
+
+// PlantTC.setResolver('findMany', PlantTC.getResolver('findMany')
+// .addFilterArg(createStringMatchFilter(PlantTC))
+// .addFilterArg({
+//   name: 'categories',
+//   type: '[String]',
+// })
+// .addSortArg({
+//   name: 'PUBLISH_DATE_DESC',
+//   description: 'Sort by publish date.',
+//   value: { publishedDate: -1 },
+// }));
 
 exports.PlantTC = PlantTC;
 

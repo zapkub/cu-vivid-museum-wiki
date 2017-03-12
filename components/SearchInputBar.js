@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
-import { compose, withReducer, lifecycle } from 'recompose';
+import { compose, withReducer, withState, onlyUpdateForKeys, withProps } from 'recompose';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
@@ -9,21 +9,21 @@ import queryString from 'query-string';
 const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
 
-const Component = ({ categories, dispatch, state, onTextChange, onCategoryChange }) => (
-  <Form onSubmit={e => e.preventDefault()} >
-    <Form.Input name="text" action={{ icon: 'search' }} placeholder="Search..." />
+const Component = ({ categories, dispatch, state, onTextChange, texts, confirmSearch }) => (
+  <Form onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
+    <Form.Input name="text" action={{ icon: 'search' }} value={texts} onChange={e => onTextChange(e.target.value)} placeholder="Search..." />
     <Form.Group inline id="size">
       { categories ? categories.map(
                 category => (
                   <Form.Checkbox
-                    key={category._id}
+                    key={category.key}
                     label={category.name}
-                    checked={state[category._id]}
-                    onChange={(e, checked) => dispatch({ type: CHECKED, payload: { key: category._id, value: checked } })}
+                    checked={state[category.key]}
+                    onChange={(e, { checked }) => dispatch({ type: CHECKED, payload: { key: category.key, value: checked } })}
                   />
                 ),
             ) : null }
-      <Label onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
+      <Label style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
     </Form.Group>
     <style jsx>{` .select-all {
                         font-size: 14px;
@@ -53,7 +53,7 @@ const Component = ({ categories, dispatch, state, onTextChange, onCategoryChange
 );
 
 
-const categoriesSelectorReducer = (state, { type, payload }) => {
+function categoriesSelectorReducer(state, { type, payload }) {
   const nextState = Object.assign(state, {});
   switch (type) {
     case CHECKED:
@@ -67,31 +67,51 @@ const categoriesSelectorReducer = (state, { type, payload }) => {
     default:
       break;
   }
-
   console.log(nextState);
-  const { query, pathname } = Router.router;
-  // query.categories = Object.keys(nextState).map(key => nextState[key]._id);
-  // console.log(query);
-  // Router.replace(`${pathname}?${queryString.stringify(query)}`);
   return nextState;
-};
+}
 
 const SearchInputBar = compose(
+        withState('texts', 'onTextChange', () => {
+          const { query } = Router.router;
+          if (!query.searchTexts) {
+            return '';
+          }
+          return query.searchTexts;
+        }),
         withReducer('state', 'dispatch', categoriesSelectorReducer, ({ categories }) => {
           const initState = {};
-          categories.forEach((category) => {
+          [{ key: 'garden' }, { key: 'herbarium' }, { key: 'museum' }].forEach((category) => {
             const { query } = Router.router;
             if (query.categories) {
               const selectedCategories = query.categories.split(',');
-              if (selectedCategories.indexOf(category._id) > -1) {
-                initState[category._id] = true;
+              if (selectedCategories.indexOf(category.key) > -1) {
+                initState[category.key] = true;
               } else {
-                initState[category._id] = false;
+                initState[category.key] = false;
               }
+            } else {
+              initState[category.key] = false;
             }
           });
           return initState;
         }),
+        withProps(({ state, texts }) => ({
+          confirmSearch: () => {
+            const categories = [];
+            Object.keys(state).forEach((key) => {
+              if (state[key]) {
+                categories.push(key);
+              }
+            });
+
+            const queryParam = {
+              searchTexts: texts,
+              categories: categories.join(','),
+            };
+            Router.push(`/results?${queryString.stringify(queryParam)}`);
+          },
+        })),
 )(Component);
 
 SearchInputBar.fragments = {

@@ -1,9 +1,13 @@
 const { GQC } = require('graphql-compose');
+const { GraphQLList } = require('graphql');
 
 const { PlantTC } = require('./models/Plant');
+const { GardenTC } = require('./models/Garden');
 const { CategoryTC } = require('./models/Category');
-const { LocationTC } = require('./models/Location');
+const { HerbariumTC } = require('./models/Herbarium');
+const { MuseumTC } = require('./models/Museum');
 
+const { createStringMatchFilter, addRelationWith } = require('./common');
 
 const checkPermission = (resolvers) => {
   Object.keys(resolvers).forEach((k) => {
@@ -17,15 +21,44 @@ const checkPermission = (resolvers) => {
   });
   return resolvers;
 };
+const cloudinaryImageType = CategoryTC.getFieldType('heroImage');
+cloudinaryImageType.name = 'CloudinaryImage';
+
+const AddTypeToImageField = (TC) => {
+  TC.removeField('images');
+  TC.addFields({
+    images: {
+      type: new GraphQLList(cloudinaryImageType),
+      resolve: source => source.images,
+    },
+    thumbnailImage: {
+      projection: { images: 1 },
+      type: 'String',
+      resolve: (source) => {
+        if (source.images.length === 0) {
+          return 'http://placehold.it/150x150';
+        }
+        return source.images[0].url;
+      },
+    },
+  });
+};
+
+addRelationWith(GardenTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
+addRelationWith(HerbariumTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
+addRelationWith(MuseumTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
+
+AddTypeToImageField(GardenTC);
+AddTypeToImageField(MuseumTC);
+AddTypeToImageField(HerbariumTC);
 
 GQC.rootQuery().addFields(Object.assign({
-  plant: PlantTC.getResolver('findById'),
-  plants: PlantTC.getResolver('findMany'),
+  findByCategory: PlantTC.getResolver('search'),
+  findPlants: PlantTC.getResolver('findMany'),
+  herbariums: HerbariumTC.getResolver('findMany'),
   categories: CategoryTC.getResolver('findMany'),
   category: CategoryTC.getResolver('findOne'),
   categoriesCount: CategoryTC.getResolver('count'),
-  location: LocationTC.getResolver('findById'),
-  locations: LocationTC.getResolver('findMany'),
 }, checkPermission({
 
 })));
