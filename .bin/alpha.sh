@@ -1,5 +1,5 @@
 docker-compose stop
 docker-compose up -d --no-recreate
-npm run build
-npm run down
-NODE_ENV=production npm run up
+sudo npm run build
+sudo npm run down
+sudo NODE_ENV=production npm run up
