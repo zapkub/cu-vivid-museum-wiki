@@ -15,7 +15,7 @@ app.prepare().then(() => {
   if (!dev) {
     require('./server/keystone').start();
   }
-  server.listen(8080, () => {
-    console.log('Start app on 8080');
+  server.listen(process.env.PORT || 8080, () => {
+    console.log(`Start app on ${process.env.PORT || 8080}`);
   });
 });
