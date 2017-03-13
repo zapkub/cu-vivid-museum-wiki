@@ -8,7 +8,7 @@ import SearchMore from './SearchMore';
 const PlantDetailList = ({ name, scientificName, familyName }) => (
   <List size={'big'}>
     <List.Item>
-      <Label color="white" horizontal>{'ชื่อไทย'}</Label>
+      <Label horizontal>{'ชื่อไทย'}</Label>
       { name }
     </List.Item>
     <List.Item>

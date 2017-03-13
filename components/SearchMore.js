@@ -11,8 +11,8 @@ export default ({ category = '', text }) => (
       { Object.keys(categories)
             .filter(key => key !== category.toUpperCase())
             .map(key => (
-              <Link key={key} >
-                <a href={`/results?categories=${key}&searchTexts=${text}`} className="search-button">
+              <Link key={key} href={`/results?categories=${key}&searchTexts=${text}`} >
+                <a className="search-button">
                   <div className="category-name">{key}</div>
                 </a>
               </Link>

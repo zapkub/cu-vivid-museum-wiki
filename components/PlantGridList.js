@@ -21,8 +21,9 @@ const PlantGridList = compose(
                 <div className="detail-wrap">
                   <Link
                     style={{ cursor: 'pointer' }}
+                    href={`/detail?category=${plant.category}&id=${plant._id}`}
                   >
-                    <Header style={{ color: '#4d876d' }} as="a" href={`/detail?category=${plant.category}&id=${plant._id}`}>
+                    <Header style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
                       <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : 'ไม่ระบุ'}`} />
                     </Header>
                   </Link>
