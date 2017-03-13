@@ -11,14 +11,14 @@ const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
 
 const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch }) => (
-  <Form className={small ? 'search-input-wrap' : ''} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
+  <Form className={small ? 'search-input-small-wrap' : 'search-input-wrap'} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Input
       className="search-input"
       name="text"
       action={{ icon: 'search', color: 'blue' }}
       value={texts} onChange={e => onTextChange(e.target.value)} placeholder="Search..."
     />
-    <Form.Group className="checkbox-input-wrap" inline id="size" style={{ marginLeft: small ? '10px' : '0' }}>
+    <Form.Group className="checkbox-input-wrap" inline id="size">
       { Categories ? Object.keys(Categories).map(
                 key => (
                   <Form.Checkbox
@@ -34,29 +34,39 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch 
     </Form.Group>
     <style jsx global>{`
         .search-input-wrap {
+            max-width: 400px !important;
+            margin: auto;
+        }
+        .search-input-small-wrap {
           display: flex;
           align-items: center;
           z-index:2;
           position:relative;
         }
         .search-input {
-          width: 300px;
+          width: 400px;
           border: 3px rgba(0,0,0,0.4) solid;
         }
         .checkbox-input-wrap {
           background: rgba(0,0,0,0.4);
+          justify-content: center;
+          max-width: 400px;
           padding: 5px 10px;
           border-radius: 10px;
           color: white;
+          margin-left: 5px !important;
         }
         .checkbox-input label {
           color: white !important;
         }
-        @media screen and (max-width: 670px) {
+        @media screen and (max-width: 800px) {
           .search-input {
             width: 100%;
           }
-          .search-input-wrap{
+          .checkbox-input-wrap {
+            margin: auto;
+          }
+          .search-input-small-wrap{
             flex-direction: column;
           }
         }

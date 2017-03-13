@@ -11,7 +11,7 @@ const CategoryThumbnailList = ({ }) => (
     <div className="category-container" >
       {
           Categories ? Object.keys(Categories).map(key =>
-          (<Link key={key} href={`/${Categories[key].value}`}><a style={{ color: 'black' }} className="category-item" >
+          (<Link key={key}><a style={{ color: 'black' }} href={`/${Categories[key].value}`} className="category-item" >
             <div
               style={{
                 border: '1px #eeeeee solid',

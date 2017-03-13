@@ -36,7 +36,7 @@ export default compose(
     withProps(({ setLoading, client, setPlant, url: { query: { category, id } } }) => {
       const fragment = PlantDetail.fragments[category];
       return {
-        reloadPlantDetail: async () => {
+        reloadPlantDetail: async (plantId = id) => {
           const query = gql`
             ${fragment}
             ${RelatePlantList.fragments.relateList}
@@ -53,10 +53,11 @@ export default compose(
                 }
             }
         `;
+          setLoading(true);
           const result = await client.query({
             query,
             variables: {
-              id,
+              id: plantId,
             },
           });
           setPlant(result.data[category]);
@@ -67,6 +68,13 @@ export default compose(
     lifecycle({
       componentDidMount() {
         this.props.reloadPlantDetail();
+      },
+      componentWillReceiveProps(nextProps) {
+        const nextQuery = nextProps.url.query;
+        const query = this.props.url.query;
+        if (nextQuery.id !== query.id) {
+          this.props.reloadPlantDetail(nextQuery.id);
+        }
       },
     }),
     withLoading(({ loading }) => loading),

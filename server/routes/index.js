@@ -19,6 +19,8 @@ module.exports = (server) => {
   //   req.isAdmin = false;
   //   next();
   // });
+
+
   server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   server.use('/graphql', graphqlExpress(req => ({
     schema,

@@ -12,6 +12,7 @@ const PlantGridList = compose(
 )(
     ({ plantList, highlightTexts }) => (
       <div className="list-wrap">
+        { plantList.length === 0 ? '' : null}
         { plantList.map(plant => (
           <div key={plant._id} className="container">
             <div className="wrap">
@@ -19,7 +20,6 @@ const PlantGridList = compose(
               <div className="detail">
                 <div className="detail-wrap">
                   <Link
-                    href={`/detail?category=${plant.category}&id=${plant._id}`}
                     style={{ cursor: 'pointer' }}
                   >
                     <Header style={{ color: '#4d876d' }} as="a" href={`/detail?category=${plant.category}&id=${plant._id}`}>
@@ -112,19 +112,20 @@ const PlantGridList = compose(
                 width: 120px;
                 font-weight: bold;
             }
+            .field {
+                display: block;
+            }
+            .field .value {
+                display: block;
+            }
+            .field .name {
+                display: block;
+            }
             @media screen and (max-width: 670px) {
                 .container {
                     flex: 1 0 100%;
                 }
-                .field {
-                    display: block;
-                }
-                .field .value {
-                    display: block;
-                }
-                .field .name {
-                    display: block;
-                }
+
             }
             .footer {
                 font-size: 12px;

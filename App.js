@@ -3,6 +3,7 @@ import React from 'react';
 import Head from 'next/head';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+import { Message } from 'semantic-ui-react';
 import { combineReducers } from 'redux';
 
 import Header from './components/Header';
@@ -30,6 +31,9 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
     }
     constructor(props: any) {
       super(props);
+      this.state = {
+        showMsg: true,
+      };
       this.client = new ApolloClient({
         networkInterface: createNetworkInterface({ uri: props.graphqlEndpoint }),
       });
@@ -57,15 +61,21 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
               <link href="/lib/react-image-gallery/styles/css/image-gallery-no-icon.css" rel="stylesheet" />
               <link href="/static/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
             </Head>
-            <Header />
+            {
+              this.state.showMsg ? <Message onDismiss={() => this.setState({ showMsg: false })} style={{ margin: 10 }} info>
+                <Message.Header>{'Beta release'}</Message.Header>
+                <p>{'We are currently at beta stage.'}</p>
+              </Message> : null
+            }
             <div className="body-container">
+              <Header />
               <div className="content">
                 <ApolloProvider store={this.store} client={this.client}>
                   <Component {...this.props} />
                 </ApolloProvider>
               </div>
+              <Footer />
             </div>
-            <Footer />
             <style jsx global>
               {
                        `
@@ -85,6 +95,10 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
                         .content {
                             flex: 2 0 auto;
                         }
+                        .ui.checkbox input:checked~.box:after, .ui.checkbox input:checked~label:after { color: white }
+                        .ui.checkbox .box:before, .ui.checkbox label:before { background: none; }
+                        .ui.checkbox input:checked~.box:before, .ui.checkbox input:checked~label:before { background: none; border: 1px solid white; color: white;}
+                        .ui.checkbox .box:hover::before, .ui.checkbox label:hover::before { background: none; border: 1px solid white; }
                         `
                                 }
             </style>

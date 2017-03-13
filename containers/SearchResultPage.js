@@ -1,24 +1,34 @@
 import React from 'react';
-import { compose, withProps, withState } from 'recompose';
+import { compose, withProps } from 'recompose';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Header } from 'semantic-ui-react';
 
 import HeroImage from '../components/HeroImage';
 import withLoading from '../lib/withLoading';
 import PlantGridList from '../components/PlantGridList';
 import SearchInputBar from '../components/SearchInputBar';
 
-const SearchResultPage = ({ data, setTexts, texts }) => (
-  <div>
-    { !data.loading ?
-      (<div>
-        <HeroImage>
+const SearchResultPage = ({ data, texts, categories }) => !data.loading ?
+      (<div className="container">
+        <HeroImage heroImageURL={'/static/images/1_home-18.jpg'} >
           <SearchInputBar categories={data.categories} />
         </HeroImage>
-        <PlantGridList highlightTexts={texts} plantList={data.findByCategory} />
-      </div>) : null }
-  </div>
-);
+        <div className="wrap">
+          <Header> ผลลัพธ์การค้นหาในหมวด {categories.join(', ')} </Header>
+          { data.findByCategory.length === 0 ? 'ไม่พบผลลัพธ์' : ''}
+          <PlantGridList highlightTexts={texts} plantList={data.findByCategory} />
+        </div>
+        <style jsx>{` 
+          .wrap {  
+            padding: 10px;
+            max-width: 1024px;
+            margin: auto; 
+            margin-top: 30px;
+          }
+        `}</style>
+      </div>) : null;
+
 
 export default compose(
       withProps(({ url }) => {

@@ -53,8 +53,10 @@ PlantTC.setResolver('search', new Resolver({
   args: {
     text: { type: '[String]', defaultValue: [] },
     categories: { type: new GraphQLList(CategoryEnum), defaultValue: ['garden', 'herbarium', 'museum'] },
+    skip: { type: 'Int', defaultValue: 0 },
+    limit: { type: 'Int', defaultValue: 20 },
   },
-  resolve: async ({ args: { categories, text }, context: { Garden, Museum, Herbarium } }) => {
+  resolve: async ({ args: { categories, text, skip, limit }, context: { Garden, Museum, Herbarium } }) => {
     const test = new RegExp(text.join('|'), 'i');
     const plants = await Plant.model.find({
       $or: [
@@ -92,7 +94,6 @@ PlantTC.setResolver('search', new Resolver({
           }
         });
         const categoriesResults = await model.find({ plantId: { $in: plantIds } })
-        .limit(20)
         .populate('plantId');
 
         categoriesResults.forEach((item) => {
@@ -113,7 +114,9 @@ PlantTC.setResolver('search', new Resolver({
       });
     });
     const searchResult = await categoriesPromise();
-    return _.sortBy(searchResult, item => item.scientificName);
+    return _(searchResult)
+        .sortBy(item => item.scientificName)
+        .slice(skip, skip + limit);
   },
 }));
 

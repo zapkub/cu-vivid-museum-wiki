@@ -2,12 +2,13 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { compose } from 'recompose';
 import ImageGallery from 'react-image-gallery';
-import { Label, List, Header, Segment } from 'semantic-ui-react';
+import { Label, List, Header } from 'semantic-ui-react';
+import SearchMore from './SearchMore';
 
 const PlantDetailList = ({ name, scientificName, familyName }) => (
   <List size={'big'}>
     <List.Item>
-      <Label color="purple" horizontal>{'ชื่อไทย'}</Label>
+      <Label color="white" horizontal>{'ชื่อไทย'}</Label>
       { name }
     </List.Item>
     <List.Item>
@@ -22,7 +23,6 @@ const PlantDetailList = ({ name, scientificName, familyName }) => (
 
 const MuseumDetail = ({ museumLocation, plant }) =>
 (<div>
-  <Header as="h1">{plant.name || 'ไม่ระบุ'}</Header>
   <PlantDetailList {...plant} />
   <List>
     <Label horizontal>{'พื้นที่จัดแสดง'}</Label>
@@ -48,7 +48,7 @@ MuseumDetail.type = `
 
 const GardenDetail = ({ zone, plant }) =>
 (<div>
-  <Header as="h1">{plant.name || 'ไม่ระบุ'}</Header>
+
   <PlantDetailList {...plant} />
   <List>
     <Label horizontal>{'พื้นที่จัดแสดง'}</Label>
@@ -74,7 +74,6 @@ GardenDetail.type = `
 
 const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
-  <Header as="h1">{plant.name || 'ไม่ระบุ'}</Header>
   <PlantDetailList {...plant} />
   <List size={'big'}>
     <List.Item>
@@ -149,7 +148,9 @@ const PlantDetail = ({ plant, category }) => {
 
       </div>
       <div className="detail-wrap">
+        <Header style={{ color: 'rgb(77, 135, 109)' }} as="h1">{plant.plant.name || 'ไม่ระบุ'}</Header>
         <DetailComponent {...plant} />
+        <SearchMore category={category} text={plant.plant.scientificName} />
       </div>
       <style jsx>{`
       .container {
