@@ -1,12 +1,10 @@
 // @flow
 
 import gql from 'graphql-tag';
-import { compose, withProps } from 'recompose';
+import { compose } from 'recompose';
 import React from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
 import { Image, Header } from 'semantic-ui-react';
-import _ from 'lodash';
 import HighlightText from 'react-highlight-words';
 
 const PlantGridList = compose(
@@ -25,19 +23,19 @@ const PlantGridList = compose(
                     style={{ cursor: 'pointer' }}
                   >
                     <Header style={{ color: '#4d876d' }} as="a" href={`/detail?category=${plant.category}&id=${plant._id}`}>
-                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : ''}`} />
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : 'ไม่ระบุ'}`} />
                     </Header>
                   </Link>
                   <div className="field">
-                    <span className="name">{'ชื่อวิทยาศาสตร์'}</span>:<span className="value">
+                    <span className="name">{'ชื่อวิทยาศาสตร์'}</span><span className="value">
                       <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.scientificName || 'ไม่ระบุ'} />
                     </span>
                   </div>
                   <div className="field">
-                    <span className="name">{'ชื่อวงศ์'}</span>:
-                        <span className="value">
-                          <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.familyName || 'ไม่ระบุ'} />
-                        </span>
+                    <span className="name">{'ชื่อวงศ์'}</span>
+                    <span className="value">
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.familyName || 'ไม่ระบุ'} />
+                    </span>
                   </div>
                 </div>
                 <div className="footer">
@@ -100,7 +98,7 @@ const PlantGridList = compose(
                 
             }
             .field {
-                display: flex;
+                display: block;
                 font-size:12px;
             }
             .field .value{
@@ -111,7 +109,22 @@ const PlantGridList = compose(
             .field .name {
                 font-size:12px;
                 display: inline-block;
-                flex: 0 0 120px;
+                width: 120px;
+                font-weight: bold;
+            }
+            @media screen and (max-width: 670px) {
+                .container {
+                    flex: 1 0 100%;
+                }
+                .field {
+                    display: block;
+                }
+                .field .value {
+                    display: block;
+                }
+                .field .name {
+                    display: block;
+                }
             }
             .footer {
                 font-size: 12px;

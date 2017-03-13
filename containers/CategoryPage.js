@@ -7,13 +7,14 @@ import HeroImage from '../components/HeroImage';
 import withLoading from '../lib/withLoading';
 import SearchInputBar from '../components/SearchInputBar';
 import PlantGridList from '../components/PlantGridList';
+import categories from '../category';
 
-const CategoryPage = ({ data }) => (
+const CategoryPage = ({ data, category }) => (
   <div>
 
     { !data.loading ?
     (<div>
-      <HeroImage>
+      <HeroImage heroImageURL={categories[category.toUpperCase()].heroImage}>
         <SearchInputBar />
       </HeroImage>
       <PlantGridList plantList={data.findByCategory} />

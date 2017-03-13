@@ -11,7 +11,14 @@ const RelatePlantList = compose(
   <div className="container">
     <Header>{'ในพื้นที่จัดแสดงเดียวกัน'}</Header>
     <Divider />
-    <PlantGridList plantList={Related.map(item => ({ ...item.plant, category, _id: item._id }))} />
+    <PlantGridList
+      plantList={Related.map(item => ({ ...item.plant, category, _id: item._id, thumbnailImage: item.thumbnailImage }))}
+    />
+    <style jsx>{`
+      .container{ 
+        padding: 10px;
+      } 
+      `}</style>
   </div>
 ));
 
@@ -20,6 +27,7 @@ RelatePlantList.fragments = {
   relateList: gql`
         fragment RelateList on Plant {
             scientificName
+            thumbnailImage
             familyName
             name
         }

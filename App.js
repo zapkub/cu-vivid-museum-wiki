@@ -10,25 +10,33 @@ import Footer from './components/Footer';
 
 import { initStore } from './store';
 
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({ uri: 'http://localhost:3000/graphql' }),
-});
-const rootReducer = combineReducers({
-  apollo: client.reducer(),
-});
 
 export default function withAppLayout(Component, title = 'พิพิธภัณฑ์ เภสัชศาสตร์') {
   class Layout extends React.Component {
     static getInitialProps({ req }) {
       const isServer = !!req;
+      const graphqlEndpoint = process.env.GRAPHQL || 'http://localhost:3000/graphql';
+      const client = new ApolloClient({
+        networkInterface: createNetworkInterface({ uri: graphqlEndpoint }),
+      });
+
+      const rootReducer = combineReducers({
+        apollo: client.reducer(),
+      });
       const store = initStore(rootReducer, {}, isServer)(client);
 
 
-      return { initialState: store.getState(), isServer };
+      return { initialState: store.getState(), isServer, graphqlEndpoint };
     }
     constructor(props: any) {
       super(props);
-      this.store = initStore(rootReducer, props.initialState, props.isServer)(client);
+      this.client = new ApolloClient({
+        networkInterface: createNetworkInterface({ uri: props.graphqlEndpoint }),
+      });
+      const rootReducer = combineReducers({
+        apollo: this.client.reducer(),
+      });
+      this.store = initStore(rootReducer, props.initialState, props.isServer)(this.client);
     }
     props: PropsType
     store: any;
@@ -52,7 +60,7 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
             <Header />
             <div className="body-container">
               <div className="content">
-                <ApolloProvider store={this.store} client={client}>
+                <ApolloProvider store={this.store} client={this.client}>
                   <Component {...this.props} />
                 </ApolloProvider>
               </div>

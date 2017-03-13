@@ -7,11 +7,12 @@ import RelatePlantList from '../components/RelatePlantList';
 import HeroImage from '../components/HeroImage';
 import SearchInputBar from '../components/SearchInputBar';
 import withLoading from '../lib/withLoading';
+import categories from '../category';
 
 const PlantDetailPage = ({ loading, plant, url: { query: { category, id } } }) =>
 loading ? null :
 (<div>
-  <HeroImage small>
+  <HeroImage small heroImageURL={categories[category.toUpperCase()].heroImage}>
     <SearchInputBar small />
   </HeroImage>
   {(
@@ -42,8 +43,9 @@ export default compose(
             query ($id: MongoID!) {
                 ${category}(_id: $id) {
                     ...PlantDetail
-                    Related {
+                    Related (limit: 6) {
                       _id
+                      thumbnailImage
                       plant {
                         ...RelateList
                       }

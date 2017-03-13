@@ -11,7 +11,7 @@ const CategoryThumbnailList = ({ }) => (
     <div className="category-container" >
       {
           Categories ? Object.keys(Categories).map(key =>
-          (<Link href={`/${Categories[key].value}`}><a key={key} className="category-item" >
+          (<Link key={key} href={`/${Categories[key].value}`}><a style={{ color: 'black' }} className="category-item" >
             <div
               style={{
                 border: '1px #eeeeee solid',
@@ -23,16 +23,23 @@ const CategoryThumbnailList = ({ }) => (
             <div className="category-name">{Categories[key].name}</div>
           </a></Link>)) : null
       }
-      <style jsx>{`
+    </div>
+
+    <style jsx>{`
                 .container {
-                    display:flex;
-                    justify-content: center;
+                    padding-top: 30px;
                 }
+     
                 .category-container {
                     display:flex;
                     justify-content: center;
                     align-items: center;
                     flex-direction: row;
+                }
+                @media screen and (max-width: 670px) {
+                    .category-container {
+                        flex-direction: column;
+                    }
                 }
                 .category-item {
                     margin: 5px;
@@ -60,7 +67,6 @@ const CategoryThumbnailList = ({ }) => (
                     transform: translate(-50%, 15px);
                 }
     `}</style>
-    </div>
   </div>
   );
 

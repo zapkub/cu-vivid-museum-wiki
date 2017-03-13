@@ -74,7 +74,6 @@ GardenDetail.type = `
 
 const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
-  {'Herbarium'}
   <Header as="h1">{plant.name || 'ไม่ระบุ'}</Header>
   <PlantDetailList {...plant} />
   <List size={'big'}>
@@ -159,6 +158,12 @@ const PlantDetail = ({ plant, category }) => {
         padding: 20px;
         box-sizing: border-box;
         display: flex;
+      }
+      @media screen and (max-width: 670px){
+        .container{
+          flex-direction: column;
+          align-items: center;
+        }
       }
       .no-image {
         width: 320px;
