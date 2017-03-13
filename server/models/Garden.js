@@ -13,7 +13,7 @@ const Garden = new keystone.List('Garden', {
 Garden.add({
   plantId: { type: Types.Relationship, ref: 'Plant', many: false },
   zone: { type: String, label: 'Zone' },
-  images: { type: Types.File },
+  images: { type: Types.CloudinaryImage },
 });
 
 Garden.defaultColumns = 'zone';
