@@ -43,5 +43,15 @@ const HerbariumTC = composeWithMongoose(Herbarium.model, {
 HerbariumTC.setResolver('findMany', HerbariumTC.getResolver('findMany')
 .addFilterArg(createStringMatchFilter(HerbariumTC)));
 
+HerbariumTC.addRelation('Related', () => ({
+  resolver: HerbariumTC.getResolver('findMany'),
+  args: {
+    filter: source => ({
+      displayLocation: source.displayLocation,
+    }),
+  },
+  projection: { displayLocation: 1 },
+}));
+
 exports.HerbariumTC = HerbariumTC;
 

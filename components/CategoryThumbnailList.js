@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 
 import Categories from '../category';
 
-const CategoryThumbnailList = ({ categories }) => (
+const CategoryThumbnailList = ({ }) => (
   <div className="container">
     <h1 style={{ textAlign: 'center' }}> {'ค้นหาตามหมวดหมู่'} </h1>
     <div className="category-container" >

@@ -7,7 +7,7 @@ keystone.init({
   name: 'VividMuseam',
   brand: 'Chula',
   static: '../public',
-  mongo: process.env.MONGO_URI,
+  mongo: process.env.MONGO_URI || 'localhost:27017/vivid',
   port: 3000,
   'session store': 'mongo',
   updates: 'updates',
@@ -15,7 +15,7 @@ keystone.init({
   session: true,
   auth: true,
   'user model': 'User',
-  'cookie secret': process.env.COOKIE_SECRET,
+  'cookie secret': process.env.COOKIE_SECRET || 'development secret',
 });
 keystone.set('cloudinary config', process.env.CLOUDINARY_URL);
 keystone.import('models');

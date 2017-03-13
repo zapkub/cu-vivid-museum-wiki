@@ -15,7 +15,8 @@ const CategoryPage = ({ data }) => (
     (<div>
       <HeroImage>
         <SearchInputBar />
-      </HeroImage><PlantGridList plantList={data.findByCategory} />
+      </HeroImage>
+      <PlantGridList plantList={data.findByCategory} />
     </div>) : null }
 
   </div>

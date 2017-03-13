@@ -17,9 +17,7 @@ const PlantGridList = compose(
         { plantList.map(plant => (
           <div key={plant._id} className="container">
             <div className="wrap">
-              <div className="thumbnail">
-                <Image style={{ marginRight: 10 }} width={150} height={150} src={plant.thumbnailImage} />
-              </div>
+              <div className="thumbnail" style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
               <div className="detail">
                 <div className="detail-wrap">
                   <Link
@@ -77,7 +75,9 @@ const PlantGridList = compose(
                 padding-right: 10px;
                 display:flex;
                 flex: 0 0 150px;
+                margin-right: 10px;
                 align-self: center;
+                width: 150px;
             }
             .detail {
                 flex:1 1 auto;
@@ -130,6 +130,7 @@ PlantGridList.fragments = {
             _id
             scientificName
             familyName
+            thumbnailImage
             name
             category
         }

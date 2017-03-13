@@ -5,7 +5,7 @@ import ImageGallery from 'react-image-gallery';
 import { Label, List, Header, Segment } from 'semantic-ui-react';
 
 const PlantDetailList = ({ name, scientificName, familyName }) => (
-  <List divided size={'big'}>
+  <List size={'big'}>
     <List.Item>
       <Label color="purple" horizontal>{'ชื่อไทย'}</Label>
       { name }
@@ -139,12 +139,15 @@ const PlantDetail = ({ plant, category }) => {
   return (
     <div className="container">
       <div className="gallery-wrap">
-        <ImageGallery
-          showFullscreenButton={false}
-          showNav={false}
-          showPlayButton={false}
-          items={plant.images.map(image => ({ original: image.url, thumbnail: 'http://placehold.it/100x100' }))}
-        />
+        {
+            plant.images.length > 0 ? <ImageGallery
+              showFullscreenButton={false}
+              showNav={false}
+              showPlayButton={false}
+              items={plant.images.map(image => ({ original: image.url, thumbnail: 'http://placehold.it/100x100' }))}
+            /> : <div className="no-image">{'ไม่มีรูปภาพ'}</div>
+        }
+
       </div>
       <div className="detail-wrap">
         <DetailComponent {...plant} />
@@ -153,7 +156,18 @@ const PlantDetail = ({ plant, category }) => {
       .container {
         max-width: 1024px;
         margin: auto;
+        padding: 20px;
+        box-sizing: border-box;
         display: flex;
+      }
+      .no-image {
+        width: 320px;
+        height: 320px;
+        background: #f9f9f9;
+        color: #c9c9c9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       .gallery-wrap {
         width: 320px;

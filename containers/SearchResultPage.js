@@ -12,7 +12,7 @@ const SearchResultPage = ({ data, setTexts, texts }) => (
   <div>
     { !data.loading ?
       (<div>
-        <HeroImage heroImageURL={data.category.heroImageURL}>
+        <HeroImage>
           <SearchInputBar categories={data.categories} />
         </HeroImage>
         <PlantGridList highlightTexts={texts} plantList={data.findByCategory} />
@@ -26,30 +26,31 @@ export default compose(
         if (url.query.searchTexts) {
           texts = url.query.searchTexts.split(' ');
         }
+        let categories = [];
+        if (url.query.categories) {
+          categories = url.query.categories.split(',').map(cate => cate.toUpperCase());
+        } else {
+          categories = ['GARDEN', 'HERBARIUM', 'MUSEUM'];
+        }
+
         return {
           texts,
+          categories,
         };
       }),
     graphql(gql`
-        ${SearchInputBar.fragments.categories}
         ${PlantGridList.fragments.plantList}
         query ($texts: [String]!, $categories: [CategoryEnum]) {
-            categories {
-              ...SearchInputBar
-            }
-            category (filter:{key: "garden"}) {
-              heroImageURL
-            }
             findByCategory (text: $texts, categories: $categories) {
                 ...PlantGridList
             }
       }`,
       {
         skip: ({ texts }) => !texts,
-        options: ({ texts, url }) => ({
+        options: ({ texts, url, categories }) => ({
           variables: ({
             texts,
-            categories: url.query.categories.split(',').map(cate => cate.toUpperCase()),
+            categories,
           }),
         }),
       }),

@@ -1,18 +1,19 @@
 // @flow
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
-import { compose, withReducer, withState, onlyUpdateForKeys, withProps } from 'recompose';
+import { compose, withReducer, withState, withProps } from 'recompose';
 import Router from 'next/router';
-import gql from 'graphql-tag';
 import queryString from 'query-string';
+
 import Categories from '../category';
+
 const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
 
-const Component = ({ categories, dispatch, state, onTextChange, texts, confirmSearch }) => (
-  <Form onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
+const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch }) => (
+  <Form style={{ display: small ? 'flex' : 'block', alignItems: 'center' }}onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Input name="text" action={{ icon: 'search' }} value={texts} onChange={e => onTextChange(e.target.value)} placeholder="Search..." />
-    <Form.Group inline id="size">
+    <Form.Group inline id="size" style={{ marginLeft: small ? '10px' : '0' }}>
       { Categories ? Object.keys(Categories).map(
                 key => (
                   <Form.Checkbox
@@ -67,7 +68,6 @@ function categoriesSelectorReducer(state, { type, payload }) {
     default:
       break;
   }
-  console.log(nextState);
   return nextState;
 }
 
@@ -79,7 +79,7 @@ const SearchInputBar = compose(
           }
           return query.searchTexts;
         }),
-        withReducer('state', 'dispatch', categoriesSelectorReducer, ({ categories }) => {
+        withReducer('state', 'dispatch', categoriesSelectorReducer, () => {
           const initState = {};
           Object.keys(Categories).forEach((key) => {
             const { query } = Router.router;
@@ -114,17 +114,5 @@ const SearchInputBar = compose(
         })),
 )(Component);
 
-SearchInputBar.fragments = {
-  categories: gql`
-        fragment SearchInputBar on Category {
-            _id
-            name
-            key
-            thumbnailImage {
-                secure_url
-            }
-        }
-    `,
-};
 
 export default SearchInputBar;

@@ -5,12 +5,6 @@ const composeWithMongoose = require('graphql-compose-mongoose').default;
 const { createStringMatchFilter } = require('../common');
 
 const Types = keystone.Field.Types;
-
-/**
- * Gallery Model
- * =============
- */
-
 const Garden = new keystone.List('Garden', {
   defaultSort: '-zone',
   map: { name: 'zone' },
@@ -40,6 +34,16 @@ const GardenTC = composeWithMongoose(Garden.model, {
 
 GardenTC.setResolver('findMany', GardenTC.getResolver('findMany')
 .addFilterArg(createStringMatchFilter(GardenTC)));
+
+GardenTC.addRelation('Related', () => ({
+  resolver: GardenTC.getResolver('findMany'),
+  args: {
+    filter: source => ({
+      zone: source.zone,
+    }),
+  },
+  projection: { zone: 1 },
+}));
 
 exports.GardenTC = GardenTC;
 

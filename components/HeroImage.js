@@ -1,13 +1,15 @@
-// @flow
 
 import React from 'react';
 import gql from 'graphql-tag';
 import { propType } from 'graphql-anywhere';
 
-const HeroImage = ({ heroImageURL, children }) => {
+const HeroImage = ({ heroImageURL, children, small }) => {
   let style = { };
   if (heroImageURL) {
     style = Object.assign(style, { backgroundImage: `url(${heroImageURL})`, backgroundSize: 'cover', backgroundPosition: 'center center' });
+  }
+  if (small) {
+    style.height = 200;
   }
   return (
     <div className="background-wrap" style={style}>
