@@ -5,62 +5,12 @@ import { compose, withProps } from 'recompose';
 import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
-import { Image } from 'semantic-ui-react';
+import { Image, Header } from 'semantic-ui-react';
 import _ from 'lodash';
 import HighlightText from 'react-highlight-words';
 
 const PlantGridList = compose(
     // Flatten plantlist
-    withProps(({ plantList }) => {
-      const Herbariums = [];
-      const Museum = [];
-      const Garden = [];
-      plantList.forEach((plant) => {
-        const { scientificName, familyName, name } = plant;
-        plant.Herbarium.forEach(
-            (herb) => {
-              Herbariums.push({
-                type: 'herbarium',
-                scientificName,
-                familyName,
-                name,
-                ...herb,
-              });
-            },
-        );
-        plant.Museum.forEach(
-            (herb) => {
-              Museum.push({
-                type: 'museum',
-                scientificName,
-                familyName,
-                name,
-                ...herb,
-              });
-            },
-        );
-
-        plant.Garden.forEach(
-            (herb) => {
-              Garden.push({
-                type: 'garden',
-                scientificName,
-                familyName,
-                name,
-                ...herb,
-              });
-            },
-        );
-      });
-
-      return {
-        plantList: _.sortBy([
-          ...Herbariums,
-          ...Garden,
-          ...Museum,
-        ], item => item.scientificName),
-      };
-    }),
 )(
     ({ plantList, highlightTexts }) => (
       <div className="list-wrap">
@@ -72,19 +22,17 @@ const PlantGridList = compose(
               </div>
               <div className="detail">
                 <div className="detail-wrap">
-                  <div>{plant.type}</div>
                   <Link
-                    href={'/detail'}
+                    href={`/detail?category=${plant.category}&id=${plant._id}`}
                     style={{ cursor: 'pointer' }}
                   >
-                    <h2>
+                    <Header style={{ color: '#4d876d' }} as="a" href={`/detail?category=${plant.category}&id=${plant._id}`}>
                       <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : ''}`} />
-                    </h2>
+                    </Header>
                   </Link>
                   <div className="field">
                     <span className="name">{'ชื่อวิทยาศาสตร์'}</span>:<span className="value">
                       <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.scientificName || 'ไม่ระบุ'} />
-
                     </span>
                   </div>
                   <div className="field">
@@ -183,22 +131,7 @@ PlantGridList.fragments = {
             scientificName
             familyName
             name
-            Herbarium(isSelected: $herbSelected) {
-                _id
-                displayLocation
-                collectedDate
-                thumbnailImage
-            }
-            Museum(isSelected: $museumSelected) {
-                _id
-                museumLocation
-                thumbnailImage
-            }
-            Garden(isSelected: $gardenSelected) {
-                _id
-                zone
-                thumbnailImage
-            }
+            category
         }
     `,
 };

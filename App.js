@@ -46,7 +46,7 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
               <link href="/static/fonts/chula-narak/stylesheet.css" rel="stylesheet" />
               <link href="/static/fonts/supermarket/stylesheet.css" rel="stylesheet" />
               <link href="/static/fonts/superspace/stylesheet.css" rel="stylesheet" />
-              <link href="/static/react-image-gallery.css" rel="stylesheet" />
+              <link href="/lib/react-image-gallery/styles/css/image-gallery-no-icon.css" rel="stylesheet" />
               <link href="/static/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
             </Head>
             <Header />

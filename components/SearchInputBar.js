@@ -5,7 +5,7 @@ import { compose, withReducer, withState, onlyUpdateForKeys, withProps } from 'r
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import queryString from 'query-string';
-
+import Categories from '../category';
 const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
 
@@ -13,13 +13,13 @@ const Component = ({ categories, dispatch, state, onTextChange, texts, confirmSe
   <Form onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Input name="text" action={{ icon: 'search' }} value={texts} onChange={e => onTextChange(e.target.value)} placeholder="Search..." />
     <Form.Group inline id="size">
-      { categories ? categories.map(
-                category => (
+      { Categories ? Object.keys(Categories).map(
+                key => (
                   <Form.Checkbox
-                    key={category.key}
-                    label={category.name}
-                    checked={state[category.key]}
-                    onChange={(e, { checked }) => dispatch({ type: CHECKED, payload: { key: category.key, value: checked } })}
+                    key={Categories[key].value}
+                    label={Categories[key].value}
+                    checked={state[key]}
+                    onChange={(e, { checked }) => dispatch({ type: CHECKED, payload: { key, value: checked } })}
                   />
                 ),
             ) : null }
@@ -81,17 +81,17 @@ const SearchInputBar = compose(
         }),
         withReducer('state', 'dispatch', categoriesSelectorReducer, ({ categories }) => {
           const initState = {};
-          [{ key: 'garden' }, { key: 'herbarium' }, { key: 'museum' }].forEach((category) => {
+          Object.keys(Categories).forEach((key) => {
             const { query } = Router.router;
             if (query.categories) {
               const selectedCategories = query.categories.split(',');
-              if (selectedCategories.indexOf(category.key) > -1) {
-                initState[category.key] = true;
+              if (selectedCategories.indexOf(key) > -1) {
+                initState[key] = true;
               } else {
-                initState[category.key] = false;
+                initState[key] = false;
               }
             } else {
-              initState[category.key] = false;
+              initState[key] = false;
             }
           });
           return initState;

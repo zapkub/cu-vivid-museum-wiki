@@ -1,25 +1,27 @@
 // @flow
-
+import Link from 'next/link';
 import React from 'react';
 import gql from 'graphql-tag';
+
+import Categories from '../category';
 
 const CategoryThumbnailList = ({ categories }) => (
   <div className="container">
     <h1 style={{ textAlign: 'center' }}> {'ค้นหาตามหมวดหมู่'} </h1>
     <div className="category-container" >
       {
-          categories ? categories.map(category =>
-          (<div key={category._id} className="category-item" >
+          Categories ? Object.keys(Categories).map(key =>
+          (<Link href={`/${Categories[key].value}`}><a key={key} className="category-item" >
             <div
               style={{
                 border: '1px #eeeeee solid',
                 backgroundColor: '#f9f9f9',
-                backgroundImage: `url(${category.thumbnailImage ? category.thumbnailImage.secure_url : null})`,
+                backgroundImage: `url(${Categories[key].thumbnailImage})`,
                 width: 200,
                 height: 150 }}
             />
-            <div className="category-name">{category.name}</div>
-          </div>)) : null
+            <div className="category-name">{Categories[key].name}</div>
+          </a></Link>)) : null
       }
       <style jsx>{`
                 .container {

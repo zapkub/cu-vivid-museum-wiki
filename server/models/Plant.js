@@ -1,5 +1,5 @@
 // eslint "no-param-reassign": "off"
-
+const _ = require('lodash');
 const keystone = require('keystone');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
 const { Resolver, TypeComposer } = require('graphql-compose');
@@ -39,11 +39,7 @@ const PlantTC = composeWithMongoose(Plant.model, {
 
 const CategoryEnum = new GraphQLEnumType({
   name: 'CategoryEnum',
-  values: {
-    HERBARIUM: { values: 'herbarium' },
-    GARDEN: { value: 'garden' },
-    MUSEUM: { value: 'museum' },
-  },
+  values: require('../../category'),
 });
 
 PlantTC.addFields({
@@ -53,7 +49,7 @@ PlantTC.setResolver('search', new Resolver({
   name: 'search',
   type: new GraphQLList(PlantTC.getType()),
   args: {
-    text: { type: '[String]' },
+    text: { type: '[String]', defaultValue: [] },
     categories: { type: new GraphQLList(CategoryEnum), defaultValue: ['garden', 'herbarium', 'museum'] },
   },
   resolve: async ({ source, args: { categories, text }, context: { Garden, Museum, Herbarium } }) => {
@@ -70,7 +66,7 @@ PlantTC.setResolver('search', new Resolver({
     const categoriesPromise = new Promise((rs, rj) => {
       categories.forEach(async (category) => {
         let model;
-        switch (category) {
+        switch (category.toLowerCase()) {
           case 'garden':
             model = Garden;
             break;
@@ -84,6 +80,7 @@ PlantTC.setResolver('search', new Resolver({
             model = Herbarium;
             break;
         }
+        console.log(category);
         const query = [];
         Object.keys(model.schema.paths).forEach(
         (path) => {
@@ -94,10 +91,11 @@ PlantTC.setResolver('search', new Resolver({
           }
         });
         const categoriesResults = await model.find({ plantId: { $in: plantIds } })
+        .limit(20)
         .populate('plantId');
         categoriesResults.forEach((item) => {
-          const plant = item.plantId;
-          plant.id = item._id;
+          const plant = Object.assign({}, item.plantId.toObject());
+          plant._id = item._id;
           plant.category = category;
           result.push(plant);
         });
@@ -106,7 +104,7 @@ PlantTC.setResolver('search', new Resolver({
     });
     await categoriesPromise;
 
-    return result;
+    return _.sortBy(result, item => item.scientificName);
   },
 }));
 

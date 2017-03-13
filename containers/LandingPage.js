@@ -9,20 +9,13 @@ import withLoading from '../lib/withLoading';
 import CategoryThumbnailList from '../components/CategoryThumbnailList';
 import SearchInputBar from '../components/SearchInputBar';
 
-const LandingPage = ({ data, randomCategory }) => (
+const LandingPage = ({ data, randomCategory }) => data.loading ? <div /> : (
   <div>
-    {
-        data.loading ? null : (
-          <div>
-            <HeroImage heroImageURL={randomCategory.heroImageURL}>
-              <SearchInputBar categories={data.categories} />
-            </HeroImage>
-            <CategoryThumbnailList categories={data.categories} />
-          </div>
-        )
-    }
-  </div>
-);
+    <HeroImage heroImageURL={randomCategory.heroImageURL}>
+      <SearchInputBar categories={data.categories} />
+    </HeroImage>
+    <CategoryThumbnailList categories={data.categories} />
+  </div>);
 
 const query = gql`
     ${SearchInputBar.fragments.categories}

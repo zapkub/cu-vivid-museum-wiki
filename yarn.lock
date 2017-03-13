@@ -4910,7 +4910,7 @@ lodash.restparam@^3.0.0:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
 
-lodash.throttle@^4.0.0:
+lodash.throttle@^4.0.0, lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
@@ -6187,6 +6187,13 @@ react-hot-loader@3.0.0-beta.6:
     redbox-react "^1.2.5"
     source-map "^0.4.4"
 
+react-image-gallery:
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-0.7.13.tgz#72ccef30afc40b5e26e0726c14f0a2391ba67c94"
+  dependencies:
+    lodash.throttle "^4.1.1"
+    react-swipeable "^3.5.1"
+
 react-images@0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/react-images/-/react-images-0.5.1.tgz#a01ba3e059009d4241bbf8a3774775fbb9821341"
@@ -6246,6 +6253,10 @@ react-select@1.0.0-beta14:
     blacklist "^1.1.2"
     classnames "^2.2.4"
     react-input-autosize "^1.1.0"
+
+react-swipeable@^3.5.1:
+  version "3.9.2"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-3.9.2.tgz#bbaab62688b1aed4a4f73830d272eedd168f3627"
 
 react@^0.14.0:
   version "0.14.8"

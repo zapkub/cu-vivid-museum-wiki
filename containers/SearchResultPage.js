@@ -15,7 +15,7 @@ const SearchResultPage = ({ data, setTexts, texts }) => (
         <HeroImage heroImageURL={data.category.heroImageURL}>
           <SearchInputBar categories={data.categories} />
         </HeroImage>
-        <PlantGridList highlightTexts={texts} plantList={data.findPlants} />
+        <PlantGridList highlightTexts={texts} plantList={data.findByCategory} />
       </div>) : null }
   </div>
 );
@@ -33,14 +33,14 @@ export default compose(
     graphql(gql`
         ${SearchInputBar.fragments.categories}
         ${PlantGridList.fragments.plantList}
-        query ($texts: [String]!, $herbSelected: Boolean!, $museumSelected: Boolean!, $gardenSelected: Boolean!) {
+        query ($texts: [String]!, $categories: [CategoryEnum]) {
             categories {
               ...SearchInputBar
             }
             category (filter:{key: "garden"}) {
               heroImageURL
             }
-            findPlants (filter:{search: $texts}) {
+            findByCategory (text: $texts, categories: $categories) {
                 ...PlantGridList
             }
       }`,
@@ -49,9 +49,7 @@ export default compose(
         options: ({ texts, url }) => ({
           variables: ({
             texts,
-            herbSelected: url.query.categories ? url.query.categories.indexOf('herbarium') > -1 : false,
-            museumSelected: url.query.categories ? url.query.categories.indexOf('museum') > -1 : false,
-            gardenSelected: url.query.categories ? url.query.categories.indexOf('garden') > -1 : false,
+            categories: url.query.categories.split(',').map(cate => cate.toUpperCase()),
           }),
         }),
       }),

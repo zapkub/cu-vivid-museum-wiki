@@ -3,10 +3,6 @@ import React from 'react';
 import Link from 'next/link';
 
 export default class Header extends React.Component {
-  props: {
-        children: any[],
-        logoURL: string,
-    }
   render() {
     return (
       <header className="container">
@@ -34,6 +30,7 @@ export default class Header extends React.Component {
                         }
                         .logo {
                             width: 50px;
+                            cursor: pointer;
                         }
                         .title {
                             font-size: 30px;
