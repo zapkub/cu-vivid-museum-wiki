@@ -12,7 +12,7 @@ const server = express();
 app.prepare().then(() => {
   const handle = app.getRequestHandler();
   server.use('/lib', express.static(path.join(__dirname, './node_modules')));
-  server.get('*', (req, res) => handle(req, res));
+  server.all('*', (req, res) => handle(req, res));
   if (!dev) {
     require('./server/keystone').start();
   }

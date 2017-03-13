@@ -17,7 +17,13 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
     static getInitialProps({ req }) {
       const isServer = !!req;
       console.log(process.env.GRAPHQL);
-      const graphqlEndpoint = process.env.GRAPHQL || 'http://localhost:3000/graphql';
+
+      let graphqlEndpoint;
+      if (isServer) {
+        graphqlEndpoint = process.env.GRAPHQL;
+      } else {
+        // graphqlEndpoint = window.graphqlEndpoint;
+      }
       // const client = new ApolloClient({
       //   networkInterface: createNetworkInterface({ uri: graphqlEndpoint }),
       // });
@@ -35,6 +41,11 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
       this.state = {
         showMsg: true,
       };
+
+      // if (!props.isServer) {
+      //   window.graphqlEndpoint = props.graphqlEndpoint;
+      // }
+
       this.client = new ApolloClient({
         networkInterface: createNetworkInterface({ uri: props.graphqlEndpoint }),
       });

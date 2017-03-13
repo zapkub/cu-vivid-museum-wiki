@@ -23,7 +23,7 @@ Herbarium.add({
   collector: { type: String },
   discoverLocation: { type: String, label: 'สถานที่ค้นพบ' },
   collectedDate: { type: Date, default: Date.now },
-  images: { type: Types.CloudinaryImage },
+  images: { type: Types.CloudinaryImages },
 });
 
 Herbarium.defaultColumns = 'cuid, displayLocation';
