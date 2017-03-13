@@ -17,17 +17,17 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
     static getInitialProps({ req }) {
       const isServer = !!req;
       const graphqlEndpoint = process.env.GRAPHQL || 'http://localhost:3000/graphql';
-      const client = new ApolloClient({
-        networkInterface: createNetworkInterface({ uri: graphqlEndpoint }),
-      });
+      // const client = new ApolloClient({
+      //   networkInterface: createNetworkInterface({ uri: graphqlEndpoint }),
+      // });
 
-      const rootReducer = combineReducers({
-        apollo: client.reducer(),
-      });
-      const store = initStore(rootReducer, {}, isServer)(client);
+      // const rootReducer = combineReducers({
+      //   apollo: client.reducer(),
+      // });
+      // const store = initStore(rootReducer, {}, isServer)(client);
 
 
-      return { initialState: store.getState(), isServer, graphqlEndpoint };
+      return { initialState: {}, isServer, graphqlEndpoint };
     }
     constructor(props: any) {
       super(props);
