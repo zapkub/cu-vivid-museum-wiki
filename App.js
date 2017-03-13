@@ -16,7 +16,7 @@ export default function withAppLayout(Component, title = 'พิพิธภั�
   class Layout extends React.Component {
     static getInitialProps({ req }) {
       const isServer = !!req;
-      require('dotenv').config();
+      console.log(process.env.GRAPHQL);
       const graphqlEndpoint = process.env.GRAPHQL || 'http://localhost:3000/graphql';
       // const client = new ApolloClient({
       //   networkInterface: createNetworkInterface({ uri: graphqlEndpoint }),

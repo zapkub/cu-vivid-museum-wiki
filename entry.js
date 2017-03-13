@@ -2,6 +2,7 @@ const next = require('next');
 const express = require('express');
 const path = require('path');
 
+require('dotenv').config();
 
 const dev = process.env.NODE_ENV !== 'production';
 
