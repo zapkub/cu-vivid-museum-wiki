@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react';
-import withAppLayout from '../App';
+import withApp from '../lib/withApp';
 import CategoryPage from '../containers/CategoryPage';
 
 const Index = props => (<CategoryPage category="MUSEUM" {...props} />);
 
-export default withAppLayout(Index);
+export default withApp(Index);

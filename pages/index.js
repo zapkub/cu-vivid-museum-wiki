@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react';
-import withAppLayout from '../App';
+import withApp from '../lib/withApp';
 import LandingPage from '../containers/LandingPage';
 
 const Index = props => (<LandingPage {...props} />);
 
-export default withAppLayout(Index);
+export default withApp(Index);

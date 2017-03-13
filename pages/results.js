@@ -1,6 +1,6 @@
-import withAppLayout from '../App';
+import withApp from '../lib/withApp';
 
 import SearchResultPage from '../containers/SearchResultPage';
 
-export default withAppLayout(SearchResultPage);
+export default withApp(SearchResultPage);
 
