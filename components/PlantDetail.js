@@ -1,8 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
+import moment from 'moment';
 import ImageGallery from 'react-image-gallery';
-import { Label, List, Header } from 'semantic-ui-react';
-
+import { Label, List, Header, Divider } from 'semantic-ui-react';
 import SearchMore from './SearchMore';
 
 const PlantDetailList = ({ name, scientificName, familyName }) => (
@@ -72,7 +72,7 @@ GardenDetail.type = `
   thumbnailImage
 `;
 
-const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
+const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
   <PlantDetailList {...plant} />
   <List size={'big'}>
@@ -86,7 +86,7 @@ const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, dis
     </List.Item>
     <List.Item>
       <Label horizontal>{'วันที่จัดเก็บ'}</Label>
-      {collectedDate}
+      {moment(collectedDate).format('dddd, MMMM Do YYYY')}
     </List.Item>
     <List.Item>
       <Label horizontal>{'ผู้จัดเก็บ'}</Label>
@@ -150,6 +150,7 @@ const PlantDetail = ({ plant, category }) => {
       <div className="detail-wrap">
         <Header style={{ color: 'rgb(77, 135, 109)' }} as="h1">{plant.plant.name || 'ไม่ระบุ'}</Header>
         <DetailComponent {...plant} />
+        <Divider />
         <SearchMore category={category} text={plant.plant.scientificName} />
       </div>
       <style jsx>{`
