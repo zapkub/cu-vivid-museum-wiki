@@ -2,7 +2,7 @@
 
 const keystone = require('keystone');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
-const { createStringMatchFilter } = require('../common');
+const { createStringMatchFilter, localStorage } = require('../common');
 
 const Types = keystone.Field.Types;
 const Garden = new keystone.List('Garden', {

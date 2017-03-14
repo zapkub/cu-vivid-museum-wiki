@@ -20,16 +20,18 @@ const checkPermission = (resolvers) => {
   });
   return resolvers;
 };
-const cloudinaryImage = TypeComposer.create('CloudinaryImage');
-cloudinaryImage.addFields({
+const FileType = TypeComposer.create('File');
+FileType.addFields({
+  // filename: { type: 'String' },
   url: { type: 'String' },
+  // path: { type: 'String' },
 });
 
 const AddTypeToImageField = (TC) => {
   TC.removeField('images');
   TC.addFields({
     images: {
-      type: new GraphQLList(cloudinaryImage.getType()),
+      type: new GraphQLList(FileType.getType()),
       resolve: source => source.images,
     },
     thumbnailImage: {

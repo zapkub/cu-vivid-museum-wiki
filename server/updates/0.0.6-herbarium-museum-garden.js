@@ -7,7 +7,7 @@ module.exports = (done) => {
   const Garden = keystone.list('Garden');
   const Museum = keystone.list('Museum');
 
-  const gardens = SeedHelpers.getGargenFromDataSheet();
+  const gardens = SeedHelpers.getGardenFromDataSheet();
   const herbariums = SeedHelpers.getHerbariumFromDataSheet();
   const museums = SeedHelpers.getMuseumFromDataSheet();
 

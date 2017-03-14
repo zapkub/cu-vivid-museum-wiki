@@ -13,14 +13,6 @@ cl.fromEnvironment();
 
 module.exports = (server) => {
   server.use(cors());
-  // Use this middleware to authenticate
-  // user to context
-  // app.use((req, res, next) => {
-  //   req.isAdmin = false;
-  //   next();
-  // });
-
-
   server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   server.use('/graphql', graphqlExpress(req => ({
     schema,

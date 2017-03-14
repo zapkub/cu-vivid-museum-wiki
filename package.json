@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "start": "node ./entry.js",
-        "server": "nodemon -w ./server ./server",
+        "dev": "nodemon -w ./entry -w ./server ./entry.js",
         "build": "next build",
         "clean": "sh .bin/clean.sh",
         "down": "forever stopall",
@@ -45,6 +45,7 @@
         "react-dom": "^15.4.2",
         "react-highlight-words": "^0.6.0",
         "react-image-gallery": "^0.7.13",
+        "react-paginate": "^4.2.0",
         "recompose": "^0.22.0",
         "redux-logger": "^2.8.2",
         "redux-thunk": "^2.2.0",

@@ -19,7 +19,6 @@ keystone.init({
 });
 keystone.set('cloudinary config', process.env.CLOUDINARY_URL);
 keystone.import('models');
-keystone.set('routes', require('./routes'));
 
 keystone.set('locals', {
   env: keystone.get('env'),

@@ -12,8 +12,7 @@ const PlantGridList = compose(
 )(
     ({ plantList, highlightTexts }) => (
       <div className="list-wrap">
-        { plantList.length === 0 ? '' : null}
-        { plantList.map(plant => (
+        { !plantList ? null : plantList.map(plant => (
           <div key={plant._id} className="container">
             <div className="wrap">
               <div className="thumbnail" style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
