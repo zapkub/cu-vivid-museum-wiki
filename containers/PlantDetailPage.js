@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import gql from 'graphql-tag';
 import { withApollo } from 'react-apollo';
+
 import PlantDetail from '../components/PlantDetail';
 import RelatePlantList from '../components/RelatePlantList';
 import HeroImage from '../components/HeroImage';
@@ -9,14 +10,13 @@ import SearchInputBar from '../components/SearchInputBar';
 import withLoading from '../lib/withLoading';
 import categories from '../category';
 
-const PlantDetailPage = ({ loading, plant, url: { query: { category, id } } }) =>
-loading ? null :
-(<div>
-  <HeroImage small heroImageURL={categories[category.toUpperCase()].heroImage}>
-    <SearchInputBar small />
-  </HeroImage>
-  {(
-
+const PlantDetailPage = ({ loading, plant, url: { query: { category } } }) => {
+  if (loading) {
+    return <div />;
+  } return (<div>
+    <HeroImage small heroImageURL={categories[category.toUpperCase()].heroImage}>
+      <SearchInputBar small />
+    </HeroImage>
     <div className="container">
       <PlantDetail plant={plant} category={category} />
       <RelatePlantList category={category} Related={plant.Related} />
@@ -26,8 +26,10 @@ loading ? null :
             margin:auto;
         }
     `}</style>
-    </div>)}
-</div>);
+    </div>
+  </div>);
+};
+
 
 export default compose(
     withState('plant', 'setPlant', null),
@@ -37,6 +39,7 @@ export default compose(
       const fragment = PlantDetail.fragments[category];
       return {
         reloadPlantDetail: async (plantId = id) => {
+          // Create query by category
           const query = gql`
             ${fragment}
             ${RelatePlantList.fragments.relateList}

@@ -6,6 +6,7 @@ logs
 *.log
 .env
 .db/
+db
 npm-debug.log*
 
 # Runtime data

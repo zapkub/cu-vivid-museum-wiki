@@ -1,6 +1,5 @@
 import React from 'react';
 import { compose } from 'recompose';
-import { graphql } from 'react-apollo';
 import { Header, Divider } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import PlantGridList from './PlantGridList';
@@ -12,7 +11,8 @@ const RelatePlantList = compose(
     <Header>{'ในพื้นที่จัดแสดงเดียวกัน'}</Header>
     <Divider />
     <PlantGridList
-      plantList={Related.map(item => ({ ...item.plant, category, _id: item._id, thumbnailImage: item.thumbnailImage }))}
+      plantList={Related.map(item => (
+        { ...item.plant, category, _id: item._id, thumbnailImage: item.thumbnailImage }))}
     />
     <style jsx>{`
       .container{ 

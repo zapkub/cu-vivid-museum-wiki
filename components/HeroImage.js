@@ -69,15 +69,4 @@ const HeroImage = ({ category, heroImageURL, children, small }) => {
     </div>
   );
 };
-
-// HeroImage.fragments = {
-//   heroImage: gql`
-//         fragment HeroImage on CloudinaryImage {
-//             secure_url
-//         }
-//     `,
-// };
-// HeroImage.propTypes = {
-//   heroImage: propType(HeroImage.fragments.heroImage),
-// };
 export default HeroImage;

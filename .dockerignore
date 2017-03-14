@@ -5,3 +5,4 @@ design
 .vscode
 /node_modules/
 db
+.db

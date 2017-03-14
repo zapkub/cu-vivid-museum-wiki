@@ -11,7 +11,7 @@ RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
 WORKDIR /app
 ADD ./package.json /app/package.json
 ADD ./seed /app/seed
-ADD .env /app
+ADD .env /app/.env
 
 ## build
 ADD ./components /app/components

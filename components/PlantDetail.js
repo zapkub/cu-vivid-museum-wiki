@@ -1,8 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { compose } from 'recompose';
 import ImageGallery from 'react-image-gallery';
 import { Label, List, Header } from 'semantic-ui-react';
+
 import SearchMore from './SearchMore';
 
 const PlantDetailList = ({ name, scientificName, familyName }) => (
@@ -72,7 +72,7 @@ GardenDetail.type = `
   thumbnailImage
 `;
 
-const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
+const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
   <PlantDetailList {...plant} />
   <List size={'big'}>
