@@ -49,7 +49,7 @@ exports.createStringMatchFilter = TC => ({
   type: '[String]',
   query: (query, arg) => {
     const fields = TC.getFieldNames();
-    query.$or = [];
+    query.$or = []; // eslint-disable-line
     const test = new RegExp(arg.join('|'), 'i');
     fields.forEach((field) => {
       const type = TC.getFieldType(field).toString();

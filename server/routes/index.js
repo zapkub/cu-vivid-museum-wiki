@@ -8,7 +8,6 @@ const express = require('express');
 const path = require('path');
 
 const schema = require('../schema');
-const Plant = require('../models/Plant');
 
 const cl = cloudinary.Cloudinary.new();
 cl.fromEnvironment();
@@ -23,7 +22,7 @@ module.exports = (server, app) => {
     context: {
       isAdmin: req.isAdmin,
       cl,
-      Plant,
+      Plant: keystone.list('Plant').model,
       Museum: keystone.list('Museum').model,
       Garden: keystone.list('Garden').model,
       Herbarium: keystone.list('Herbarium').model,

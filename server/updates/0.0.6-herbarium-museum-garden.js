@@ -7,9 +7,9 @@ module.exports = (done) => {
   const Garden = keystone.list('Garden');
   const Museum = keystone.list('Museum');
 
-  const gardens = SeedHelpers.getGardenFromDataSheet();
-  const herbariums = SeedHelpers.getHerbariumFromDataSheet();
-  const museums = SeedHelpers.getMuseumFromDataSheet();
+  const gardens = require('../../seed/json/garden.json'); // SeedHelpers.getGardenFromDataSheet();
+  const herbariums = require('../../seed/json/garden.json');
+  const museums = require('../../seed/json/garden.json');
 
   const Plant = keystone.list('Plant');
 

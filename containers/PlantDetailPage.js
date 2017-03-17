@@ -35,24 +35,35 @@ export default compose(
     withState('plant', 'setPlant', null),
     withState('loading', 'setLoading', true),
     withApollo,
-    withProps(({ setLoading, client, setPlant, url: { query: { category, id } } }) => {
+    withProps(({ setLoading, client, setPlant, url: { query: { category, id, cuid, s } } }) => {
       const fragment = PlantDetail.fragments[category];
       return {
         reloadPlantDetail: async (plantId = id) => {
           // Create query by category
+          let queryArgs = `(_id: "${id})"`;
+          let variables = {
+            id: plantId,
+          };
           switch (category) {
             case 'garden':
               break;
             case 'herbarium':
+              queryArgs = `(filter: {cuid: "${cuid}"}, scientificName: "${s}" )`;
+              variables = {
+                cuid,
+                scientificName: s,
+              };
               break;
             case 'museum':
+              break;
+            default:
               break;
           }
           const query = gql`
             ${fragment}
             ${RelatePlantList.fragments.relateList}
-            query ($id: MongoID!) {
-                ${category}(_id: $id) {
+            query {
+                ${category} ${queryArgs} {
                     ...PlantDetail
                     Related (limit: 6) {
                       _id
@@ -67,9 +78,7 @@ export default compose(
           setLoading(true);
           const result = await client.query({
             query,
-            variables: {
-              id: plantId,
-            },
+            variables,
           });
           setPlant(result.data[category]);
           setLoading(false);
