@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import { compose } from 'recompose';
 import React from 'react';
 import Link from 'next/link';
-import { Image, Header } from 'semantic-ui-react';
+import { Image, Header } from 'semantic-ui-react';  // eslint-disable-line
 import HighlightText from 'react-highlight-words';
 
 const PlantGridList = compose(
@@ -20,7 +20,14 @@ const PlantGridList = compose(
                 <div className="detail-wrap">
                   <Link
                     style={{ cursor: 'pointer' }}
-                    href={`/detail?category=${plant.category}&id=${plant._id}`}
+                    href={{
+                      pathname: 'detail',
+                      query: {
+                        category: plant.category,
+                        id: plant.id,
+                      },
+                    }}
+                    // href={`/detail?category=${plant.category}&id=${plant._id}`}
                   >
                     <Header style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
                       <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : 'ไม่ระบุ'}`} />
@@ -95,7 +102,7 @@ const PlantGridList = compose(
                 font-family: supermarketregular, Helvetica Neue,Helvetica,Arial,sans-serif;
             }
             h2:hover {
-                
+
             }
             .field {
                 display: block;

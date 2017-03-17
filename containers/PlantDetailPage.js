@@ -40,6 +40,14 @@ export default compose(
       return {
         reloadPlantDetail: async (plantId = id) => {
           // Create query by category
+          switch (category) {
+            case 'garden':
+              break;
+            case 'herbarium':
+              break;
+            case 'museum':
+              break;
+          }
           const query = gql`
             ${fragment}
             ${RelatePlantList.fragments.relateList}
