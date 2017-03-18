@@ -33,7 +33,6 @@ MuseumDetail.type = `
   _id
   plantId
   museumLocation
-  thumbnailImage
   images {
     url
   }
@@ -42,7 +41,6 @@ MuseumDetail.type = `
     scientificName
     familyName
     name
-    category
   }
 `;
 
@@ -66,10 +64,8 @@ GardenDetail.type = `
     scientificName
     familyName
     name
-    category
   }
   zone
-  thumbnailImage
 `;
 
 const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>

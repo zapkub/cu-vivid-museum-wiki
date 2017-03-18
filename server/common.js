@@ -36,7 +36,20 @@ exports.addRelationWith = (TC, fieldName, targetName, relateTC) => {
   }));
   return TC;
 };
-
+exports.addScientificNameSearch = (TC) => {
+  TC.getResolver('findOne')
+    .addArgs({
+      scientificName: { type: 'String' },
+    });
+  TC.setResolver('findOne', TC.getResolver('findOne')
+    .wrapResolve(next => async (rp) => {
+      const result = await rp.context.Plant.findOne({ scientificName: rp.args.scientificName });
+      if (result) {
+    rp.args.filter = Object.assign({ plantId: result._id.toString() }, rp.args.filter) // eslint-disable-line
+      }
+      return next(rp);
+    }));
+};
 exports.createStringMatchFilter = TC => ({
   name: 'search',
   type: '[String]',

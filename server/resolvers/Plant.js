@@ -58,25 +58,25 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     //   .limit(limit);
       const plantIds = plants.map(plant => plant.id);
       const result = [];
-      const categoriesPromise = () => new Promise(async (rs) => {
-        const Q = categories.map(async (category) => {
-          let model;
-          switch (category.toLowerCase()) {
-            case 'garden':
-              model = Garden;
-              break;
-            case 'herbarium':
-              model = Herbarium;
-              break;
-            case 'museum':
-              model = Museum;
-              break;
-            default:
-              model = Herbarium;
-              break;
-          }
-          const query = [];
-          Object.keys(model.schema.paths).forEach(
+      let count = 0;
+      const searchPromises = categories.map(async (category) => {
+        let model;
+        switch (category.toLowerCase()) {
+          case 'garden':
+            model = Garden;
+            break;
+          case 'herbarium':
+            model = Herbarium;
+            break;
+          case 'museum':
+            model = Museum;
+            break;
+          default:
+            model = Herbarium;
+            break;
+        }
+        const query = [];
+        Object.keys(model.schema.paths).forEach(
         (path) => {
           if (model.schema.paths[path].instance === 'String') {
             query.push({
@@ -84,39 +84,41 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
             });
           }
         });
-          const categoriesResults = await model
-            .find({ plantId: { $in: plantIds } })
+        const searchQuery = { plantId: { $in: plantIds } };
+        const categoriesResults = await model
+            .find(searchQuery)
+            .skip(skip)
             .limit(limit);
+
             // .populate('plantId');
-
-          categoriesResults.forEach((item) => {
-            const plant = Object.assign({}, item.toObject());
-            plant._id = item._id;
-            plant.category = category;
-            if (item.images[0]) {
-              plant.thumbnailImage = item.images[0].url;
-            } else {
-              plant.thumbnailImage = '/static/images/placeholder150x150.png';
-            }
-            result.push(plant);
-          });
-        });
-
-        Promise.all(Q).then(() => {
-          rs(result);
+        const amount = await model
+          .find(searchQuery)
+          .count();
+        count += amount;
+        categoriesResults.forEach((item) => {
+          const plant = Object.assign({}, item.toObject());
+          plant._id = item._id;
+          plant.category = category;
+          if (item.images[0]) {
+            plant.thumbnailImage = item.images[0].url;
+          } else {
+            plant.thumbnailImage = '/static/images/placeholder150x150.png';
+          }
+          result.push(plant);
         });
       });
-
-      const searchResult = await categoriesPromise();
-      const skipResult = _(searchResult)
+      await Promise.all(searchPromises);
+      const skipResult = _(result)
         .sortBy(item => item.scientificName)
-        .slice(skip, skip + limit)
+        .sortBy(item => item.category)
+        .sortBy(item => item._id)
+        // .slice(skip, skip + limit)
         .filter((item, i) => i < limit)
         .value();
       console.timeEnd('Find plant by category and scientific name');
       return {
         result: skipResult,
-        count: searchResult.length,
+        count,
       };
     },
   }));

@@ -2,7 +2,7 @@
 
 const keystone = require('keystone');
 const composeWithMongoose = require('graphql-compose-mongoose').default;
-const { createStringMatchFilter, createScienticNameFilter } = require('../common');
+const { createStringMatchFilter } = require('../common');
 
 const Types = keystone.Field.Types;
 
@@ -17,7 +17,7 @@ const Herbarium = new keystone.List('Herbarium', {
 });
 
 Herbarium.add({
-  plantId: { type: Types.Relationship, ref: 'Plant', many: false },
+  plantId: { type: Types.Relationship, ref: 'Plant', many: false, index: true },
   cuid: { type: String },
   displayLocation: { type: String, label: 'พื้นที่จัดเก็บ' },
   collector: { type: String },
@@ -49,14 +49,6 @@ HerbariumTC.getResolver('findOne')
 HerbariumTC.setResolver('findMany', HerbariumTC.getResolver('findMany')
 .addFilterArg(createStringMatchFilter(HerbariumTC)));
 
-HerbariumTC.setResolver('findOne', HerbariumTC.getResolver('findOne')
-.wrapResolve(next => async (rp) => {
-  const result = await rp.context.Plant.findOne({ scientificName: rp.args.scientificName });
-  if (result) {
-    rp.args.filter = Object.assign({ plantId: result._id.toString() }, rp.args.filter) // eslint-disable-line
-  }
-  return next(rp);
-}));
 
 HerbariumTC.addRelation('Related', () => ({
   resolver: HerbariumTC.getResolver('findMany'),

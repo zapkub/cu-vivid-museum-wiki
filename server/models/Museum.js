@@ -18,7 +18,7 @@ const Museum = new keystone.List('Museum', {
 
 Museum.add({
   images: { type: Types.CloudinaryImages },
-  plantId: { type: Types.Relationship, ref: 'Plant' },
+  plantId: { type: Types.Relationship, ref: 'Plant', index: true },
   museumLocation: { type: String, label: 'Museum location' },
 });
 

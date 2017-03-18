@@ -8,7 +8,7 @@ const { GardenTC } = require('./models/Garden');
 const { HerbariumTC } = require('./models/Herbarium');
 const { MuseumTC } = require('./models/Museum');
 
-const { addRelationWith } = require('./common');
+const { addRelationWith, addScientificNameSearch } = require('./common');
 
 const checkPermission = (resolvers) => {
   Object.keys(resolvers).forEach((k) => {
@@ -64,6 +64,9 @@ PlantResolver({ PlantTC, GardenTC, MuseumTC, HerbariumTC });
 addRelationWith(GardenTC, 'plant', 'plantId', PlantTC);
 addRelationWith(HerbariumTC, 'plant', 'plantId', PlantTC);
 addRelationWith(MuseumTC, 'plant', 'plantId', PlantTC);
+addScientificNameSearch(GardenTC);
+addScientificNameSearch(HerbariumTC);
+addScientificNameSearch(MuseumTC);
 
 AddTypeToImageField(GardenTC);
 AddTypeToImageField(MuseumTC);
@@ -76,9 +79,9 @@ GQC.rootQuery().addFields(Object.assign({
   herbariumById: HerbariumTC.getResolver('findById'),
   herbarium: HerbariumTC.getResolver('findOne'),
   gardens: GardenTC.getResolver('findMany'),
-  garden: GardenTC.getResolver('findById'),
+  garden: GardenTC.getResolver('findOne'),
   museums: MuseumTC.getResolver('findMany'),
-  museum: MuseumTC.getResolver('findById'),
+  museum: MuseumTC.getResolver('findOne'),
 }, checkPermission({
 
 })));

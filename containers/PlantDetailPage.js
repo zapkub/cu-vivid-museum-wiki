@@ -19,7 +19,7 @@ const PlantDetailPage = ({ loading, plant, url: { query: { category } } }) => {
     </HeroImage>
     <div className="container">
       <PlantDetail plant={plant} category={category} />
-      <RelatePlantList category={category} Related={plant.Related} />
+      {/* {plant.Related ? <RelatePlantList category={category} Related={plant.Related} /> : null}*/}
       <style jsx>{`
         .container {
             max-width: 1024px;
@@ -35,17 +35,18 @@ export default compose(
     withState('plant', 'setPlant', null),
     withState('loading', 'setLoading', true),
     withApollo,
-    withProps(({ setLoading, client, setPlant, url: { query: { category, id, cuid, s } } }) => {
+    withProps(({ setLoading, client, setPlant, url: { query: { museumLocation, zone, category, id, cuid, s } } }) => {
       const fragment = PlantDetail.fragments[category];
       return {
         reloadPlantDetail: async (plantId = id) => {
           // Create query by category
-          let queryArgs = `(_id: "${id})"`;
+          let queryArgs = '';
           let variables = {
             id: plantId,
           };
           switch (category) {
             case 'garden':
+              queryArgs = `(filter: {zone: "${zone}"}, scientificName: "${s}" )`;
               break;
             case 'herbarium':
               queryArgs = `(filter: {cuid: "${cuid}"}, scientificName: "${s}" )`;
@@ -55,6 +56,7 @@ export default compose(
               };
               break;
             case 'museum':
+              queryArgs = `(filter: {museumLocation: "${museumLocation}"}, scientificName: "${s}" )`;
               break;
             default:
               break;
@@ -74,7 +76,7 @@ export default compose(
                     }
                 }
             }
-        `;
+          `;
           setLoading(true);
           const result = await client.query({
             query,

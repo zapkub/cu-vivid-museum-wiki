@@ -12,7 +12,7 @@ const RelatePlantList = compose(
     <Divider />
     <PlantGridList
       plantList={Related.map(item => (
-        { ...item.plant, category, _id: item._id, thumbnailImage: item.thumbnailImage }))}
+        { ...item, category, _id: item._id, thumbnailImage: item.thumbnailImage }))}
     />
     <style jsx>{`
       .container{ 
@@ -27,7 +27,6 @@ RelatePlantList.fragments = {
   relateList: gql`
         fragment RelateList on Plant {
             scientificName
-            thumbnailImage
             familyName
             name
         }

@@ -26,7 +26,7 @@ const CategoryPage = ({ data, category, url: { query: { page } } }) => (
         <Paginate
           onPageChange={({ selected }) => Router.push(`/${categories[category].value}?page=${selected + 1}`)}
           totalPages={data.findByCategory.count / 20}
-          currentPage={parseInt(page - 1, 10)}
+          currentPage={isNaN(parseInt(page - 1, 10)) ? 0 : parseInt(page - 1, 10)}
         />
       </div>
     </div>) : null }
@@ -54,12 +54,19 @@ export default compose(
             }
         }
     `, {
-      options: ({ category, url: { query: { page } } }) => ({
-        variables: {
+      options: ({ category, url: { query: { page } } }) => {
+        let skip = 0;
+        if (page > 0) {
+          skip = page ? parseInt(page - 1, 10) * 20 : 0;
+        }
+        if (isNaN(skip)) {
+          skip = 1;
+        }
+        return { variables: {
           categories: [category],
-          skip: page ? parseInt(page - 1, 10) * 20 : 0,
-        },
-      }),
+          skip,
+        } };
+      },
     }),
     withLoading(({ data }) => data.loading),
 )(CategoryPage);

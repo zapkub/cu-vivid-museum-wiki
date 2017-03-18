@@ -11,7 +11,7 @@ const Garden = new keystone.List('Garden', {
 });
 
 Garden.add({
-  plantId: { type: Types.Relationship, ref: 'Plant', many: false },
+  plantId: { type: Types.Relationship, ref: 'Plant', many: false, index: true },
   zone: { type: String, label: 'Zone' },
   images: { type: Types.CloudinaryImages },
 });
