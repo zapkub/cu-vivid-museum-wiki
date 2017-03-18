@@ -10,21 +10,22 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     values: require('../../category'),
   });
 
-  PlantTC.addFields({
-    category: 'String',
-    thumbnailImage: 'String',
-  });
+//   PlantTC.addFields({
+//     category: 'String',
+//     thumbnailImage: 'String',
+//   });
 
   const PlantSearchResultItemType = new GraphQLList(new GraphQLUnionType({
     name: 'PlantSearchResultItem',
-    types: [HerbariumTC.getType(), GardenTC.getType()],
+    types: [HerbariumTC.getType(), GardenTC.getType(), MuseumTC.getType()],
     resolveType(value) {
-      console.log(value);
       switch (value.category) {
         case 'garden':
           return GardenTC.getType();
         case 'herbarium':
           return HerbariumTC.getType();
+        case 'museum':
+          return MuseumTC.getType();
         default:
           return HerbariumTC.getType();
       }
@@ -50,6 +51,7 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
       args: { categories, text, skip, limit },
       context: { Garden, Museum, Herbarium, Plant },
     }) => {
+      console.time('Find plant by category and scientific name');
       const test = new RegExp(text.join('|'), 'i');
       const plants = await Plant.find({
         $or: [
@@ -58,6 +60,7 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
         { name: test },
         ],
       });
+    //   .limit(limit);
       const plantIds = plants.map(plant => plant.id);
       const result = [];
       const categoriesPromise = () => new Promise(async (rs) => {
@@ -86,22 +89,22 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
             });
           }
         });
-          if (result.length < limit) {
-            const categoriesResults = await model.find({ plantId: { $in: plantIds } })
-            .populate('plantId');
+          const categoriesResults = await model
+            .find({ plantId: { $in: plantIds } })
+            .limit(limit);
+            // .populate('plantId');
 
-            categoriesResults.forEach((item) => {
-              const plant = Object.assign({}, item.plantId.toObject(), item.toObject());
-              plant._id = item._id;
-              plant.category = category;
-              if (item.images[0]) {
-                plant.thumbnailImage = item.images[0].url;
-              } else {
-                plant.thumbnailImage = '/static/images/placeholder150x150.png';
-              }
-              result.push(plant);
-            });
-          }
+          categoriesResults.forEach((item) => {
+            const plant = Object.assign({}, item.toObject());
+            plant._id = item._id;
+            plant.category = category;
+            if (item.images[0]) {
+              plant.thumbnailImage = item.images[0].url;
+            } else {
+              plant.thumbnailImage = '/static/images/placeholder150x150.png';
+            }
+            result.push(plant);
+          });
         });
 
         Promise.all(Q).then(() => {
@@ -112,11 +115,11 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
       const skipResult = _(searchResult)
         .sortBy(item => item.scientificName)
         .slice(skip, skip + limit)
+        .filter((item, i) => i < limit)
         .value();
+      console.timeEnd('Find plant by category and scientific name');
       return {
-        result: skipResult.map(item => (Object.assign(item, {
-          scientificName: scientificSplit(item.scientificName),
-        }))),
+        result: skipResult,
         count: searchResult.length,
       };
     },
@@ -142,4 +145,10 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     args: PlantIdRelationArg,
     projection: { _id: 1, plantId: 1 },
   }));
+
+
+  PlantTC.extendField('scientificName', {
+    description: '',
+    resolve: source => (scientificSplit(source.scientificName)),
+  });
 };

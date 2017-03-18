@@ -79,7 +79,7 @@ export default compose(
       }),
     withLoading(({ data }) => data.loading),
     withProps(({ data, url: { query: { searchTexts, categories } } }) => {
-      if (!data.loading && data.category) { data.category = { }; }
+      if (!data.loading && data.category) { data.category = { }; } // eslint-disable-line
       return {
         data,
         goTo: (page) => {

@@ -7,14 +7,15 @@
     "license": "MIT",
     "scripts": {
         "start": "node ./entry.js",
-        "dev": "nodemon -w ./entry -w ./server ./entry.js",
+        "dev": "nodemon --debug -w ./entry -w ./server ./entry.js",
         "build": "next build",
+        "json": "node ./seed/convertToJson.js",
         "clean": "sh .bin/clean.sh",
         "down": "forever stopall",
         "up": "forever start ./entry.js",
         "prod": "sh .bin/prod.sh",
         "alpha": "sh .bin/alpha.sh",
-        "test": "jest"
+        "test": "jest || true"
     },
     "dependencies": {
         "apollo-client": "^0.10.1",

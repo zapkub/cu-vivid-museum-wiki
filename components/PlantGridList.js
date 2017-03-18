@@ -30,18 +30,18 @@ const PlantGridList = compose(
                     // href={`/detail?category=${plant.category}&id=${plant._id}`}
                   >
                     <Header style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
-                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.name ? plant.name : 'ไม่ระบุ'}`} />
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.plant.name ? plant.plant.name : 'ไม่ระบุ'}`} />
                     </Header>
                   </Link>
                   <div className="field">
                     <span className="name">{'ชื่อวิทยาศาสตร์'}</span><span className="value">
-                      <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.scientificName || 'ไม่ระบุ'} />
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.scientificName || 'ไม่ระบุ'} />
                     </span>
                   </div>
                   <div className="field">
                     <span className="name">{'ชื่อวงศ์'}</span>
                     <span className="value">
-                      <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.familyName || 'ไม่ระบุ'} />
+                      <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.familyName || 'ไม่ระบุ'} />
                     </span>
                   </div>
                 </div>
@@ -147,14 +147,41 @@ const PlantGridList = compose(
 
 PlantGridList.fragments = {
   plantList: gql`
-        fragment PlantGridList on Plant {
+        fragment PlantDetail on Plant {
             _id
             scientificName
             familyName
-            thumbnailImage
             name
-            category
         }
+
+        fragment PlantGridList on PlantSearchResultItem {
+            __typename
+        ... on Herbarium {
+            _id
+            cuid
+            thumbnailImage
+            displayLocation
+            plant {
+                ...PlantDetail
+            }
+        }
+        ... on Garden {
+            _id
+            zone
+            thumbnailImage
+            plant {
+                ...PlantDetail
+            }
+        }
+        ... on Museum {
+            _id
+            museumLocation
+            thumbnailImage
+            plant {
+                ...PlantDetail
+            }
+        }
+     }
     `,
 };
 

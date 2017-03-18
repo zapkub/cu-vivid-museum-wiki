@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
-const keystone = require('keystone');
 const path = require('path');
 
 exports.getReference = function getReference() {
@@ -10,15 +9,9 @@ exports.getReference = function getReference() {
 exports.scientificSplit = function scientificSplit(input) {
   const name = input.match(/^[a-zA-Z]+(\s|\ )[a-zA-Z]+/, 'g');
   if (!name) return input;
+  if (name.length === 0) return input;
   return name[0];
 };
-exports.localStorage = new keystone.Storage({
-  adapter: keystone.Storage.Adapters.FS,
-  fs: {
-    path: path.join(__dirname, '../static/images'),
-    publicPath: '/static',
-  },
-});
 
 exports.extractLocation = function extractLocation(document, sheetIndex) {
 // find ref columns index
