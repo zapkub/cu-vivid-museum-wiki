@@ -6,9 +6,20 @@ const fs = require('fs');
 const gardenSheet = XLSX.parse(path.join(__dirname, './garden.xlsx'));
 const herbariumnSheet = XLSX.parse(path.join(__dirname, './herbarium.xlsx'));
 
-let amount = 999999999;
+let amount = process.env.JSON_PARSE_AMOUNT || 999999999;
+
 exports.setAmount = function setAmount(_amount) {
     amount = _amount;
+}
+function encodeRFC5987ValueChars(str) {
+    return encodeURI(str).
+        // Note that although RFC3986 reserves "!", RFC5987 does not,
+        // so we do not need to escape it
+        replace(/['()]/g, escape) // i.e., %27 %28 %29
+        // replace(/\*/g, '%2A').
+            // The following are not required for percent-encoding per RFC5987, 
+            // so we can allow for a little better readability over the wire: |`^
+            // replace(/%(?:7C|60|5E)/g, unescape);
 }
 function escapeRegExp(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -22,8 +33,7 @@ function normailizeScientificName(name) {
         .toLowerCase()
         .trim();
 }
-// barleria strigosa willd
-// barleria strigosa willd
+
 const findImages = (category, nameOrCuid) => {
     let name = nameOrCuid.replace(new RegExp(/\.+$/, 'gi'), '');
     let words = name.split(' ');
@@ -32,7 +42,6 @@ const findImages = (category, nameOrCuid) => {
     }
     let images = [];
     const dirTest = new RegExp(`${escapeRegExp(words[0])}.*${escapeRegExp(words[1])}`, 'gi');
-    // console.log(name);
     switch (category) {
         case 'garden':
         case 'museum':
@@ -43,7 +52,7 @@ const findImages = (category, nameOrCuid) => {
                     if (fs.existsSync(dirPath)) {
                         const files = fs.readdirSync(dirPath);
                         images = files.map(file => ({
-                            url: `/static/images/stock/${category}/${file}`,
+                            url: encodeRFC5987ValueChars(`/static/images/stock/${category}/${dirName}/${file}`),
                         }))
                     }
                 }

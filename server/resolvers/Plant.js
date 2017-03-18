@@ -10,11 +10,6 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     values: require('../../category'),
   });
 
-//   PlantTC.addFields({
-//     category: 'String',
-//     thumbnailImage: 'String',
-//   });
-
   const PlantSearchResultItemType = new GraphQLList(new GraphQLUnionType({
     name: 'PlantSearchResultItem',
     types: [HerbariumTC.getType(), GardenTC.getType(), MuseumTC.getType()],
@@ -111,6 +106,7 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
           rs(result);
         });
       });
+
       const searchResult = await categoriesPromise();
       const skipResult = _(searchResult)
         .sortBy(item => item.scientificName)
