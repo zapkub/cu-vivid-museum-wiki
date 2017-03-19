@@ -4,6 +4,8 @@ const composeWithMongoose = require('graphql-compose-mongoose').default;
 const keystone = require('keystone');
 
 const PlantResolver = require('./resolvers/Plant');
+
+
 const { GardenTC } = require('./models/Garden');
 const { HerbariumTC } = require('./models/Herbarium');
 const { MuseumTC } = require('./models/Museum');
@@ -47,7 +49,7 @@ const AddTypeToImageField = (TC) => {
   });
 };
 
-
+const ReportTC = composeWithMongoose(keystone.list('Report').model);
 const PlantTC = composeWithMongoose(keystone.list('Plant').model, {
   resolvers: {
     findMany: {
@@ -71,6 +73,7 @@ addScientificNameSearch(MuseumTC);
 AddTypeToImageField(GardenTC);
 AddTypeToImageField(MuseumTC);
 AddTypeToImageField(HerbariumTC);
+
 GQC.rootQuery().addFields(Object.assign({
   findByCategory: PlantTC.getResolver('search'),
   findPlants: PlantTC.getResolver('findMany'),
@@ -85,5 +88,9 @@ GQC.rootQuery().addFields(Object.assign({
 }, checkPermission({
 
 })));
+
+GQC.rootMutation().addFields({
+  createReport: ReportTC.getResolver('createOne'),
+});
 
 module.exports = GQC.buildSchema();
