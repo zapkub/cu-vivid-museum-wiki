@@ -48,25 +48,40 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     }) => {
       console.time('Find plant by category and scientific name');
       const test = new RegExp(text.join('|'), 'i');
+      let result = [];
 
-      const result = await Plant.aggregate([
-        {
-          $match: {
-            $or: [{ scientificName: test }, { familyName: test }, { name: test }],
-          },
-        },
-        { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },
-        { $lookup: { from: 'museums', localField: '_id', foreignField: 'plantId', as: 'museum' } },
-        { $lookup: { from: 'gardens', localField: '_id', foreignField: 'plantId', as: 'garden' } },
-        { $project: { result: { $concatArrays: ['$garden', '$museum', '$herbarium'] } } },
-        { $project: { result: { $slice: ['$result', 0, limit] } } },
-        // { $limit: limit },
-      ]);
+      const q = categories.map(async (category) => {
+        let model;
+        switch (category) {
+          case 'garden':
+            model = Garden;
+            break;
+          case 'herbarium':
+            model = Herbarium;
+            break;
+          case 'museum':
+            model = Museum;
+            break;
+          default:
+            model = Herbarium;
+            break;
+        }
 
+
+        const categorySeachResult = await model.aggregate([
+          { $lookup: { from: 'plants', localField: 'plantId', foreignField: '_id', as: 'plant' } },
+          { $unwind: '$plant' },
+          { $match: { $or: [{ 'plant.scientificName': test }, { 'plant.familyName': test }, { 'plant.name': test }] } },
+        ]);
+        result = [].concat.apply([], [categorySeachResult, result]);
+      });
+      await Promise.all(q);
       console.timeEnd('Find plant by category and scientific name');
       return {
-        result: [],
-        count: 0,
+        result: _(result)
+          .sortBy(item => item.scientificName)
+          .slice(skip, skip + limit),
+        count: result.length,
       };
     },
   }));
