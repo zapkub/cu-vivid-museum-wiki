@@ -3,6 +3,7 @@
 
 This project is created for normalize Plant data from Faculty of Pharmaceutical sciences, Chulalongkorn University to Web based application provide an easier way to search for information, available at [CU Vivid Museum website]().
 # Feature
+ - Normalize and seeding data from massy XLXS file to noSQL.
  - Searching Plant, Herb information over 8000+ items by scientific name.
  - Searching by Plant Category.
  - Content management system.
@@ -65,4 +66,5 @@ We built this site with Monolithic NodeJS and popular modern web development too
 - In process of opensourcing
 
 # CONTRIBUTOR
- 1. [Rungsikorn Rungsikavanich](https://github.com/zapkub)
+ 1. Softever co.
+ 2. [Rungsikorn Rungsikavanich](https://github.com/zapkub)
