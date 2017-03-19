@@ -83,6 +83,7 @@ exports.getPlantFromDataSheet = () => {
         .filter((item, i) => i > 0 && i < amount)
         .filter((item) => item[4])
         .filter((item) => filterOnlyEnglish(item[4]))
+        .filter((item) => item[4] !== '_')
         .map(item => {
             const _id = ObjectID();
             const sciname = normailizeScientificName(item[4]);
@@ -91,13 +92,14 @@ exports.getPlantFromDataSheet = () => {
                 _id,
                 scientificName: sciname,
                 familyName: item[8],
-                name: (item[5] || item[6] || '').replace(new RegExp(/\s+$/, 'gi'), '')
+                name: (item[5] || item[6] || '').replace(new RegExp(/_|\s+$/, 'gi'), '')
             }
         });
     const scientificNamesFromGarden = gardenSheet[0].data
         .filter((item, i) => i > 0 && i < amount)
         .filter(item => item[1])
         .filter((item) => filterOnlyEnglish(item[1]))
+        .filter((item) => item[1] !== '_')
         .map(item => {
             const _id = ObjectID();
             const sciname = normailizeScientificName(item[1]);
@@ -106,7 +108,7 @@ exports.getPlantFromDataSheet = () => {
                 _id,
                 scientificName: normailizeScientificName(item[1]),
                 familyName: item[2],
-                name: (item[0] || '').replace(new RegExp(/\s+$/, 'gi'), ''),
+                name: (item[0] || '').replace(new RegExp(/_|\s+$/, 'gi'), ''),
             }
         });
 
