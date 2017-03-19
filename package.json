@@ -16,7 +16,8 @@
         "up": "forever start ./entry.js",
         "prod": "sh .bin/prod.sh",
         "alpha": "sh .bin/alpha.sh",
-        "test": "jest || true"
+        "test": "jest || true",
+        "commit": "git-cz || true"
     },
     "dependencies": {
         "apollo-client": "^0.10.1",
@@ -57,6 +58,8 @@
     },
     "devDependencies": {
         "babel-eslint": "^7.1.1",
+        "commitizen": "^2.9.6",
+        "cz-conventional-changelog": "^2.0.0",
         "eslint": "latest",
         "eslint-config-airbnb": "^14.1.0",
         "eslint-config-clogii": "^1.0.0",
@@ -74,5 +77,10 @@
             "tsx",
             "js"
         ]
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
     }
 }
