@@ -1,6 +1,6 @@
 # run only DB
 mongo:
-  image: mongo:3.0.8 
+  image: mongo:3.2.12 
   volumes_from:
     - mongo-data
   ports:

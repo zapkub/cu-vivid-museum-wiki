@@ -48,74 +48,25 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     }) => {
       console.time('Find plant by category and scientific name');
       const test = new RegExp(text.join('|'), 'i');
-      const plants = await Plant.find({
-        $or: [
-        { scientificName: test },
-        { familyName: test },
-        { name: test },
-        ],
-      });
-      const plantIds = plants.map(plant => plant.id);
-      const result = [];
-      let count = 0;
-      const searchPromises = categories.map(async (category) => {
-        let model;
-        switch (category.toLowerCase()) {
-          case 'garden':
-            model = Garden;
-            break;
-          case 'herbarium':
-            model = Herbarium;
-            break;
-          case 'museum':
-            model = Museum;
-            break;
-          default:
-            model = Herbarium;
-            break;
-        }
-        const query = [];
-        Object.keys(model.schema.paths).forEach(
-        (path) => {
-          if (model.schema.paths[path].instance === 'String') {
-            query.push({
-              [path]: test,
-            });
-          }
-        });
-        const searchQuery = { plantId: { $in: plantIds } };
-        const categoriesResults = await model
-            .find(searchQuery)
-            .skip(skip);
 
-        const amount = await model
-          .find(searchQuery)
-          .count();
-        count += amount;
-        categoriesResults.forEach((item) => {
-          const plant = Object.assign({}, item.toObject());
-          plant._id = item._id;
-          plant.category = category;
-          if (item.images[0]) {
-            plant.thumbnailImage = item.images[0].url;
-          } else {
-            plant.thumbnailImage = '/static/images/placeholder150x150.png';
-          }
-          result.push(plant);
-        });
-      });
-      await Promise.all(searchPromises);
-      const skipResult = _(result)
-        .sortBy(item => item.scientificName)
-        .sortBy(item => item.category)
-        .sortBy(item => item._id)
-        .slice(skip, skip + limit)
-        .filter((item, i) => i < limit)
-        .value();
+      const result = await Plant.aggregate([
+        {
+          $match: {
+            $or: [{ scientificName: test }, { familyName: test }, { name: test }],
+          },
+        },
+        { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },
+        { $lookup: { from: 'museums', localField: '_id', foreignField: 'plantId', as: 'museum' } },
+        { $lookup: { from: 'gardens', localField: '_id', foreignField: 'plantId', as: 'garden' } },
+        { $project: { result: { $concatArrays: ['$garden', '$museum', '$herbarium'] } } },
+        { $project: { result: { $slice: ['$result', 0, limit] } } },
+        // { $limit: limit },
+      ]);
+
       console.timeEnd('Find plant by category and scientific name');
       return {
-        result: skipResult,
-        count,
+        result: [],
+        count: 0,
       };
     },
   }));
