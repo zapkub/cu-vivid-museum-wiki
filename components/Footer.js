@@ -6,39 +6,34 @@ export default class Footer extends React.Component {
       <div className="footer-container">
         <div className="wrap">
           <div className="info-wrap" >
-            <img alt="" className="logo" src="/static/images/logo.png" width="40" />
-            <br />
-            {'คณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย'}<br />
-            {'254 ถนนพญาไทย เขตปทุมวัน'}<br />
-            {'10330'}
-            <div className="contact-info-wrap" >
-              <div><img alt="" src="/static/icon/phone.svg" width="10" />{'02-218-8283'}</div>
-              <div><img alt="" src="/static/icon/fax.svg" width="10" />{'02-251-5086'}</div>
+            <span style={{ fontWeight: 'bold' }}>{'คณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย'}</span>{' 254 ถนนพญาไทย เขตปทุมวัน 10330'}
+            <div>
+              <img alt="" src="/static/icon/phone.svg" width="10" />{' 02-218-8283'}
+              <img alt="" src="/static/icon/fax.svg" style={{ marginLeft: 10 }} width="10" />{' 02-251-5086'}
             </div>
           </div>
         </div>
         <div className="bottom-row">
           <div className="bottom-wrap" >
-            {'Copyright © 2010-2011 Continuing Education Unit. All rights reserved'}
+            {'Copyright © 2017 Continuing Education Unit. All rights reserved.'}
           </div>
         </div>
         <style jsx>{`
             .info-wrap{
-                text-align: center;
+                text-align: left;
+                padding: 0 10px;
             }
             .footer-container {
                 background-color: #252627;
                 color: #848586;
                 margin-top: 30px;
-                padding:10px 0 0 0;
             }
             .wrap {
                 max-width: 1024px;
                 margin:0 auto;
                 display:flex;
                 flex-direction: row;
-                justify-content: space-around;
-                padding:20px 10px;
+                padding:15px 0px 10px 0px;
             }
             @media screen and (max-width: 1024px) {
                 .wrap {
@@ -63,7 +58,8 @@ export default class Footer extends React.Component {
                 }
             }
             .logo {
-                padding-bottom:10px;
+                padding-bottom:0px;
+                vertical-align: middle;
             }
             .contact-info-wrap img {
                 margin-right:5px;
@@ -90,13 +86,16 @@ export default class Footer extends React.Component {
             }
             .bottom-row {
                 background:black;
-                padding:15px;
+                padding: 5px 0;
             }
             .bottom-row .bottom-wrap {
                 margin:0 auto;
                 display:flex;
+                font-size:12px;
                 flex-direction: row;
                 max-width: 1024px;
+
+                padding: 0 10px;
                 justify-content: space-between;
             }
             @media screen and (max-width: 1024px) {
