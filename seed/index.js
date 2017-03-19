@@ -2,7 +2,7 @@ const XLSX = require('node-xlsx').default;
 const path = require('path');
 const _ = require('lodash');
 const fs = require('fs');
-
+const ObjectID = require('mongodb').ObjectID;
 const gardenSheet = XLSX.parse(path.join(__dirname, './garden.xlsx'));
 const herbariumnSheet = XLSX.parse(path.join(__dirname, './herbarium.xlsx'));
 
@@ -13,22 +13,20 @@ exports.setAmount = function setAmount(_amount) {
 }
 function encodeRFC5987ValueChars(str) {
     return encodeURI(str).
-        // Note that although RFC3986 reserves "!", RFC5987 does not,
-        // so we do not need to escape it
-        replace(/['()]/g, escape) // i.e., %27 %28 %29
-        // replace(/\*/g, '%2A').
-            // The following are not required for percent-encoding per RFC5987, 
-            // so we can allow for a little better readability over the wire: |`^
-            // replace(/%(?:7C|60|5E)/g, unescape);
+        replace(/['()]/g, escape)
 }
 function escapeRegExp(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+function getScinameKey(sciname){
+    const scinameSplit = sciname.split(' ');
+    return `${scinameSplit[0]} ${scinameSplit[1]}`;
 }
 function normailizeScientificName(name) {
     return name.replace(new RegExp(/\.|[(ไม้แดง)]|ฺ|\//, 'gi'), '')
         .replace(new RegExp(/,/), ' ')
         .replace(new RegExp(/(\s\s)/), ' ')
-        .replace(new RegExp(/ /,'gi'), ' ')
+        .replace(new RegExp(/ /, 'gi'), ' ')
         .replace(new RegExp(/(\s\s)/), ' ')
         .toLowerCase()
         .trim();
@@ -59,7 +57,7 @@ const findImages = (category, nameOrCuid) => {
             })
             break;
     }
-    if(images.length > 0) {
+    if (images.length > 0) {
         console.log('Image found : ' + name)
     }
     return images;
@@ -75,26 +73,42 @@ const filterOnlyEnglish = (input) => {
 exports.filterOnlyEnglish = filterOnlyEnglish;
 
 
-
+let scientificNameKeyCollection = {};
+let noPlantIdfiltered = [];
+exports.getNoPlantIdItem = () => {
+    return noPlantIdfiltered;
+}
 exports.getPlantFromDataSheet = () => {
     const scientificNamesFromHerbarium = herbariumnSheet[0].data
         .filter((item, i) => i > 0 && i < amount)
         .filter((item) => item[4])
         .filter((item) => filterOnlyEnglish(item[4]))
-        .map(item => ({
-            scientificName: normailizeScientificName(item[4]),
-            familyName: item[8],
-            name: (item[5] || item[6] || '').replace(new RegExp(/\s+$/, 'gi'), '')
-        }));
+        .map(item => {
+            const _id = ObjectID();
+            const sciname = normailizeScientificName(item[4]);
+            scientificNameKeyCollection[getScinameKey(sciname)] = _id;
+            return {
+                _id,
+                scientificName: sciname,
+                familyName: item[8],
+                name: (item[5] || item[6] || '').replace(new RegExp(/\s+$/, 'gi'), '')
+            }
+        });
     const scientificNamesFromGarden = gardenSheet[0].data
         .filter((item, i) => i > 0 && i < amount)
         .filter(item => item[1])
         .filter((item) => filterOnlyEnglish(item[1]))
-        .map(item => ({
-            scientificName: normailizeScientificName(item[1]),
-            familyName: item[2],
-            name: (item[0] || '').replace(new RegExp(/\s+$/, 'gi'), ''),
-        }))
+        .map(item => {
+            const _id = ObjectID();
+            const sciname = normailizeScientificName(item[1]);
+            scientificNameKeyCollection[getScinameKey(sciname)] = _id
+            return {
+                _id,
+                scientificName: normailizeScientificName(item[1]),
+                familyName: item[2],
+                name: (item[0] || '').replace(new RegExp(/\s+$/, 'gi'), ''),
+            }
+        });
 
     const scientificNames = _.union(scientificNamesFromGarden, scientificNamesFromHerbarium);
     return _.uniqBy(scientificNames, item => item.scientificName);
@@ -105,23 +119,47 @@ exports.getMuseumFromDataSheet = () => {
         .filter((item, i) => i > 0 && i < amount)
         .filter(item => item[2])
         .filter((item) => filterOnlyEnglish(item[2]))
-        .map(item => ({
-            scientificName: normailizeScientificName(item[2]),
-            museumLocation: item[3],
-            images: findImages('museum', item[2])
-        }));
-    return museums;
+        .map(item => {
+            const sciname = normailizeScientificName(item[2]);
+            return ({
+                plantId: scientificNameKeyCollection[getScinameKey(sciname)],
+                scientificName: sciname,
+                museumLocation: item[3],
+                images: findImages('museum', item[2])
+            })
+        });
+    return museums.filter(item => {
+        if (!item.plantId) {
+            console.log('remove item with no plant id');
+            console.log(item);
+            noPlantIdfiltered.push(item.scientificName);
+        }
+        return item.plantId
+    });
 }
 
 exports.getGardenFromDataSheet = () => {
     const gardens = gardenSheet[2].data
         .filter((item, i) => i > 0 && item[0] && i < amount)
-        .map(item => ({
-            zone: item[2],
-            scientificName: normailizeScientificName(item[0]),
-            images: findImages('garden', item[0]),
-        }));
-    return gardens;
+        .map(item => {
+            const sciname = normailizeScientificName(item[0]);
+            return {
+                plantId: scientificNameKeyCollection[getScinameKey(sciname)],
+                zone: item[2],
+                scientificName: normailizeScientificName(item[0]),
+                images: findImages('garden', item[0]),
+            }
+        });
+    return gardens.filter(
+        item => {
+            if (!item.plantId) {
+                console.log('remove item with no plant id');
+                console.log(item);
+                noPlantIdfiltered.push(item.scientificName);
+            }
+            return item.plantId;
+        }
+    );
 }
 
 exports.getHerbariumFromDataSheet = () => {

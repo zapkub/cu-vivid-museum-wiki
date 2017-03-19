@@ -55,7 +55,6 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
         { name: test },
         ],
       });
-    //   .limit(limit);
       const plantIds = plants.map(plant => plant.id);
       const result = [];
       let count = 0;
@@ -87,10 +86,8 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
         const searchQuery = { plantId: { $in: plantIds } };
         const categoriesResults = await model
             .find(searchQuery)
-            .skip(skip)
-            .limit(limit);
+            .skip(skip);
 
-            // .populate('plantId');
         const amount = await model
           .find(searchQuery)
           .count();
@@ -112,7 +109,7 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
         .sortBy(item => item.scientificName)
         .sortBy(item => item.category)
         .sortBy(item => item._id)
-        // .slice(skip, skip + limit)
+        .slice(skip, skip + limit)
         .filter((item, i) => i < limit)
         .value();
       console.timeEnd('Find plant by category and scientific name');

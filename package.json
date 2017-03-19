@@ -7,7 +7,8 @@
     "license": "MIT",
     "scripts": {
         "start": "node ./entry.js",
-        "dev": "nodemon --debug -w ./entry -w ./server ./entry.js",
+        "dev": "sh ./.bin/dev.sh",
+        "watch": "nodemon --debug -w ./entry -w ./server ./entry.js",
         "build": "next build",
         "json": "node ./seed/convertToJson.js",
         "clean": "sh .bin/clean.sh",
@@ -39,7 +40,7 @@
         "keystone": "^4.0.0-beta.5",
         "lodash": "^4.17.4",
         "mongoose": "^4.8.5",
-        "next": "2.0.0-beta.37",
+        "next": "2.0.0-beta.39",
         "node-xlsx": "^0.7.4",
         "query-string": "^4.3.2",
         "react": "^15.4.2",

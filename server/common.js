@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
-const path = require('path');
 
 exports.getReference = function getReference() {
   return {
@@ -39,13 +38,13 @@ exports.addRelationWith = (TC, fieldName, targetName, relateTC) => {
 exports.addScientificNameSearch = (TC) => {
   TC.getResolver('findOne')
     .addArgs({
-      scientificName: { type: 'String' },
+      key: { type: 'String' },
     });
   TC.setResolver('findOne', TC.getResolver('findOne')
     .wrapResolve(next => async (rp) => {
-      const result = await rp.context.Plant.findOne({ scientificName: rp.args.scientificName });
+      const result = await rp.context.Plant.findOne({ $or: [{ key: rp.args.key }] });
       if (result) {
-    rp.args.filter = Object.assign({ plantId: result._id.toString() }, rp.args.filter) // eslint-disable-line
+        rp.args.filter = Object.assign({ plantId: result._id.toString() }, rp.args.filter) // eslint-disable-line
       }
       return next(rp);
     }));

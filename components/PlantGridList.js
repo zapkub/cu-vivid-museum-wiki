@@ -1,64 +1,64 @@
-// @flow
-
 import gql from 'graphql-tag';
 import { compose } from 'recompose';
 import React from 'react';
 import Link from 'next/link';
-import { Image, Header } from 'semantic-ui-react';  // eslint-disable-line
+import { Image, Header,  Message, Icon } from 'semantic-ui-react';  // eslint-disable-line
 import HighlightText from 'react-highlight-words';
 
 const PlantGridList = compose(
     // Flatten plantlist
 )(
-    ({ plantList, highlightTexts }) => (
-      <div className="list-wrap">
-        { !plantList ? null : plantList.map((plant) => {
-          const query = { scientificName: plant.plant.scientificName };
-          const searchFields = ['cuid', 'zone', 'museumLocation'];
-          query.category = plant.__typename.toLowerCase();
-          searchFields.forEach((key) => {
-            if (plant[key]) {
-              query[key] = plant[key];
-            }
-          });
-          return (
-            <div key={plant._id} className="container">
-              <div className="wrap">
-                <div className="thumbnail" style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
-                <div className="detail">
-                  <div className="detail-wrap">
-                    <Link
-                      style={{ cursor: 'pointer' }}
-                      href={{
-                        pathname: 'detail',
-                        query,
-                      }}
-                    >
-                      <a className="plant-title" style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
-                        <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.plant.name ? plant.plant.name : 'ไม่ระบุ'}`} />
-                      </a>
-                    </Link>
-                    <div className="field">
-                      <span className="name">{'ชื่อวิทยาศาสตร์'}</span><span className="value">
-                        <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.scientificName || 'ไม่ระบุ'} />
-                      </span>
+    ({ plantList, highlightTexts }) => {
+      try {
+        return (
+          <div className="list-wrap">
+            { !plantList ? null : plantList.map((plant) => {
+              const query = { s: plant.plant.key };
+              const searchFields = ['cuid', 'zone', 'museumLocation'];
+              query.category = plant.__typename.toLowerCase();
+              searchFields.forEach((key) => {
+                if (plant[key]) {
+                  query[key] = plant[key];
+                }
+              });
+              return (
+                <div key={plant._id} className="container">
+                  <div className="wrap">
+                    <div className="thumbnail" style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
+                    <div className="detail">
+                      <div className="detail-wrap">
+                        <Link
+                          style={{ cursor: 'pointer' }}
+                          href={{
+                            pathname: 'detail',
+                            query,
+                          }}
+                        >
+                          <a className="plant-title" style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
+                            <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.plant.name ? plant.plant.name : 'ไม่ระบุ'}`} />
+                          </a>
+                        </Link>
+                        <div className="field">
+                          <span className="name">{'ชื่อวิทยาศาสตร์'}</span><span className="value">
+                            <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.scientificName || 'ไม่ระบุ'} />
+                          </span>
+                        </div>
+                        <div className="field">
+                          <span className="name">{'ชื่อวงศ์'}</span>
+                          <span className="value">
+                            <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.familyName || 'ไม่ระบุ'} />
+                          </span>
+                        </div>
+                      </div>
+                      <div className="footer">
+                        <div>
+                          {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation ? plant.displayLocation.name : '-'}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="field">
-                      <span className="name">{'ชื่อวงศ์'}</span>
-                      <span className="value">
-                        <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.familyName || 'ไม่ระบุ'} />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="footer">
-                    <div>
-                      {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation ? plant.displayLocation.name : '-'}</span>
-                    </div>
-                  </div>
-                </div>
-              </div></div>);
-        })}
-        <style jsx>{`
+                  </div></div>);
+            })}
+            <style jsx>{`
             .list-wrap {
                 max-width: 1024px;
                 margin: auto;
@@ -148,8 +148,19 @@ const PlantGridList = compose(
                 justify-content: space-between;
             }
         `}</style>
-      </div>
-    ));
+          </div>
+        );
+      } catch (e) {
+        console.error(e);
+        return (<Message negative icon>
+          <Icon name="warning sign" />
+          <Message.Content>
+            <Message.Header>Problem occurs with results</Message.Header>
+            <p>we are truely apologize for this</p>
+          </Message.Content>
+        </Message>);
+      }
+    });
 
 
 PlantGridList.fragments = {
@@ -159,6 +170,7 @@ PlantGridList.fragments = {
             scientificName
             familyName
             name
+            key
         }
 
         fragment PlantGridList on PlantSearchResultItem {

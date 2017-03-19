@@ -19,7 +19,7 @@ const PlantDetailPage = ({ loading, plant, url: { query: { category } } }) => {
     </HeroImage>
     <div className="container">
       <PlantDetail plant={plant} category={category} />
-      {/* {plant.Related ? <RelatePlantList category={category} Related={plant.Related} /> : null}*/}
+      {plant.Related ? <RelatePlantList category={category} Related={plant.Related} /> : null}
       <style jsx>{`
         .container {
             max-width: 1024px;
@@ -35,28 +35,24 @@ export default compose(
     withState('plant', 'setPlant', null),
     withState('loading', 'setLoading', true),
     withApollo,
-    withProps(({ setLoading, client, setPlant, url: { query: { museumLocation, zone, category, id, cuid, s } } }) => {
+    withProps(({ setLoading, client, setPlant, url: { query: { museumLocation, zone, category, cuid, s } } }) => {
       const fragment = PlantDetail.fragments[category];
       return {
-        reloadPlantDetail: async (plantId = id) => {
+        reloadPlantDetail: async (plantId) => {
           // Create query by category
           let queryArgs = '';
-          let variables = {
-            id: plantId,
-          };
+          // const variables = {
+          //   id: plantId,
+          // };
           switch (category) {
             case 'garden':
-              queryArgs = `(filter: {zone: "${zone}"}, scientificName: "${s}" )`;
+              queryArgs = `(filter: {zone: "${zone}"}, key: "${s}" )`;
               break;
             case 'herbarium':
-              queryArgs = `(filter: {cuid: "${cuid}"}, scientificName: "${s}" )`;
-              variables = {
-                cuid,
-                scientificName: s,
-              };
+              queryArgs = `(filter: {cuid: "${cuid}"}, key: "${s}" )`;
               break;
             case 'museum':
-              queryArgs = `(filter: {museumLocation: "${museumLocation}"}, scientificName: "${s}" )`;
+              queryArgs = `(filter: {museumLocation: "${museumLocation}"}, key: "${s}" )`;
               break;
             default:
               break;
@@ -80,7 +76,7 @@ export default compose(
           setLoading(true);
           const result = await client.query({
             query,
-            variables,
+            // variables,
           });
           setPlant(result.data[category]);
           setLoading(false);

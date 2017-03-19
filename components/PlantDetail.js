@@ -11,9 +11,9 @@ const PlantDetailList = ({ name, scientificName, familyName }) => (
       <Label horizontal>{'ชื่อไทย'}</Label>
       { name }
     </List.Item>
-    <List.Item>
+    <List.Item >
       <Label horizontal>{'ชื่อวิทยาศาสตร์'}</Label>
-      { scientificName }
+      <span style={{ fontStyle: 'italic', textTransform: 'capitalize' }}>{ scientificName }</span>
     </List.Item>
     <List.Item>
       <Label horizontal>{'ชื่อวงศ์'}</Label>
