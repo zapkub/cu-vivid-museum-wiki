@@ -2,6 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import ImageGallery from 'react-image-gallery';
+import Link from 'next/link';
+import Router from 'next/router';
 import { Label, List, Header, Divider } from 'semantic-ui-react';
 import SearchMore from './SearchMore';
 
@@ -146,8 +148,10 @@ const PlantDetail = ({ plant, category }) => {
       <div className="detail-wrap">
         <Header style={{ color: 'rgb(77, 135, 109)' }} as="h1">{plant.plant.name || 'ไม่ระบุ'}</Header>
         <DetailComponent {...plant} />
+
         <Divider />
         <SearchMore category={category} text={plant.plant.scientificName} />
+        <div style={{ textAlign: 'right', color: 'grey', fontSize: 10 }}> {'ข้อมูลผิดพลาดหรือเปล่า,'} <Link href={`/report?url=${encodeURIComponent(Router.router.as)}`}><a>{'โปรดบอกเรา'}</a></Link></div>
       </div>
       <style jsx>{`
       .container {

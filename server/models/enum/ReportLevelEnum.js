@@ -1,27 +1,27 @@
 const list = [
   {
     key: 'CRITICAL',
-    value: 'critical',
+    value: 'CRITICAL',
     text: 'สำคัญมาก',
   },
   {
     key: 'MAJOR',
-    value: 'major',
+    value: 'MAJOR',
     text: 'สำคัญ',
   },
   {
     key: 'MINOR',
-    value: 'minor',
+    value: 'MINOR',
     text: 'เล็กน้อย',
   },
   {
     key: 'IMPROVEMENT',
-    value: 'improvement',
+    value: 'IMPROVEMENT',
     text: 'เพิ่มเติม รายละเอียด',
   },
 ];
 
 module.exports = {
-  enum: list.map(item => item.key),
+  enum: list.map(item => item.value),
   list,
 };

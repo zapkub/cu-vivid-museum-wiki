@@ -26,5 +26,5 @@ Report.add({
   screenshot: { type: Types.File, storage: ReportImageStorage },
 });
 
-Report.defaultColumns = 'topic, level';
+Report.defaultColumns = 'topic, description, level';
 Report.register();
