@@ -39,11 +39,9 @@ export default compose(
       const fragment = PlantDetail.fragments[category];
       return {
         reloadPlantDetail: async (plantId) => {
+          
           // Create query by category
           let queryArgs = '';
-          // const variables = {
-          //   id: plantId,
-          // };
           switch (category) {
             case 'garden':
               queryArgs = `(filter: {zone: "${zone}"}, key: "${s}" )`;

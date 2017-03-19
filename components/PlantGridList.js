@@ -52,7 +52,7 @@ const PlantGridList = compose(
                       </div>
                       <div className="footer">
                         <div>
-                          {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation ? plant.displayLocation.name : '-'}</span>
+                          {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation || plant.zone || plant.museumLocation}</span>
                         </div>
                       </div>
                     </div>
