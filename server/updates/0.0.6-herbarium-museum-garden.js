@@ -1,5 +1,4 @@
 const keystone = require('keystone');
-const SeedHelpers = require('../../seed/index');
 const _ = require('lodash');
 
 module.exports = (done) => {
@@ -7,9 +6,9 @@ module.exports = (done) => {
   const Garden = keystone.list('Garden');
   const Museum = keystone.list('Museum');
 
-  const gardens = SeedHelpers.getGargenFromDataSheet();
-  const herbariums = SeedHelpers.getHerbariumFromDataSheet();
-  const museums = SeedHelpers.getMuseumFromDataSheet();
+  const gardens = require('../../seed/json/garden.json'); // SeedHelpers.getGardenFromDataSheet();
+  const herbariums = require('../../seed/json/herbarium.json');
+  const museums = require('../../seed/json/museum.json');
 
   const Plant = keystone.list('Plant');
 
@@ -22,10 +21,12 @@ module.exports = (done) => {
       if (plant) {
         herb.plantId = plant._id;
       }
-      if (herb.collectedDate.toString() === 'Invalid Date') {
-        herb.collectedDate = undefined;
+      if (herb.collectedDate) {
+        if (herb.collectedDate.toString() === 'Invalid Date') {
+          herb.collectedDate = undefined;
+        }
       }
-      return plant;
+      return herb;
     }));
 
     await Museum.model.create(museums.filter((museum) => {
@@ -33,7 +34,7 @@ module.exports = (done) => {
       if (plant) {
         museum.plantId = plant._id;
       }
-      return plant;
+      return museum;
     }));
 
     await Garden.model.create(gardens.filter((garden) => {
@@ -41,7 +42,7 @@ module.exports = (done) => {
       if (plant) {
         garden.plantId = plant._id;
       }
-      return plant;
+      return garden;
     }));
     resolve();
   });

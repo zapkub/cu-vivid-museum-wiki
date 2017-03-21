@@ -17,7 +17,7 @@ const Herbarium = new keystone.List('Herbarium', {
 });
 
 Herbarium.add({
-  plantId: { type: Types.Relationship, ref: 'Plant', many: false },
+  plantId: { type: Types.Relationship, ref: 'Plant', many: false, index: true },
   cuid: { type: String },
   displayLocation: { type: String, label: 'พื้นที่จัดเก็บ' },
   collector: { type: String },
@@ -40,8 +40,15 @@ const HerbariumTC = composeWithMongoose(Herbarium.model, {
     },
   },
 });
+
+HerbariumTC.getResolver('findOne')
+.addArgs({
+  scientificName: { type: 'String' },
+});
+
 HerbariumTC.setResolver('findMany', HerbariumTC.getResolver('findMany')
 .addFilterArg(createStringMatchFilter(HerbariumTC)));
+
 
 HerbariumTC.addRelation('Related', () => ({
   resolver: HerbariumTC.getResolver('findMany'),

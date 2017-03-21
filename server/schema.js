@@ -1,16 +1,20 @@
 const { GQC, TypeComposer } = require('graphql-compose');
 const { GraphQLList } = require('graphql');
+const composeWithMongoose = require('graphql-compose-mongoose').default;
+const keystone = require('keystone');
 
-const { PlantTC } = require('./models/Plant');
+const PlantResolver = require('./resolvers/Plant');
+
+
 const { GardenTC } = require('./models/Garden');
 const { HerbariumTC } = require('./models/Herbarium');
 const { MuseumTC } = require('./models/Museum');
 
-const { addRelationWith } = require('./common');
+const { addRelationWith, addScientificNameSearch } = require('./common');
 
 const checkPermission = (resolvers) => {
   Object.keys(resolvers).forEach((k) => {
-    resolvers[k] = resolvers[k].wrapResolve(next => (rp) => {
+    resolvers[k] = resolvers[k].wrapResolve(next => (rp) => { // eslint-disable-line
       // rp = resolveParams = { source, args, context, info }
       if (!rp.context.isAuth) {
         throw new Error('You should be admin, to have access to this action.');
@@ -20,8 +24,8 @@ const checkPermission = (resolvers) => {
   });
   return resolvers;
 };
-const cloudinaryImage = TypeComposer.create('CloudinaryImage');
-cloudinaryImage.addFields({
+const FileType = TypeComposer.create('File');
+FileType.addFields({
   url: { type: 'String' },
 });
 
@@ -29,7 +33,7 @@ const AddTypeToImageField = (TC) => {
   TC.removeField('images');
   TC.addFields({
     images: {
-      type: new GraphQLList(cloudinaryImage.getType()),
+      type: new GraphQLList(FileType.getType()),
       resolve: source => source.images,
     },
     thumbnailImage: {
@@ -45,9 +49,26 @@ const AddTypeToImageField = (TC) => {
   });
 };
 
-addRelationWith(GardenTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
-addRelationWith(HerbariumTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
-addRelationWith(MuseumTC, 'plant', 'plantId', require('./models/Plant').PlantTC);
+const ReportTC = composeWithMongoose(keystone.list('Report').model);
+const PlantTC = composeWithMongoose(keystone.list('Plant').model, {
+  resolvers: {
+    findMany: {
+      sort: true,
+      skip: true,
+      limit: {
+        defaultValue: 100,
+      },
+    },
+  },
+});
+
+PlantResolver({ PlantTC, GardenTC, MuseumTC, HerbariumTC });
+addRelationWith(GardenTC, 'plant', 'plantId', PlantTC);
+addRelationWith(HerbariumTC, 'plant', 'plantId', PlantTC);
+addRelationWith(MuseumTC, 'plant', 'plantId', PlantTC);
+addScientificNameSearch(GardenTC);
+addScientificNameSearch(HerbariumTC);
+addScientificNameSearch(MuseumTC);
 
 AddTypeToImageField(GardenTC);
 AddTypeToImageField(MuseumTC);
@@ -58,13 +79,18 @@ GQC.rootQuery().addFields(Object.assign({
   findPlants: PlantTC.getResolver('findMany'),
   plant: PlantTC.getResolver('findById'),
   herbariums: HerbariumTC.getResolver('findMany'),
-  herbarium: HerbariumTC.getResolver('findById'),
+  herbariumById: HerbariumTC.getResolver('findById'),
+  herbarium: HerbariumTC.getResolver('findOne'),
   gardens: GardenTC.getResolver('findMany'),
-  garden: GardenTC.getResolver('findById'),
+  garden: GardenTC.getResolver('findOne'),
   museums: MuseumTC.getResolver('findMany'),
-  museum: MuseumTC.getResolver('findById'),
+  museum: MuseumTC.getResolver('findOne'),
 }, checkPermission({
 
 })));
+
+GQC.rootMutation().addFields({
+  createReport: ReportTC.getResolver('createOne'),
+});
 
 module.exports = GQC.buildSchema();

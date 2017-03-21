@@ -6,4 +6,4 @@ import CategoryPage from '../containers/CategoryPage';
 
 const Index = props => (<CategoryPage category="MUSEUM" {...props} />);
 
-export default withApp(Index);
+export default withApp()(Index);

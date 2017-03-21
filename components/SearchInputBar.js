@@ -125,7 +125,7 @@ const SearchInputBar = compose(
           }
           return query.searchTexts;
         }),
-        withReducer('state', 'dispatch', categoriesSelectorReducer, () => {
+        withReducer('state', 'dispatch', categoriesSelectorReducer, ({ initCategories }) => {
           const initState = {};
           Object.keys(Categories).forEach((key) => {
             if (!Router.router) return;
@@ -141,6 +141,13 @@ const SearchInputBar = compose(
               initState[key] = false;
             }
           });
+
+          if (initCategories) {
+            initCategories.forEach((key) => {
+              initState[key] = true;
+            });
+          }
+
           return initState;
         }),
         withProps(({ state, texts }) => ({

@@ -19,7 +19,7 @@ const PlantDetailPage = ({ loading, plant, url: { query: { category } } }) => {
     </HeroImage>
     <div className="container">
       <PlantDetail plant={plant} category={category} />
-      <RelatePlantList category={category} Related={plant.Related} />
+      {plant.Related ? <RelatePlantList category={category} Related={plant.Related} /> : null}
       <style jsx>{`
         .container {
             max-width: 1024px;
@@ -35,16 +35,30 @@ export default compose(
     withState('plant', 'setPlant', null),
     withState('loading', 'setLoading', true),
     withApollo,
-    withProps(({ setLoading, client, setPlant, url: { query: { category, id } } }) => {
+    withProps(({ setLoading, client, setPlant, url: { query: { museumLocation, zone, category, cuid, s } } }) => {
       const fragment = PlantDetail.fragments[category];
       return {
-        reloadPlantDetail: async (plantId = id) => {
+        reloadPlantDetail: async (plantId) => {
           // Create query by category
+          let queryArgs = '';
+          switch (category) {
+            case 'garden':
+              queryArgs = `(filter: {zone: "${zone}"}, key: "${s}" )`;
+              break;
+            case 'herbarium':
+              queryArgs = `(filter: {cuid: "${cuid}"}, key: "${s}" )`;
+              break;
+            case 'museum':
+              queryArgs = `(filter: {museumLocation: "${museumLocation}"}, key: "${s}" )`;
+              break;
+            default:
+              break;
+          }
           const query = gql`
             ${fragment}
             ${RelatePlantList.fragments.relateList}
-            query ($id: MongoID!) {
-                ${category}(_id: $id) {
+            query {
+                ${category} ${queryArgs} {
                     ...PlantDetail
                     Related (limit: 6) {
                       _id
@@ -55,13 +69,11 @@ export default compose(
                     }
                 }
             }
-        `;
+          `;
           setLoading(true);
           const result = await client.query({
             query,
-            variables: {
-              id: plantId,
-            },
+            // variables,
           });
           setPlant(result.data[category]);
           setLoading(false);
