@@ -163,6 +163,9 @@ const SearchInputBar = compose(
               searchTexts: texts,
               categories: categories.join(','),
             };
+            if (categories.length < 1) {
+              queryParam.categories = Object.keys(Categories).join(',');
+            }
             Router.push(`/results?${queryString.stringify(queryParam)}`);
           },
         })),
