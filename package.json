@@ -12,8 +12,8 @@
         "build": "next build",
         "json": "node ./seed/convertToJson.js",
         "clean": "sh .bin/clean.sh",
-        "prod": "sh .bin/prod.sh",
-        "alpha": "sh .bin/alpha.sh",
+        "up": "bash .bin/up-prod.sh",
+        "down": "bash .bin/down-prod.sh",
         "test": "jest || true",
         "commit": "git-cz || true"
     },
