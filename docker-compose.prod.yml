@@ -1,6 +1,13 @@
 # run only DB
-vivid:
+web:
   image: rungsikorn/vivid:latest
   ports:
-    - "8080:3000"
-  
+    - "3183:3000"
+  links:
+    - mongo
+  environment: 
+    MONGO_URI: 'mongo'
+    COOKIE_SECRET: '${COOKIE_SECRET}'
+    CLOUDINARY_URL: '${CLOUDINARY_URL}'
+    GRAPHQL: '${GRAPHQL_ENDPOINT}'
+    NODE_ENV: 'production'

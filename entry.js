@@ -30,7 +30,7 @@ app.prepare().then(() => {
     require('./server/routes')(server, app);
   });
 
-  keystone.start(process.env.PORT || 8080, () => {
-    console.log(`Start app on ${process.env.PORT || 8080}`);  // eslint-disable-line
+  keystone.start(3000, () => {
+    console.log(`Start app on 3000`);  // eslint-disable-line
   });
 });

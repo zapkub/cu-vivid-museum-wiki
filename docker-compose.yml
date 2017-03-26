@@ -1,4 +1,12 @@
-# run only DB
+nginx:
+  image: nginx
+  volumes: 
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  ports:
+    - "80:80"
+  links:
+    - web
+
 mongo:
   image: mongo:3.2.12 
   volumes_from:

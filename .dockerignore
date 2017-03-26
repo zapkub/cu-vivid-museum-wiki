@@ -1,8 +1,8 @@
 node_modules
 npm-debug.log
-.next
 design
 .vscode
 /node_modules/
 db
 .db
+docs

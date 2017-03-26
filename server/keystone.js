@@ -7,7 +7,7 @@ keystone.init({
   name: 'VividMuseam',
   brand: 'Chula',
   static: '../public',
-  mongo: process.env.MONGO_URI || 'localhost:27017/vivid',
+  mongo: `${process.env.MONGO_URI}/vivid` || 'localhost:27017/vivid',
   port: 3000,
   'session store': 'mongo',
   updates: 'updates',
