@@ -22,6 +22,7 @@ ADD ./category.js /app/category.js
 
 ## Clean and lean
 RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
+RUN npm run json
 
 EXPOSE 3000
 CMD ["npm", "start"]
