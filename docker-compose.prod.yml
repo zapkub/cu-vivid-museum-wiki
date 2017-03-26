@@ -1,0 +1,6 @@
+# run only DB
+vivid:
+  image: rungsikorn/vivid:latest
+  ports:
+    - "8080:3000"
+  

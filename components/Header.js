@@ -44,9 +44,9 @@ export default class Header extends React.Component {
             .subtitle {
                 margin-top: 3px;
                 font-size: 15px;
-                margin-left: 5px;
+                margin-left: 15px;
             }
-              @media screen and (max-width: 670px) {
+              @media screen and (max-width: 740px) {
               .logo {
                 margin-right: 10px;
               }
@@ -65,6 +65,7 @@ export default class Header extends React.Component {
               }
               .subtitle {
                 font-size: 14px;
+                margin-left: 0;
               }
             }
            `}</style>

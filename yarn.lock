@@ -6177,7 +6177,7 @@ react-alt-text@2.0.0:
     blacklist "^1.1.2"
     vkey "^1.0.0"
 
-react-apollo:
+react-apollo@latest:
   version "1.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-1.0.0-rc.3.tgz#a1d613785d1f07dcf012d7cde4f2c3a0507ceb03"
   dependencies:
