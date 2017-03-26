@@ -12,14 +12,3 @@ mongo-data:
   volumes:
     - ./.db/:/data/db
   command: "--break-mongo" # break mongod command and use it as data-volume-container
-
-
-
-nginx:
-  image: nginx
-  volumes: 
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-  ports:
-    - "80:80"
-  links:
-    - web
