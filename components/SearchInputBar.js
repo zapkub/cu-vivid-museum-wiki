@@ -14,7 +14,9 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch 
   <Form className={small ? 'search-input-small-wrap' : 'search-input-wrap'} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Input
       className="search-input"
+      style={{ borderRadius: 0 }}
       name="text"
+      Transparent
       action={{ icon: 'search', color: 'blue' }}
       value={texts} onChange={e => onTextChange(e.target.value)} placeholder="Search..."
     />
@@ -26,7 +28,10 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch 
                     key={Categories[key].value}
                     label={Categories[key].value}
                     checked={state[key]}
-                    onChange={(e, { checked }) => dispatch({ type: CHECKED, payload: { key, value: checked } })}
+                    onChange={(e, { checked }) => dispatch({
+                      type: CHECKED,
+                      payload: { key, value: checked } })
+                    }
                   />
                 ),
             ) : null }
@@ -46,6 +51,12 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch 
         .search-input {
           width: 400px;
           border: 3px rgba(0,0,0,0.4) solid;
+        }
+        .search-input button {
+          border-radius: 0 !important;
+        }
+        .search-input.field .ui.input input  {
+          border-radius: 0;
         }
         .checkbox-input-wrap {
           background: rgba(0,0,0,0.4);
@@ -71,30 +82,31 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch 
           }
         }
       `}</style>
-    <style jsx>{` .select-all {
-                        font-size: 14px;
-                        cursor: pointer;
-                    }
-                    .category-wrap {
-                        padding: 5px 15px;
-                        border-radius: 5px;
-                        background: rgba(0, 0, 0, 0.3);
-                        display: flex;
-                        font-size: 20px;
-                        color: white;
-                        align-items: center;
-                    }
-                    .fa {
-                        margin-right: 4px;
-                    }
-                    .category-item {
-                        margin-right: 15px;
-                        cursor: pointer;
-                    }
-                    .category-item:nth-last-child(1) {
-                        margin:0;
-                    }`}
-    </style>
+    <style jsx>{` 
+       .select-all {
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .category-wrap {
+            padding: 5px 15px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            font-size: 20px;
+            color: white;
+            align-items: center;
+        }
+        .fa {
+            margin-right: 4px;
+        }
+        .category-item {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .category-item:nth-last-child(1) {
+            margin:0;
+        }
+    `}</style>
   </Form>
 );
 
