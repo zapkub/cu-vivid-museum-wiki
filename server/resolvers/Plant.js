@@ -2,37 +2,22 @@ const _ = require('lodash');
 const { Resolver } = require('graphql-compose');
 
 const { scientificSplit } = require('../common');
-const { GraphQLEnumType, GraphQLList, GraphQLUnionType, GraphQLObjectType } = require('graphql');
+const { GraphQLEnumType, GraphQLList, GraphQLObjectType } = require('graphql');
 
-module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
+module.exports = (context) => {
+  const { PlantTC, GardenTC, MuseumTC, HerbariumTC, PlantSearchResultItemType } = context;
   const CategoryEnum = new GraphQLEnumType({
     name: 'CategoryEnum',
     values: require('../../category'),
   });
 
-  const PlantSearchResultItemType = new GraphQLList(new GraphQLUnionType({
-    name: 'PlantSearchResultItem',
-    types: [HerbariumTC.getType(), GardenTC.getType(), MuseumTC.getType()],
-    resolveType(value) {
-      switch (value.category) {
-        case 'garden':
-          return GardenTC.getType();
-        case 'herbarium':
-          return HerbariumTC.getType();
-        case 'museum':
-          return MuseumTC.getType();
-        default:
-          return HerbariumTC.getType();
-      }
-    },
-  }));
 
   PlantTC.setResolver('search', new Resolver({
     name: 'search',
     type: new GraphQLObjectType({
       name: 'PlantSearchResult',
       fields: {
-        result: { type: PlantSearchResultItemType },
+        result: { type: new GraphQLList(PlantSearchResultItemType) },
         count: { type: 'Int' },
       },
     }),
@@ -44,7 +29,7 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
     },
     resolve: async ({
       args: { categories, text, skip, limit },
-      context: { Garden, Museum, Herbarium, Plant },
+    context: { Garden, Museum, Herbarium },
     }) => {
       console.time('Find plant by category and scientific name');
       const test = new RegExp(text.join('|'), 'i');
@@ -63,15 +48,14 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
             model = Museum;
             break;
           default:
-            model = Herbarium;
-            break;
+            throw new Error('Error unknown type');
         }
 
 
         const categorySeachResult = await model.aggregate([
-          { $lookup: { from: 'plants', localField: 'plantId', foreignField: '_id', as: 'plant' } },
-          { $unwind: '$plant' },
-          { $match: { $or: [{ 'plant.scientificName': test }, { 'plant.familyName': test }, { 'plant.name': test }] } },
+        { $lookup: { from: 'plants', localField: 'plantId', foreignField: '_id', as: 'plant' } },
+        { $unwind: '$plant' },
+        { $match: { $or: [{ 'plant.scientificName': test }, { 'plant.familyName': test }, { 'plant.name': test }] } },
         ]);
         result = [].concat.apply([], [categorySeachResult, result]);
       });
@@ -79,8 +63,8 @@ module.exports = ({ PlantTC, GardenTC, MuseumTC, HerbariumTC }) => {
       console.timeEnd('Find plant by category and scientific name');
       return {
         result: _(result)
-          .sortBy(item => item.scientificName)
-          .slice(skip, skip + limit),
+        .sortBy(item => item.plant.scientificName)
+        .slice(skip, skip + limit),
         count: result.length,
       };
     },

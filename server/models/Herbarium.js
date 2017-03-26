@@ -1,8 +1,6 @@
 // eslint "no-param-reassign": "off"
 
 const keystone = require('keystone');
-const composeWithMongoose = require('graphql-compose-mongoose').default;
-const { createStringMatchFilter } = require('../common');
 
 const Types = keystone.Field.Types;
 
@@ -28,37 +26,4 @@ Herbarium.add({
 
 Herbarium.defaultColumns = 'cuid, displayLocation';
 Herbarium.register();
-
-const HerbariumTC = composeWithMongoose(Herbarium.model, {
-  resolvers: {
-    findMany: {
-      sort: true,
-      skip: true,
-      limit: {
-        defaultValue: 100,
-      },
-    },
-  },
-});
-
-HerbariumTC.getResolver('findOne')
-.addArgs({
-  scientificName: { type: 'String' },
-});
-
-HerbariumTC.setResolver('findMany', HerbariumTC.getResolver('findMany')
-.addFilterArg(createStringMatchFilter(HerbariumTC)));
-
-
-HerbariumTC.addRelation('Related', () => ({
-  resolver: HerbariumTC.getResolver('findMany'),
-  args: {
-    filter: source => ({
-      displayLocation: source.displayLocation,
-    }),
-  },
-  projection: { displayLocation: 1 },
-}));
-
-exports.HerbariumTC = HerbariumTC;
 
