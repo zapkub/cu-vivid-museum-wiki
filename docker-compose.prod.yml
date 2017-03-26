@@ -1,0 +1,21 @@
+nginx:
+  image: nginx
+  volumes: 
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  ports:
+    - "80:80"
+  links:
+    - web
+
+web:
+  image: rungsikorn/vivid:latest
+  ports:
+    - "3183:3000"
+  links:
+    - mongo
+  environment: 
+    MONGO_URI: 'mongo'
+    COOKIE_SECRET: '${COOKIE_SECRET}'
+    CLOUDINARY_URL: '${CLOUDINARY_URL}'
+    GRAPHQL: '${GRAPHQL_ENDPOINT}'
+    NODE_ENV: 'production'

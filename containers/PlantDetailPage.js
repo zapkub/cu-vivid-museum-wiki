@@ -19,7 +19,11 @@ const PlantDetailPage = ({ loading, plant, url: { query: { category } } }) => {
     </HeroImage>
     <div className="container">
       <PlantDetail plant={plant} category={category} />
-      {plant.Related ? <RelatePlantList category={category} Related={plant.Related} /> : null}
+      {plant.Related ? <RelatePlantList
+        category={category}
+        Related={plant.Related}
+        displayLocation={plant.zone || plant.displayLocation || plant.museumLocation}
+      /> : null}
       <style jsx>{`
         .container {
             max-width: 1024px;
@@ -35,10 +39,12 @@ export default compose(
     withState('plant', 'setPlant', null),
     withState('loading', 'setLoading', true),
     withApollo,
-    withProps(({ setLoading, client, setPlant, url: { query: { museumLocation, zone, category, cuid, s } } }) => {
+    withProps((props) => {
+      const { setLoading, client, setPlant } = props;
+      const { url: { query: { museumLocation, zone, category, cuid, s } } } = props;
       const fragment = PlantDetail.fragments[category];
       return {
-        reloadPlantDetail: async (plantId) => {
+        reloadPlantDetail: async () => {
           // Create query by category
           let queryArgs = '';
           switch (category) {

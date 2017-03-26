@@ -1,6 +1,31 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
+const { TypeComposer } = require('graphql-compose');
+const { GraphQLList } = require('graphql');
 
+const FileType = TypeComposer.create('File');
+FileType.addFields({
+  url: { type: 'String' },
+});
+exports.AddTypeToImageField = (TC) => {
+  TC.removeField('images');
+  TC.addFields({
+    images: {
+      type: new GraphQLList(FileType.getType()),
+      resolve: source => source.images,
+    },
+    thumbnailImage: {
+      projection: { images: 1 },
+      type: 'String',
+      resolve: (source) => {
+        if (source.images.length === 0) {
+          return '/static/images/placeholder150x150.png';
+        }
+        return source.images[0].url;
+      },
+    },
+  });
+};
 exports.getReference = function getReference() {
   return {
   };

@@ -8,17 +8,17 @@ const RelatePlantList = compose(
 
 )(({ displayLocation, Related, category }) => !Related ? <div /> : (
   <div className="container">
-    { console.log(Related) }
     <Header>{'ในพื้นที่จัดแสดงเดียวกัน'}</Header>
     <Divider />
     <PlantGridList
       plantList={Related}
+      displayLocation={displayLocation}
     />
     <style jsx>{`
       .container{ 
         padding: 10px;
       } 
-      `}</style>
+    `}</style>
   </div>
 ));
 
@@ -29,6 +29,7 @@ RelatePlantList.fragments = {
             scientificName
             familyName
             name
+            key
         }
     `,
 };

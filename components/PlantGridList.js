@@ -8,7 +8,7 @@ import HighlightText from 'react-highlight-words';
 const PlantGridList = compose(
     // Flatten plantlist
 )(
-    ({ plantList, highlightTexts }) => {
+    ({ plantList, highlightTexts, displayLocation }) => {
       try {
         return (
           <div className="list-wrap">
@@ -52,7 +52,7 @@ const PlantGridList = compose(
                       </div>
                       <div className="footer">
                         <div>
-                          {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation || plant.zone || plant.museumLocation}</span>
+                          {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation || plant.zone || plant.museumLocation || displayLocation || '-'}</span>
                         </div>
                       </div>
                     </div>

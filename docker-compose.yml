@@ -1,4 +1,4 @@
-# run only DB
+
 mongo:
   image: mongo:3.2.12 
   volumes_from:

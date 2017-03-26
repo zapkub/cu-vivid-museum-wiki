@@ -1,5 +1,6 @@
 // eslint "no-param-reassign": "off"
 const keystone = require('keystone');
+const textSearch = require('mongoose-text-search');
 
 const Plant = new keystone.List('Plant', {
   defaultSort: 'scientificName',
@@ -12,6 +13,9 @@ Plant.add({
   familyName: { type: String, label: 'ชื่อวงศ์' },
   name: { type: String, label: 'ชื่อ' },
 });
+
+Plant.schema.plugin(textSearch);
+Plant.schema.index({ scientificName: 'text', familyName: 'text', name: 'text' });
 
 Plant.relationship({ ref: 'Herbarium', path: 'herbarium', refPath: 'plantId' });
 Plant.relationship({ ref: 'Museum', path: 'museum', refPath: 'plantId' });

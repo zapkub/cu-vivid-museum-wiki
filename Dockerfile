@@ -4,7 +4,7 @@ RUN apk add --no-cache build-base
 
 ## cache node_modules
 ADD ./package.json /tmp/package.json
-RUN cd /tmp && npm install
+RUN cd /tmp && NODE_ENV=production npm install
 RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
 
 ## copy meta
@@ -14,16 +14,14 @@ ADD ./seed /app/seed
 ADD .env /app/.env
 
 ## build
-ADD ./components /app/components
-ADD ./containers /app/containers
-ADD ./lib /app/lib
-ADD ./pages /app/pages
 ADD ./static /app/static
+ADD \.next/ /app/.next
 ADD ./server /app/server
-ADD ./App.js /app/App.js
 ADD ./entry.js /app/entry.js
+ADD ./category.js /app/category.js
 
-RUN npm run build
+## Clean and lean
+RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
 
 EXPOSE 3000
 CMD ["npm", "start"]
