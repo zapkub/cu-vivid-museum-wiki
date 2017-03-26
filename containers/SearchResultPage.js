@@ -18,7 +18,7 @@ const SearchResultPage = ({ data, texts, categories, goTo, url: { query: { page 
         </HeroImage>
         {!data.findByCategory ? <div>{'เกิดความผิดพลาด'}</div> :
         <div className="wrap">
-          <Header> ผลลัพธ์การค้นหาในหมวด {categories.join(', ')} </Header>
+          <Header><span style={{ fontSize: 38, marginRight: 10 }}>{data.findByCategory.count}</span>{`ผลลัพธ์การค้นหาในหมวด ${categories.join(', ')}`} </Header>
           { data.findByCategory.result.length === 0 ? 'ไม่พบผลลัพธ์' : ''}
           <PlantGridList highlightTexts={texts} plantList={data.findByCategory.result} />
           <Paginate
@@ -83,8 +83,7 @@ export default compose(
       return {
         data,
         goTo: (page) => {
-          console.log(page);
-          if (page > 0) {
+          if (page >= 0) {
             const param = {
               pathname: 'results',
               query: {
@@ -93,7 +92,6 @@ export default compose(
                 page: `${page}`,
               },
             };
-            console.log(param);
             Router.push(`/results?categories=${categories}&searchTexts=${searchTexts}&page=${page + 1}`);
           }
         },
