@@ -16,6 +16,8 @@ web:
   environment: 
     MONGO_URI: 'mongo'
     COOKIE_SECRET: '${COOKIE_SECRET}'
+    ROOT_EMAIL: '${ROOT_EMAIL}'
+    ROOT_PASS: '${ROOT_PASS}'
     CLOUDINARY_URL: '${CLOUDINARY_URL}'
     GRAPHQL: '${GRAPHQL_ENDPOINT}'
     NODE_ENV: 'production'
