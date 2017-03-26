@@ -55,8 +55,10 @@ AddTypeToImageField(MuseumTC);
 
 GQC.rootQuery().addFields(Object.assign({
   findByCategory: PlantTC.getResolver('search'),
+  autoCompletion: PlantTC.getResolver('autoCompletion'),
   findPlants: PlantTC.getResolver('findMany'),
   plant: PlantTC.getResolver('findById'),
+  plants: PlantTC.getResolver('findMany'),
   plantCount: PlantTC.getResolver('count'),
   herbariums: HerbariumTC.getResolver('findMany'),
   herbariumById: HerbariumTC.getResolver('findById'),

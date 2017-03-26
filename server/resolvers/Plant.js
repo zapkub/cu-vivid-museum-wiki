@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { Resolver } = require('graphql-compose');
 
 const { scientificSplit } = require('../common');
-const { GraphQLEnumType, GraphQLList, GraphQLObjectType } = require('graphql');
+const { GraphQLEnumType, GraphQLList, GraphQLObjectType, GraphQLString } = require('graphql');
 
 module.exports = (context) => {
   const { PlantTC, GardenTC, MuseumTC, HerbariumTC, PlantSearchResultItemType } = context;
@@ -11,6 +11,23 @@ module.exports = (context) => {
     values: require('../../category'),
   });
 
+  PlantTC.setResolver('autoCompletion', new Resolver({
+    name: 'autoCompletion',
+    args: {
+      text: { type: 'String' },
+    },
+    resolve: async ({ source, args, context }) => {
+      const { Plant } = context;
+      return [];
+    },
+    type: new GraphQLList(new GraphQLObjectType({
+      name: 'ScientificNameItem',
+      fields: {
+        scientificName: { type: GraphQLString },
+        _id: { type: GraphQLString },
+      },
+    })),
+  }));
 
   PlantTC.setResolver('search', new Resolver({
     name: 'search',
@@ -29,7 +46,7 @@ module.exports = (context) => {
     },
     resolve: async ({
       args: { categories, text, skip, limit },
-    context: { Garden, Museum, Herbarium },
+      context: { Garden, Museum, Herbarium },
     }) => {
       console.time('Find plant by category and scientific name');
       const test = new RegExp(text.join('|'), 'i');
