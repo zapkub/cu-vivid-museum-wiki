@@ -15,7 +15,9 @@
     "up": "bash .bin/up-prod.sh",
     "down": "bash .bin/down-prod.sh",
     "test": "jest || true",
-    "commit": "git-cz || true"
+    "commit": "git-cz || true",
+    "release": "standard-version",
+    "pre-release": "standard-version --pre-release alpha"
   },
   "dependencies": {
     "@types/graphql": "^0.8.6",
@@ -68,7 +70,8 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "standard-version": "^4.0.0"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
