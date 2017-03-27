@@ -4,8 +4,8 @@ const { Resolver } = require('graphql-compose');
 const { scientificSplit } = require('../common');
 const { GraphQLEnumType, GraphQLList, GraphQLObjectType, GraphQLString } = require('graphql');
 
-module.exports = (context) => {
-  const { PlantTC, GardenTC, MuseumTC, HerbariumTC, PlantSearchResultItemType } = context;
+module.exports = (modelsTC) => {
+  const { PlantTC, GardenTC, MuseumTC, HerbariumTC, PlantSearchResultItemType } = modelsTC;
   const CategoryEnum = new GraphQLEnumType({
     name: 'CategoryEnum',
     values: require('../../category'),
@@ -14,11 +14,13 @@ module.exports = (context) => {
   PlantTC.setResolver('autoCompletion', new Resolver({
     name: 'autoCompletion',
     args: {
-      text: { type: 'String' },
+      text: { type: 'String', defaultValue: '' },
     },
-    resolve: async ({ source, args, context }) => {
+    resolve: async ({ args, context }) => {
       const { Plant } = context;
-      return [];
+      const result = await Plant.find({ scientificName: new RegExp(args.text.split('.*').join('|'), 'ig') })
+        .limit(40);
+      return result;
     },
     type: new GraphQLList(new GraphQLObjectType({
       name: 'ScientificNameItem',
@@ -52,6 +54,7 @@ module.exports = (context) => {
       const test = new RegExp(text.join('|'), 'i');
       let result = [];
 
+
       const q = categories.map(async (category) => {
         let model;
         switch (category) {
@@ -69,6 +72,7 @@ module.exports = (context) => {
         }
 
 
+      // const result = await Plant.find({ $text: { $search: args.text } });
         const categorySeachResult = await model.aggregate([
         { $lookup: { from: 'plants', localField: 'plantId', foreignField: '_id', as: 'plant' } },
         { $unwind: '$plant' },

@@ -1,8 +1,9 @@
-const next = require('next');
+const NextJS = require('next');
 require('dotenv').config();
 // Require our core node modules.
 const chalk = require('chalk');
-
+const path = require('path');
+const cloudinary = require('cloudinary-core');
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
 
@@ -21,16 +22,60 @@ process.on('unhandledRejection',
     });
 const dev = process.env.NODE_ENV !== 'production';
 
-const app = next({ dev });
+const next = NextJS({ dev });
 
-app.prepare().then(() => {
-  const keystone = require('./server/keystone');
+// Setup keystone
 
-  keystone.set('routes', (server) => {
-    require('./server/routes')(server, app);
-  });
+const keystone = require('keystone');
 
-  keystone.start(3000, () => {
+require('dotenv').config();
+
+keystone.init({
+  name: 'VividMuseam',
+  brand: 'Chula',
+  static: '../static',
+  'module root': path.join(__dirname, './server'),
+  mongo: `${process.env.MONGO_URI}/vivid` || 'localhost:27017/vivid',
+  port: 3000,
+  'session store': 'mongo',
+  updates: 'updates',
+  'auto update': true,
+  session: true,
+  auth: true,
+  'user model': 'User',
+  'cookie secret': process.env.COOKIE_SECRET || 'development secret',
+});
+keystone.set('cloudinary config', process.env.CLOUDINARY_URL);
+keystone.import('./models');
+
+keystone.set('locals', {
+  env: keystone.get('env'),
+  utils: keystone.utils,
+  editable: keystone.content.editable,
+  _: require('lodash'),
+})
+;
+keystone.set('nav', {
+  users: 'users',
+});
+
+
+const cl = cloudinary.Cloudinary.new();
+cl.fromEnvironment();
+
+next.prepare().then(() => {
+  const context = {
+    keystone,
+    cl,
+    next,
+    Plant: keystone.list('Plant').model,
+    Museum: keystone.list('Museum').model,
+    Garden: keystone.list('Garden').model,
+    Herbarium: keystone.list('Herbarium').model,
+    Report: keystone.list('Report').model,
+  };
+  const server = require('./server')(context);
+  server.start(3000, () => {
     console.log(`Start app on 3000`);  // eslint-disable-line
   });
 });

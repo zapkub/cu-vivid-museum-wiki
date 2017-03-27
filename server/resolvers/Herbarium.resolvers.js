@@ -1,16 +1,12 @@
-module.exports = (context) => {
-  const { addRelationWith, addScientificNameSearch, createStringMatchFilter, AddTypeToImageField } = require('../common');
-  const { PlantTC, HerbariumTC, PlantSearchResultItemType } = context;
-  const { GraphQLList } = require('graphql');
+
+module.exports = (modelsTC) => {
+  const { createStringMatchFilter } = require('../common');
+  const { HerbariumTC } = modelsTC;
+
   const findMany = HerbariumTC.getResolver('findMany')
     .addFilterArg(createStringMatchFilter(HerbariumTC));
 
   HerbariumTC.setResolver('findMany', findMany);
-
-  // const relatedResolver = HerbariumTC.getResolver('findMany')
-  //   .clone()
-  //   .setType(new GraphQLList(PlantSearchResultItemType));
-
   HerbariumTC.addRelation('Related', () => ({
     resolver: HerbariumTC.getResolver('findMany'),
     args: {
@@ -21,8 +17,5 @@ module.exports = (context) => {
     projection: { displayLocation: 1 },
   }));
 
-  addScientificNameSearch(HerbariumTC);
-  addRelationWith(HerbariumTC, 'plant', 'plantId', PlantTC);
-  AddTypeToImageField(HerbariumTC);
   return HerbariumTC;
 };

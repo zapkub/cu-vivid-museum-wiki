@@ -24,30 +24,3 @@ Museum.add({
 
 Museum.defaultColumns = 'museumLocation, plantId';
 Museum.register();
-
-const MuseumTC = composeWithMongoose(Museum.model, {
-  resolvers: {
-    findMany: {
-      sort: true,
-      skip: true,
-      limit: {
-        defaultValue: 100,
-      },
-    },
-  },
-});
-MuseumTC.setResolver('findMany', MuseumTC.getResolver('findMany')
-.addFilterArg(createStringMatchFilter(MuseumTC)));
-
-MuseumTC.addRelation('Related', () => ({
-  resolver: MuseumTC.getResolver('findMany'),
-  args: {
-    filter: source => ({
-      museumLocation: source.museumLocation,
-    }),
-  },
-  projection: { zone: 1 },
-}));
-
-exports.MuseumTC = MuseumTC;
-
