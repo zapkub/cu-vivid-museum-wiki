@@ -6,13 +6,24 @@ const path = require('path');
 const cloudinary = require('cloudinary-core');
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
-
+// ENV Var check
+const requiredEnv = ['MONGO_URI', 'COOKIE_SECRET', 'CLOUDINARY_URL'];
+const missingEnv = [];
+requiredEnv.forEach((key) => {
+  if (!process.env[key]) {
+    missingEnv.push(key);
+  }
+});
+if (missingEnv.length > 0) {
+  throw new Error(`Environment variable is missing : ${missingEnv.join(', ')}`);
+}
 
 // Added in Node.js v1.4.1, this is a global event handler that will be notified of
 // Promise values that do not have a .catch() handler (or some kind) attached to them.
 // --
 // NOTE: Some 3rd-party Promise libraries like Bluebird and Q will catch unhandled
 // rejections and emit an "unhandledRejection" event on the global process object.
+
 process.on('unhandledRejection',
     (reason) => {
       console.log(chalk.red.bold('[PROCESS] Unhandled Promise Rejection'));
@@ -20,10 +31,9 @@ process.on('unhandledRejection',
       console.log(reason);
       console.log(chalk.red.bold('- -'));
     });
+
 const dev = process.env.NODE_ENV !== 'production';
-
 const next = NextJS({ dev });
-
 // Setup keystone
 
 const keystone = require('keystone');

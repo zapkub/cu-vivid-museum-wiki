@@ -15,37 +15,26 @@ const CHECKED_ALL = 'input/CHECKED_ALL';
 
 const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch, data }) => (
   <Form className={small ? 'search-input-small-wrap' : 'search-input-wrap'} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
-    {console.log(data.get(''))}
-    <Search
-      loading={data.get('loading', false)}
-      onSearchChange={(e, value) => onTextChange(value)}
-      onResultSelect={(e, result) => onTextChange(result.title)}
-      value={texts}
-      results={data.get('autoCompletion', []).map(item => ({
-        title: item.scientificName,
-      }))}
-      className="search-input"
-      style={{ borderRadius: 0 }}
-    />
-
-    {/* <Form.Input
-
-      as={() => <Search
+    <Form.Field className="search-input">
+      <Search
         loading={data.get('loading', false)}
         onSearchChange={(e, value) => onTextChange(value)}
         onResultSelect={(e, result) => onTextChange(result.title)}
         value={texts}
+        icon={false}
+        showNoResults={false}
         results={data.get('autoCompletion', []).map(item => ({
           title: item.scientificName,
         }))}
-      />}
-      className="search-input"
-      style={{ borderRadius: 0 }}
-      name="text"
-      action={{ icon: 'search', color: 'blue' }}
-
-     onChange={e => onTextChange(e.target.value)} placeholder="Search..."
-    />*/}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            confirmSearch();
+          }
+        }}
+        className="search"
+      />
+      <Form.Button color="blue" icon={'search'} />
+    </Form.Field>
     <Form.Group className="checkbox-input-wrap" inline id="size">
       { Categories ? Object.keys(Categories).map(
                 key => (
@@ -64,6 +53,13 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
       <Label style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
     </Form.Group>
     <style jsx global>{`
+        .search {
+          border-radius: 0;
+          flex: 1 0 auto; 
+        }
+        .search-input-wrap .ui.blue.button {
+          margin:0;
+        }
         .search-input-wrap {
             max-width: 400px !important;
             margin: auto;
@@ -76,7 +72,7 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
           width: 100%;
         }
         .search-input-wrap .ui.input input{
-          border-radius: 0;
+          border-radius: 0 !important;
           border:none;
         }
         .search-input-small-wrap {
@@ -89,13 +85,15 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
           width: 400px;
           border: 3px rgba(0,0,0,0.4) solid;
           margin-bottom:20px;
+          display: flex;
         }
 
         .search-input button {
           border-radius: 0 !important;
         }
         .search-input.field .ui.input input  {
-          border-radius: 0;
+          border-radius: 0 !important;
+          flex: 1 0 auto;
         }
         .checkbox-input-wrap {
           background: rgba(0,0,0,0.4);

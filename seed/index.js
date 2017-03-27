@@ -84,6 +84,7 @@ exports.getPlantFromDataSheet = () => {
         .filter((item) => item[4])
         .filter((item) => filterOnlyEnglish(item[4]))
         .filter((item) => item[4] !== '_')
+        .filter((item) => item[4] !== '-')
         .map(item => {
             const _id = ObjectID();
             const sciname = normailizeScientificName(item[4]);
