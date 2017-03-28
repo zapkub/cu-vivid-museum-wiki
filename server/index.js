@@ -1,6 +1,22 @@
-const keystone = require('./keystone');
 
 
-// Ref: https://www.bennadel.com/blog/3238-logging-and-debugging-unhandled-promise-rejections-in-node-js-v1-4-1-and-later.html
+module.exports = (externalContext) => {
+  const { keystone } = externalContext;
+      // create schema from models
+  const schema = require('./schema')(externalContext);
+  const context = Object.assign({
+    schema,
+  }, externalContext);
 
-keystone.start();
+  keystone.set('routes', (app) => {
+    require('./routes')(app, context);
+  });
+
+  return {
+    start(callback) {
+      keystone.start(3000, () => {
+        if (callback) callback();
+      });
+    },
+  };
+};

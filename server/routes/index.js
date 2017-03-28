@@ -2,33 +2,22 @@
 // custom keystone app
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const cors = require('cors');
-const cloudinary = require('cloudinary-core');
-const keystone = require('keystone');
 const express = require('express');
 const path = require('path');
 
-const schema = require('../schema');
-
-const cl = cloudinary.Cloudinary.new();
-cl.fromEnvironment();
-
-module.exports = (server, app) => {
-  const handle = app.getRequestHandler();
-  server.use(cors());
-  server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
-  server.use('/lib', express.static(path.join(__dirname, '../../node_modules')));
-  server.use('/graphql', graphqlExpress(req => ({
-    schema,
-    context: {
+module.exports = (app, context) => {
+  const { next } = context;
+  app.use(cors());
+  app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+  app.use('/lib', express.static(path.join(__dirname, '../../node_modules')));
+  app.use('/graphql', graphqlExpress(req => ({
+    schema: context.schema,
+    context: Object.assign({
       isAdmin: req.isAdmin,
-      cl,
-      Plant: keystone.list('Plant').model,
-      Museum: keystone.list('Museum').model,
-      Garden: keystone.list('Garden').model,
-      Herbarium: keystone.list('Herbarium').model,
-    },
+    }, context),
   })));
 
-  require('./plantDetail.routes')(server, app);
-  server.get('*', (req, res) => handle(req, res));
+  require('./plantDetail.routes')(app, context);
+  const handle = next.getRequestHandler();
+  app.get('*', (req, res) => handle(req, res));
 };

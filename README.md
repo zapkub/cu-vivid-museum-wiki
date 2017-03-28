@@ -9,10 +9,31 @@ This project is created for normalize Plant data from Faculty of Pharmaceutical 
  - Content management system.
  - Public GraphQL api.
 
+# TODO
+ - Implement elastic search
+
 ![SS](./docs/overall.jpg)
 
 # How we build it
 We built this site with Monolithic NodeJS and popular modern web development tools like React (NextJS), GraphQL, Keystone and more.
+
+## Stack Overall
+**Server**
+- Apollo GraphQL
+- GraphQL compose
+- ExpressJS
+- KeystoneJS
+
+**Client**
+- React Universal (NextJS)
+
+**Http service**
+- NGINX
+
+**Deployment**
+- Circle-ci
+- Docker
+
 
 # System Requirements
 1. [NodeJS](https://nodejs.org/en/)
@@ -22,7 +43,21 @@ We built this site with Monolithic NodeJS and popular modern web development too
 3. [MongoDB](https://www.mongodb.com/) ( In case you don't want to run Docker )
     - Version 3.4.2
 
-# Setup
+# Start
+This project use Docker as main process and server manager
+```
+ $ docker run -d 
+ -e MONGO_URI=[mongouri (require)]
+ -e COOKIE_SECRET=[cookie secret (require)]
+ -e ROOT_EMAIL=[admin email (default root@vivid.com)]
+ -e ROOT_PASS=[admin password (default root1234)]
+ -e CLOUDINARY_URL=[cloudinary cloud url (require)]
+ -e GRAPHQL=[graphql endpoint (default '/graphql')]
+  rungsikorn/vivid
+```
+
+
+# Development
 1. **Clone repository**
 ```
    $ git clone https://github.com/zapkub/cu-vivid-museum
