@@ -18,7 +18,11 @@ module.exports = (modelsTC) => {
     },
     resolve: async ({ args, context }) => {
       const { Plant } = context;
-      const result = await Plant.find({ scientificName: new RegExp(args.text.split('.*').join('|'), 'ig') })
+      const test = new RegExp(args.text.split('.*').join('|'), 'ig');
+      const result = await Plant.find({ $or: [
+        { scientificName: test },
+        { familyName: test },
+      ] })
         .limit(40);
       return result;
     },
@@ -26,6 +30,7 @@ module.exports = (modelsTC) => {
       name: 'ScientificNameItem',
       fields: {
         scientificName: { type: GraphQLString },
+        familyName: { type: GraphQLString },
         _id: { type: GraphQLString },
       },
     })),

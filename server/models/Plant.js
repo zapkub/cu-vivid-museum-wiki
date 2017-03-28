@@ -13,7 +13,7 @@ Plant.add({
   name: { type: String, label: 'ชื่อ' },
 });
 
-Plant.schema.index({ scientificName: 'text' });
+Plant.schema.index({ scientificName: 'text', familyName: 'text' });
 
 Plant.relationship({ ref: 'Herbarium', path: 'herbarium', refPath: 'plantId' });
 Plant.relationship({ ref: 'Museum', path: 'museum', refPath: 'plantId' });
