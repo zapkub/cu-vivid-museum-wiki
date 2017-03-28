@@ -22,8 +22,8 @@ process.on('unhandledRejection',
 const dev = process.env.NODE_ENV !== 'production';
 
 const app = next({ dev });
-
-app.prepare().then(() => {
+(async () => {
+  if (!process.env.SERVER_ONLY) { await app.prepare(); }
   const keystone = require('./server/keystone');
 
   keystone.set('routes', (server) => {
@@ -33,4 +33,5 @@ app.prepare().then(() => {
   keystone.start(3000, () => {
     console.log(`Start app on 3000`);  // eslint-disable-line
   });
-});
+})();
+
