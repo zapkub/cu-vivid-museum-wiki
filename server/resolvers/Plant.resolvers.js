@@ -22,6 +22,7 @@ module.exports = (modelsTC) => {
       const result = await Plant.find({ $or: [
         { scientificName: test },
         { familyName: test },
+        { name: test },
       ] })
         .limit(40);
       return result;
@@ -31,6 +32,7 @@ module.exports = (modelsTC) => {
       fields: {
         scientificName: { type: GraphQLString },
         familyName: { type: GraphQLString },
+        name: { type: GraphQLString },
         _id: { type: GraphQLString },
       },
     })),
@@ -56,11 +58,13 @@ module.exports = (modelsTC) => {
       context: { Plant },
     }) => {
       console.time('Find plant by category and scientific name');
+      const test = new RegExp(text.join('|'), 'i');
+
       const queryResult = await Plant.aggregate([
         {
           $match: {
-            // $or: [{ scientificName: test }, { familyName: test }, { name: test }],
-            $text: { $search: `"${text.join(' ')}"` },
+            $or: [{ name: test }, { $text: { $search: `"${text.join(' ')}"` } }],
+
           },
         },
         { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },

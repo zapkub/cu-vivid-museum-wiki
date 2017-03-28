@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import objectPath from 'object-path';
 
-import SearchInputResultItem from './SearchInputResultItem';
+import SearchInputResultItem from './AutocompleteResultItem';
 import Categories from '../category';
 
 const CHECKED = 'input/CHECKED';
@@ -24,11 +24,12 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
         />}
         loading={data.get('loading', false)}
         onSearchChange={(e, value) => onTextChange(value)}
-        onResultSelect={(e, result) => onTextChange(result.title)}
+        onResultSelect={(e, result) => onTextChange(`${result.name} ${result.description} ${result.title}`)}
         value={texts}
         icon={false}
         showNoResults={false}
         results={data.get('autoCompletion', []).map(item => ({
+          name: item.name,
           title: item.scientificName,
           description: item.familyName,
         }))}
@@ -189,6 +190,7 @@ const SearchInputBar = compose(
             autoCompletion(text: $text) {
               scientificName
               familyName
+              name
               _id
             }
           }

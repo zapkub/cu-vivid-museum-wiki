@@ -10,7 +10,7 @@ const Plant = new keystone.List('Plant', {
 Plant.add({
   scientificName: { type: String, label: 'ชื่อวิทยาศาสตร์', unique: true, index: true },
   familyName: { type: String, label: 'ชื่อวงศ์' },
-  name: { type: String, label: 'ชื่อ' },
+  name: { type: String, label: 'ชื่อ', index: true },
 });
 
 Plant.schema.index({ scientificName: 'text', familyName: 'text' });
