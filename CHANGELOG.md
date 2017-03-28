@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.0"></a>
+# [1.1.0-beta.0](https://github.com/zapkub/vivid-museum/compare/1.0.0-beta.3...1.1.0-beta.0) (2017-03-28)
+
+
+### Bug Fixes
+
+* **Search:** Fix Thai language search, Update UI ([509ffc5](https://github.com/zapkub/vivid-museum/commit/509ffc5))
+
+
+### Features
+
+* **Search input:** Add autocompletion for scientific name ([0c7f479](https://github.com/zapkub/vivid-museum/commit/0c7f479))
+* **Search input:** Add family name to autocompletion result ([9721b77](https://github.com/zapkub/vivid-museum/commit/9721b77))
+* **Search input:** Highlight search text ([c1b6ecb](https://github.com/zapkub/vivid-museum/commit/c1b6ecb))
+
+
+### Performance Improvements
+
+* **Search:** Optimize search query ([49b700e](https://github.com/zapkub/vivid-museum/commit/49b700e))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-03-26)
 
