@@ -18,17 +18,19 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
   <Form className={small ? 'search-input-small-wrap' : 'search-input-wrap'} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Field className="search-input">
       <Search
-        resultRenderer={SearchInputResultItem}
+        resultRenderer={props => <SearchInputResultItem
+          searchText={[texts || '']}
+          {...props}
+        />}
         loading={data.get('loading', false)}
         onSearchChange={(e, value) => onTextChange(value)}
-        onResultSelect={(e, result) => onTextChange(result.scientificName)}
+        onResultSelect={(e, result) => onTextChange(result.title)}
         value={texts}
         icon={false}
         showNoResults={false}
         results={data.get('autoCompletion', []).map(item => ({
-          scientificName: item.scientificName,
-          familyName: item.familyName,
-          searchText: [texts || ''],
+          title: item.scientificName,
+          description: item.familyName,
         }))}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

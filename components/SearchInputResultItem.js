@@ -1,10 +1,14 @@
 import React from 'react';
 import HighlightText from 'react-highlight-words';
 
-export default ({ scientificName, familyName, searchText }) => (
+export default ({ title, description, searchText }) => (
   <div className="result-wrap">
-    <HighlightText searchWords={searchText} highlightClassName="scientific-name" textToHighlight={scientificName} />
-    <HighlightText searchWords={searchText} textToHighlight={familyName || ''} />
+    <div className="family-name">
+      <HighlightText searchWords={searchText} textToHighlight={description || ''} />
+    </div>
+    <div className="scientific-name">
+      <HighlightText searchWords={searchText} textToHighlight={title} />
+    </div>
     <style jsx>{`
         .result-wrap {
             text-transform: capitalize;
@@ -14,7 +18,7 @@ export default ({ scientificName, familyName, searchText }) => (
             font-weight: bold;
         }
         .family-name {
-
+            font-size: 11px;
         }
     `}</style>
   </div>
