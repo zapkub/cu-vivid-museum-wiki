@@ -17,6 +17,24 @@ This project is created for normalize Plant data from Faculty of Pharmaceutical 
 # How we build it
 We built this site with Monolithic NodeJS and popular modern web development tools like React (NextJS), GraphQL, Keystone and more.
 
+## Stack Overall
+**Server**
+- Apollo GraphQL
+- GraphQL compose
+- ExpressJS
+- KeystoneJS
+
+**Client**
+- React Universal (NextJS)
+
+**Http service**
+- NGINX
+
+**Deployment**
+- Circle-ci
+- Docker
+
+
 # System Requirements
 1. [NodeJS](https://nodejs.org/en/)
     - Version 7.7.1 +
