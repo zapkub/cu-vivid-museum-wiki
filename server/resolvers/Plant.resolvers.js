@@ -52,44 +52,29 @@ module.exports = (modelsTC) => {
       limit: { type: 'Int', defaultValue: 20 },
     },
     resolve: async ({
-      args: { categories, text, skip, limit },
-      context: { Garden, Museum, Herbarium },
+      args: { text, skip, limit },
+      context: { Plant },
     }) => {
       console.time('Find plant by category and scientific name');
-      const test = new RegExp(text.join('|'), 'i');
-      let result = [];
+      const queryResult = await Plant.aggregate([
+        {
+          $match: {
+            // $or: [{ scientificName: test }, { familyName: test }, { name: test }],
+            $text: { $search: `"${text.join(' ')}"` },
+          },
+        },
+        { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },
+        { $lookup: { from: 'museums', localField: '_id', foreignField: 'plantId', as: 'museum' } },
+        { $lookup: { from: 'gardens', localField: '_id', foreignField: 'plantId', as: 'garden' } },
+        { $project: { result: { $concatArrays: ['$garden', '$museum', '$herbarium'] } } },
+        { $project: { result: { $slice: ['$result', 0, limit] } } },
+        { $sort: { scientificName: -1 } },
+      ]);
+      const result = _.flatMap(queryResult, item => item.result);
 
-
-      const q = categories.map(async (category) => {
-        let model;
-        switch (category) {
-          case 'garden':
-            model = Garden;
-            break;
-          case 'herbarium':
-            model = Herbarium;
-            break;
-          case 'museum':
-            model = Museum;
-            break;
-          default:
-            throw new Error('Error unknown type');
-        }
-
-
-      // const result = await Plant.find({ $text: { $search: args.text } });
-        const categorySeachResult = await model.aggregate([
-        { $lookup: { from: 'plants', localField: 'plantId', foreignField: '_id', as: 'plant' } },
-        { $unwind: '$plant' },
-        { $match: { $or: [{ 'plant.scientificName': test }, { 'plant.familyName': test }, { 'plant.name': test }] } },
-        ]);
-        result = [].concat.apply([], [categorySeachResult, result]);
-      });
-      await Promise.all(q);
       console.timeEnd('Find plant by category and scientific name');
       return {
         result: _(result)
-        .sortBy(item => item.plant.scientificName)
         .slice(skip, skip + limit),
         count: result.length,
       };
