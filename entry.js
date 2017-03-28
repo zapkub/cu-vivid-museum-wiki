@@ -72,8 +72,8 @@ keystone.set('nav', {
 
 const cl = cloudinary.Cloudinary.new();
 cl.fromEnvironment();
-
-next.prepare().then(() => {
+(async () => {
+  await next.prepare();
   const context = {
     keystone,
     cl,
@@ -88,4 +88,4 @@ next.prepare().then(() => {
   server.start(3000, () => {
     console.log(`Start app on 3000`);  // eslint-disable-line
   });
-});
+})();
