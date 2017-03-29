@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.1"></a>
+# [1.1.0-beta.1](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.0...v1.1.0-beta.1) (2017-03-29)
+
+
+
 <a name="1.1.0-beta.0"></a>
 # [1.1.0-beta.0](https://github.com/zapkub/vivid-museum/compare/1.0.0-beta.3...1.1.0-beta.0) (2017-03-28)
 
