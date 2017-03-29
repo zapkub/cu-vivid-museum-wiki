@@ -47,6 +47,7 @@ We built this site with Monolithic NodeJS and popular modern web development too
 This project use Docker as main process and server manager
 ```
  $ docker run -d 
+ -p [HOST_PORT]:3000
  -e MONGO_URI=[mongouri (require)]
  -e COOKIE_SECRET=[cookie secret (require)]
  -e ROOT_EMAIL=[admin email (default root@vivid.com)]
