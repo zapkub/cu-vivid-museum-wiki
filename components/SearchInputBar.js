@@ -14,17 +14,20 @@ import Categories from '../category';
 const CHECKED = 'input/CHECKED';
 const CHECKED_ALL = 'input/CHECKED_ALL';
 
-const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch, data }) => (
-  <Form className={small ? 'search-input-small-wrap' : 'search-input-wrap'} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
+const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch, data, setToggleAutoComplete, isToggleAutoComplete }) => (
+  <Form className={`${small ? 'search-input-small-wrap' : 'search-input-wrap'} ${isToggleAutoComplete ? 'toggle-mobile-input' : ''}`} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
     <Form.Field className="search-input">
       <Search
+        fluid
         resultRenderer={props => <SearchInputResultItem
           searchText={[texts || '']}
           {...props}
         />}
+        onFocus={() => setToggleAutoComplete(true)}
+        onBlur={() => setTimeout(() => setToggleAutoComplete(false), 500)}
         loading={data.get('loading', false)}
         onSearchChange={(e, value) => onTextChange(value)}
-        onResultSelect={(e, result) => onTextChange(`${result.name} ${result.description} ${result.title}`)}
+        onResultSelect={(e, result) => { e.preventDefault(); onTextChange(`${result.name} ${result.description} ${result.title}`); setToggleAutoComplete(false); }}
         value={texts}
         icon={false}
         showNoResults={false}
@@ -36,6 +39,7 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             confirmSearch();
+            setToggleAutoComplete(false);
           }
         }}
         className="search"
@@ -48,7 +52,7 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
                   <Form.Checkbox
                     className="checkbox-input"
                     key={Categories[key].value}
-                    label={Categories[key].value}
+                    label={Categories[key].name}
                     checked={state[key]}
                     onChange={(e, { checked }) => dispatch({
                       type: CHECKED,
@@ -57,7 +61,7 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
                   />
                 ),
             ) : null }
-      <Label style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
+      <Label className="select-all-button" style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
     </Form.Group>
     <style jsx global>{`
         .search {
@@ -90,7 +94,8 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
         }
         .search-input {
           width: 400px;
-          border: 3px rgba(0,0,0,0.4) solid;
+          border: 1px black solid;
+          background:#2185d0;
           margin-bottom:20px;
           display: flex;
         }
@@ -119,11 +124,34 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
         }
 
         @media screen and (max-width: 800px) {
+          .ui.form.toggle-mobile-input {
+            position:fixed;
+            background:rgba(255,255,255,0.8);
+            height: 100vh;
+            top:0;
+            left:0;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 5px;
+          }
+          .search-input-wrap {
+            max-width: none !important;
+            margin: auto;
+          }
+          .ui.label.select-all-button {
+            display:none;
+          }
           .search-input {
             width: 100%;
           }
-          .checkbox-input-wrap {
-            margin: auto;
+          .checkbox-input {
+
+          }
+          .ui.form .inline.fields.checkbox-input-wrap {
+            margin: auto !important;
+          }
+          .ui.form .inline.fields .checkbox-input {
+            padding: 5px 5px;
           }
           .search-input-small-wrap{
             flex-direction: column;
@@ -177,6 +205,7 @@ function categoriesSelectorReducer(state, { type, payload }) {
 }
 
 const SearchInputBar = compose(
+       withState('isToggleAutoComplete', 'setToggleAutoComplete', false),
        withState('texts', 'onTextChange', () => {
          if (!Router.router) return '';
          const { query } = Router.router;
@@ -214,7 +243,7 @@ const SearchInputBar = compose(
                initState[key] = false;
              }
            } else {
-             initState[key] = false;
+             initState[key] = true;
            }
          });
 
