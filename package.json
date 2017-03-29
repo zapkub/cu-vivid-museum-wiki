@@ -13,6 +13,7 @@
     "json": "node ./seed/convertToJson.js",
     "clean": "sh .bin/clean.sh",
     "up": "bash .bin/up-prod.sh",
+    "prepare": "bash .bin/build.sh",
     "down": "bash .bin/down-prod.sh",
     "test": "jest || true",
     "commit": "git-cz || true",
