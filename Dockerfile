@@ -11,7 +11,6 @@ RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
 WORKDIR /app
 ADD ./package.json /app/package.json
 ADD ./seed /app/seed
-ADD .env /app/.env
 
 ## build
 ADD ./static /app/static
@@ -21,7 +20,7 @@ ADD ./entry.js /app/entry.js
 ADD ./category.js /app/category.js
 
 ## Clean and lean
-RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
+# RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
 RUN npm run json
 
 EXPOSE 3000
