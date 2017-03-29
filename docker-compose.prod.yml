@@ -1,6 +1,6 @@
 
 web:
-  image: rungsikorn/vivid:latest
+  image: rungsikorn/vivid:1.1.0-beta.1
   ports:
     - "3183:3000"
   links:

@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="1.1.0-beta.1"></a>
 # [1.1.0-beta.1](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.0...v1.1.0-beta.1) (2017-03-29)
 
+### Bug Fixes
+* **Dependency:** Missing dependency version ( React-dom )
 
 
 <a name="1.1.0-beta.0"></a>
