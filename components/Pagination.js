@@ -15,9 +15,9 @@ export default ({ totalPages, currentPage, onPageChange }) => (
       onPageChange={onPageChange}
     />
     <div className="mobile-paginate">
-      <Button onClick={() => onPageChange({ selected: currentPage - 1 })} circular icon="chevron left" />
-      <div className="page-number">{`Page ${currentPage}`}</div>
-      <Button onClick={() => onPageChange({ selected: currentPage + 1 })} circular icon="chevron right" />
+      { currentPage > 1 ? <Button onClick={() => onPageChange({ selected: currentPage - 1 })} circular icon="chevron left" /> : null }
+      <div className="page-number">{`Page ${isNaN(currentPage) ? 1 : currentPage}`}</div>
+      { totalPages > 1 ? <Button onClick={() => onPageChange({ selected: currentPage + 1 })} circular icon="chevron right" /> : null }
     </div>
     <style jsx global>
       {
