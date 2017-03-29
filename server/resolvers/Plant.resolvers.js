@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { Resolver } = require('graphql-compose');
+const { Resolver, TypeComposer } = require('graphql-compose');
 
 const { scientificSplit } = require('../common');
 const { GraphQLEnumType, GraphQLList, GraphQLObjectType, GraphQLString } = require('graphql');
@@ -11,6 +11,20 @@ module.exports = (modelsTC) => {
     values: require('../../category'),
   });
 
+
+  const AutoCompleteResultItem = new GraphQLObjectType({
+    name: 'ScientificNameItem',
+    fields: {
+      scientificName: { type: GraphQLString },
+      familyName: { type: GraphQLString },
+      name: { type: GraphQLString },
+      _id: { type: GraphQLString },
+    },
+  });
+  const AutoCompleteResultItemTC = TypeComposer.create(AutoCompleteResultItem);
+  AutoCompleteResultItemTC.extendField('scientificName', {
+    resolve: source => (scientificSplit(source.scientificName)),
+  });
   PlantTC.setResolver('autoCompletion', new Resolver({
     name: 'autoCompletion',
     args: {
@@ -19,23 +33,17 @@ module.exports = (modelsTC) => {
     resolve: async ({ args, context }) => {
       const { Plant } = context;
       const test = new RegExp(args.text.split('.*').join('|'), 'ig');
-      const result = await Plant.find({ $or: [
-        { scientificName: test },
-        { familyName: test },
-        { name: test },
-      ] })
+      const result = await Plant.find({
+        $or: [
+          { scientificName: test },
+          { familyName: test },
+          { name: test },
+        ],
+      })
         .limit(40);
       return result;
     },
-    type: new GraphQLList(new GraphQLObjectType({
-      name: 'ScientificNameItem',
-      fields: {
-        scientificName: { type: GraphQLString },
-        familyName: { type: GraphQLString },
-        name: { type: GraphQLString },
-        _id: { type: GraphQLString },
-      },
-    })),
+    type: new GraphQLList(AutoCompleteResultItemTC.getType()),
   }));
 
   PlantTC.setResolver('search', new Resolver({
@@ -79,7 +87,7 @@ module.exports = (modelsTC) => {
       console.timeEnd('Find plant by category and scientific name');
       return {
         result: _(result)
-        .slice(skip, skip + limit),
+          .slice(skip, skip + limit),
         count: result.length,
       };
     },
