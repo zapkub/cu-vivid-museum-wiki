@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.2"></a>
+# [1.1.0-beta.2](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2017-03-29)
+
+
+### Bug Fixes
+
+* **Autocomplete:** Scientific name in autocomplete must be nomalized ([ebf18bf](https://github.com/zapkub/vivid-museum/commit/ebf18bf))
+* **Pagination:** Mobile UI Pagination number is not working properly ([1d88e16](https://github.com/zapkub/vivid-museum/commit/1d88e16))
+
+
+### Features
+
+* **Search:** Autocomplete search UI Improvment ([88d6718](https://github.com/zapkub/vivid-museum/commit/88d6718))
+
+
+
 <a name="1.1.0-beta.1"></a>
 # [1.1.0-beta.1](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.0...v1.1.0-beta.1) (2017-03-29)
 
