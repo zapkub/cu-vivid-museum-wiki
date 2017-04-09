@@ -79,3 +79,4 @@ node_modules
 .DS_Store
 db
 static/images/report
+static/images/stock/herbarium-resize
