@@ -25,6 +25,52 @@ module.exports = (modelsTC) => {
   AutoCompleteResultItemTC.extendField('scientificName', {
     resolve: source => (scientificSplit(source.scientificName)),
   });
+
+  const PlantSearchResolver = new Resolver({
+    name: 'search',
+    type: new GraphQLObjectType({
+      name: 'PlantSearchResult',
+      fields: {
+        result: { type: new GraphQLList(PlantSearchResultItemType) },
+        count: { type: 'Int' },
+      },
+    }),
+    args: {
+      text: { type: '[String]', defaultValue: [] },
+      categories: { type: new GraphQLList(CategoryEnum), defaultValue: ['garden', 'herbarium', 'museum'] },
+      skip: { type: 'Int', defaultValue: 0 },
+      limit: { type: 'Int', defaultValue: 20 },
+    },
+    resolve: async ({
+      args: { text, skip, limit },
+      context: { Plant },
+    }) => {
+      console.time('Find plant by category and scientific name');
+      const test = new RegExp(text.join('|'), 'i');
+      const queryResult = await Plant.aggregate([
+        {
+          $match: {
+            $or: [{ name: test }, { $text: { $search: `"${text.join(' ')}"` } }],
+          },
+        },
+        { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },
+        { $lookup: { from: 'museums', localField: '_id', foreignField: 'plantId', as: 'museum' } },
+        { $lookup: { from: 'gardens', localField: '_id', foreignField: 'plantId', as: 'garden' } },
+        { $project: { result: { $concatArrays: ['$garden', '$museum', '$herbarium'] } } },
+        { $project: { result: { $slice: ['$result', 0, limit] } } },
+        { $sort: { scientificName: -1 } },
+      ]);
+      const result = _.flatMap(queryResult, item => item.result);
+      console.timeEnd('Find plant by category and scientific name');
+      return {
+        result: _(result)
+          .slice(skip, skip + limit),
+        count: result.length,
+      };
+    },
+  });
+
+
   PlantTC.setResolver('autoCompletion', new Resolver({
     name: 'autoCompletion',
     args: {
@@ -46,52 +92,7 @@ module.exports = (modelsTC) => {
     type: new GraphQLList(AutoCompleteResultItemTC.getType()),
   }));
 
-  PlantTC.setResolver('search', new Resolver({
-    name: 'search',
-    type: new GraphQLObjectType({
-      name: 'PlantSearchResult',
-      fields: {
-        result: { type: new GraphQLList(PlantSearchResultItemType) },
-        count: { type: 'Int' },
-      },
-    }),
-    args: {
-      text: { type: '[String]', defaultValue: [] },
-      categories: { type: new GraphQLList(CategoryEnum), defaultValue: ['garden', 'herbarium', 'museum'] },
-      skip: { type: 'Int', defaultValue: 0 },
-      limit: { type: 'Int', defaultValue: 20 },
-    },
-    resolve: async ({
-      args: { text, skip, limit },
-      context: { Plant },
-    }) => {
-      console.time('Find plant by category and scientific name');
-      const test = new RegExp(text.join('|'), 'i');
-
-      const queryResult = await Plant.aggregate([
-        {
-          $match: {
-            $or: [{ name: test }, { $text: { $search: `"${text.join(' ')}"` } }],
-
-          },
-        },
-        { $lookup: { from: 'herbaria', localField: '_id', foreignField: 'plantId', as: 'herbarium' } },
-        { $lookup: { from: 'museums', localField: '_id', foreignField: 'plantId', as: 'museum' } },
-        { $lookup: { from: 'gardens', localField: '_id', foreignField: 'plantId', as: 'garden' } },
-        { $project: { result: { $concatArrays: ['$garden', '$museum', '$herbarium'] } } },
-        { $project: { result: { $slice: ['$result', 0, limit] } } },
-        { $sort: { scientificName: -1 } },
-      ]);
-      const result = _.flatMap(queryResult, item => item.result);
-
-      console.timeEnd('Find plant by category and scientific name');
-      return {
-        result: _(result)
-          .slice(skip, skip + limit),
-        count: result.length,
-      };
-    },
-  }));
+  PlantTC.setResolver('search', PlantSearchResolver);
 
 
   const PlantIdRelationArg = {
