@@ -7,7 +7,7 @@ import Router from 'next/router';
 
 import HeroImage from '../components/HeroImage';
 import withLoading from '../lib/withLoading';
-import SearchInputBar from '../components/SearchInputBar';
+import SearchInputBar from '../containers/SearchInputBar';
 import PlantGridList from '../components/PlantGridList';
 import categories from '../category';
 import Paginate from '../components/Pagination';
