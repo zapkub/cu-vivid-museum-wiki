@@ -1,4 +1,5 @@
 # CU Vivid Museum Wiki
+[![Build Status](https://travis-ci.org/zapkub/cu-vivid-museum-wiki.svg?branch=master)](https://travis-ci.org/zapkub/cu-vivid-museum-wiki)
 [![Coverage Status](https://coveralls.io/repos/github/zapkub/cu-vivid-museum-wiki/badge.svg?branch=develop)](https://coveralls.io/github/zapkub/cu-vivid-museum-wiki?branch=develop)
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
