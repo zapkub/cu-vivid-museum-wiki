@@ -17,7 +17,9 @@ module.exports = (app, context) => {
     }, context),
   })));
 
+
   require('./plantDetail.routes')(app, context);
+  require('./static.routes')(app, context);
   const handle = next.getRequestHandler();
   app.get('*', (req, res) => handle(req, res));
 };
