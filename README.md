@@ -98,8 +98,8 @@ This project use Docker as main process and server manager
 > NOTE : Step 5-6 is already created as bash script file you can just run `npm run dev`
 
 # LICENSE
-- In process of opensourcing
+BSD-3
 
 # CONTRIBUTOR
- 1. Softever co.
+ 1. [Softever co.](http://www.softever.co.th/)
  2. [Rungsikorn Rungsikavanich](https://github.com/zapkub)
