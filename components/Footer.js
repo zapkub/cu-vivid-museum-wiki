@@ -1,4 +1,6 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
+import Link from 'next/link';
 
 export default class Footer extends React.Component {
   render() {
@@ -6,7 +8,9 @@ export default class Footer extends React.Component {
       <div className="footer-container">
         <div className="wrap">
           <div className="info-wrap" >
-            <span style={{ fontWeight: 'bold' }}>{'คณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย'}</span>{' 254 ถนนพญาไทย เขตปทุมวัน 10330'}
+            <a href="http://www.pharm.chula.ac.th/"><span style={{ fontWeight: 'bold', color: '#e896ab' }}>{'คณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย'}</span></a>
+            <br />
+            {' 254 ถนนพญาไทย เขตปทุมวัน 10330'}
             <div>
               <img alt="" src="/static/icon/phone.svg" width="10" />{' 02-218-8283'}
               <img alt="" src="/static/icon/fax.svg" style={{ marginLeft: 10 }} width="10" />{' 02-251-5086'}
@@ -15,13 +19,32 @@ export default class Footer extends React.Component {
         </div>
         <div className="bottom-row">
           <div className="bottom-wrap" >
-            {'Copyright © 2017 Continuing Education Unit. All rights reserved.'}
+            <span>{'Copyright © 2017 Continuing Education Unit under the BSD-3 License.' }</span>
+
+            <div className="site-menu">
+              <Link href="https://github.com/zapkub/vivid-museum"><a><Icon name="github" />{'Github'}</a></Link>
+              <Link href="/release-log"><a>{ 'Changlog' }</a></Link>
+              <Link href="/terms"><a>{ 'Terms of Services' }</a></Link>
+              <Link href="/policy"><a>{ 'Privacy Policy' }</a></Link>
+            </div>
           </div>
         </div>
         <style jsx>{`
             .info-wrap{
                 text-align: left;
                 padding: 0 10px;
+            }
+            .site-menu {
+                flex: 1 0 auto;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .site-menu a {
+                margin:0 5px;
+                color: #848586;
+            }
+            .site-menu a:hover{
+                color: white;
             }
             .footer-container {
                 background-color: #252627;
