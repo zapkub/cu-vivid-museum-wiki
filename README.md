@@ -1,4 +1,6 @@
 # CU Vivid Museum Wiki
+[![Coverage Status](https://coveralls.io/repos/github/zapkub/cu-vivid-museum-wiki/badge.svg?branch=develop)](https://coveralls.io/github/zapkub/cu-vivid-museum-wiki?branch=develop)
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 This project is created for normalize Plant data from Faculty of Pharmaceutical sciences, Chulalongkorn University to Web based application provide an easier way to search for information, available at [CU Vivid Museum website]().
