@@ -11,6 +11,7 @@ const RelatePlantList = compose(
     <Header>{'ในพื้นที่จัดแสดงเดียวกัน'}</Header>
     <Divider />
     <PlantGridList
+      category={category}
       plantList={Related}
       displayLocation={displayLocation}
     />
@@ -22,15 +23,52 @@ const RelatePlantList = compose(
   </div>
 ));
 
-
-RelatePlantList.fragments = {
-  relateList: gql`
+const plantFragment = gql`
         fragment RelateList on Plant {
             scientificName
             familyName
             name
+            _id
             key
         }
-    `,
+    `;
+
+RelatePlantList.fragments = {
+  relateList: {
+    garden: gql`
+    ${plantFragment}
+    fragment RelatedItem on Garden {
+      _id
+      zone
+      thumbnailImage
+      plant {
+        ...RelateList
+      }
+    }
+  `,
+    herbarium: gql`
+    ${plantFragment}
+    fragment RelatedItem on Herbarium {
+      cuid
+      _id
+      thumbnailImage
+      plant {
+        ...RelateList
+      }
+   }
+  `,
+    museum: gql`
+    ${plantFragment}
+    fragment RelatedItem on Museum {
+      _id
+      museumLocation
+      thumbnailImage
+      plant {
+        ...RelateList
+      }
+    }
+  `,
+
+  },
 };
 export default RelatePlantList;

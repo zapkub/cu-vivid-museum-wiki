@@ -9,7 +9,7 @@ import HeroImage from '../components/HeroImage';
 import withLoading from '../lib/withLoading';
 import PlantGridList from '../components/PlantGridList';
 import Paginate from '../components/Pagination';
-import SearchInputBar from '../components/SearchInputBar';
+import SearchInputBar from '../containers/SearchInputBar';
 
 const SearchResultPage = ({ data, texts, categories, goTo, url: { query: { page } } }) => !data.loading ?
       (<div className="container">

@@ -1,12 +1,13 @@
 import React from 'react';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import gql from 'graphql-tag';
+import Router from 'next/router';
 import { withApollo } from 'react-apollo';
 
 import PlantDetail from '../components/PlantDetail';
 import RelatePlantList from '../components/RelatePlantList';
 import HeroImage from '../components/HeroImage';
-import SearchInputBar from '../components/SearchInputBar';
+import SearchInputBar from '../containers/SearchInputBar';
 import withLoading from '../lib/withLoading';
 import categories from '../category';
 
@@ -62,16 +63,13 @@ export default compose(
           }
           const query = gql`
             ${fragment}
-            ${RelatePlantList.fragments.relateList}
+            ${RelatePlantList.fragments.relateList[category]}
             query {
                 ${category} ${queryArgs} {
                     ...PlantDetail
+                    _id
                     Related (limit: 6) {
-                      _id
-                      thumbnailImage
-                      plant {
-                        ...RelateList
-                      }
+                      ...RelatedItem
                     }
                 }
             }
@@ -81,7 +79,11 @@ export default compose(
             query,
             // variables,
           });
-          setPlant(result.data[category]);
+          if (result.data[category]) {
+            setPlant(result.data[category]);
+          } else {
+            Router.push('/404');
+          }
           setLoading(false);
         },
       };
@@ -90,11 +92,12 @@ export default compose(
       componentDidMount() {
         this.props.reloadPlantDetail();
       },
-      componentWillReceiveProps(nextProps) {
-        const nextQuery = nextProps.url.query;
-        const query = this.props.url.query;
-        if (nextQuery.id !== query.id) {
-          this.props.reloadPlantDetail(nextQuery.id);
+      componentDidUpdate(prevProps) {
+        const nextQuery = this.props.url.query;
+        const query = prevProps.url.query;
+        if (nextQuery.s !== query.s || nextQuery.cuid !== query.cuid || nextQuery.zone !== query.zone) {
+          console.log('reload');
+          this.props.reloadPlantDetail();
         }
       },
     }),
