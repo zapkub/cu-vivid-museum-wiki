@@ -1,6 +1,6 @@
 {
   "name": "vivid-museum",
-  "version": "1.1.0-beta.2",
+  "version": "1.1.0-alpha.0",
   "main": "index.js",
   "repository": "https://github.com/zapkub/vivid-museum",
   "author": "Softever co. <info@softever.co.th>",
@@ -19,7 +19,7 @@
     "test": "jest",
     "commit": "git-cz || true",
     "release": "standard-version",
-    "pre-release": "standard-version --pre-release alpha"
+    "pre-release": "standard-version --prerelease alpha"
   },
   "dependencies": {
     "@types/graphql": "0.8.6",
@@ -85,8 +85,7 @@
       "tsx",
       "js"
     ],
-    "setupFiles": [
-    ],
+    "setupFiles": [],
     "transform": {
       "^.+\\.js$": "<rootDir>/__test__/jest.babel.js"
     }
