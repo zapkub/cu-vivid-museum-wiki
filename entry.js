@@ -1,5 +1,13 @@
 const NextJS = require('next');
 require('dotenv').config();
+
+// Sentry io error log management
+const Raven = require('raven-js');
+
+Raven
+    .config('https://cc5ab672ec87464fab8efcce58e4377f@sentry.io/158729')
+    .install();
+
 // Require our core node modules.
 const chalk = require('chalk');
 const path = require('path');
@@ -45,7 +53,7 @@ keystone.init({
   brand: 'Chula',
   static: '../static',
   'module root': path.join(__dirname, './server'),
-  mongo: `${process.env.MONGO_URI}/vivid` || 'localhost:27017/vivid',
+  mongo: `${process.env.MONGO_URI}` || 'localhost:27017/vivid',
   port: 3000,
   'session store': 'mongo',
   updates: 'updates',
