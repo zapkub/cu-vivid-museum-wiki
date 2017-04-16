@@ -1,13 +1,14 @@
 const NextJS = require('next');
 require('dotenv').config();
 
+
 // Sentry io error log management
-const Raven = require('raven-js');
-
-Raven
-    .config('https://cc5ab672ec87464fab8efcce58e4377f@sentry.io/158729')
+if (process.env.RAVEN_URL) {
+  const Raven = require('raven-js');
+  Raven
+    .config(process.env.RAVEN_URL)
     .install();
-
+}
 // Require our core node modules.
 const chalk = require('chalk');
 const path = require('path');
