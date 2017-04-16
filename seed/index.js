@@ -18,7 +18,7 @@ function encodeRFC5987ValueChars(str) {
 function escapeRegExp(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
-function getScinameKey(sciname){
+function getScinameKey(sciname) {
     const scinameSplit = sciname.split(' ');
     return `${scinameSplit[0]} ${scinameSplit[1]}`;
 }
@@ -31,22 +31,29 @@ function normailizeScientificName(name) {
         .toLowerCase()
         .trim();
 }
-
+let _imagePath = '../static/images/stock/';
+exports.setImagePath = (path) => {
+    _imagePath = path;
+}
 const findImages = (category, nameOrCuid) => {
+
+    if (!nameOrCuid) {
+        return [];
+    }
     let name = nameOrCuid.replace(new RegExp(/\.+$/, 'gi'), '');
     let words = name.split(' ');
     if (words.length < 2) {
         return [];
     }
     let images = [];
-    const dirTest = new RegExp(`${escapeRegExp(words[0])}.*${escapeRegExp(words[1])}`, 'gi');
+    try{
     switch (category) {
-        case 'garden':
-        case 'museum':
-            const dirList = fs.readdirSync(path.join(__dirname, `../static/images/stock/${category}`));
+        case 'museum': {
+            const dirTest = new RegExp(`${escapeRegExp(words[0])}.*${escapeRegExp(words[1])}`, 'gi');
+            const dirList = fs.readdirSync(path.join(__dirname, `${_imagePath}${category}`));
             dirList.map(dirName => {
                 if (dirTest.test(dirName)) {
-                    const dirPath = path.join(__dirname, `../static/images/stock/${category}/${dirName}`);
+                    const dirPath = path.join(__dirname, `${_imagePath}${category}/${dirName}`);
                     if (fs.existsSync(dirPath)) {
                         const files = fs.readdirSync(dirPath);
                         images = files.map(file => ({
@@ -54,11 +61,25 @@ const findImages = (category, nameOrCuid) => {
                         }))
                     }
                 }
-            })
+            });
+        }
             break;
+        case 'herbarium': {
+            const files = fs.readdirSync(path.join(__dirname, `${_imagePath}herbarium`));
+            files.forEach(file => {
+                if ((new RegExp(escapeRegExp(nameOrCuid), 'g')).test(file)) {
+                    images.push({
+                        url: encodeRFC5987ValueChars(`/static/images/stock/${category}/${file}`),
+                    })
+                }
+            })
+        }
+    }
+    }catch(e){
+    
     }
     if (images.length > 0) {
-        console.log('Image found : ' + name)
+        console.log('Image found : ' + name + `, amount: ${images.length}`)
     }
     return images;
 }
@@ -66,7 +87,7 @@ const filterOnlyEnglish = (input) => {
     const text = new RegExp(/^[a-zA-Z0-9?><\\;,’éêü{}()[\]\-_+=!@#$%\^&*|'"\s|\.×]*$/, 'i');
     const str = normailizeScientificName(input);
     if (!text.test(str)) {
-        console.log('Remove plant with invalide scientific name : ' + str);
+        // console.log('Remove plant with invalide scientific name : ' + str);
     }
     return text.test(str);
 }
@@ -92,7 +113,7 @@ exports.getPlantFromDataSheet = () => {
             return {
                 _id,
                 scientificName: sciname,
-                familyName: item[8],
+                familyName: item[8] ? item[8].trim() : null,
                 name: (item[5] || item[6] || '').replace(new RegExp(/_|\s+$/, 'gi'), '')
             }
         });
@@ -108,7 +129,7 @@ exports.getPlantFromDataSheet = () => {
             return {
                 _id,
                 scientificName: normailizeScientificName(item[1]),
-                familyName: item[2],
+                familyName: item[2] ? item[2].trim() : null,
                 name: (item[0] || '').replace(new RegExp(/_|\s+$/, 'gi'), ''),
             }
         });
@@ -133,8 +154,8 @@ exports.getMuseumFromDataSheet = () => {
         });
     return museums.filter(item => {
         if (!item.plantId) {
-            console.log('remove item with no plant id');
-            console.log(item);
+            // console.log('remove item with no plant id');
+            // console.log(item);
             noPlantIdfiltered.push(item.scientificName);
         }
         return item.plantId
@@ -156,8 +177,8 @@ exports.getGardenFromDataSheet = () => {
     return gardens.filter(
         item => {
             if (!item.plantId) {
-                console.log('remove item with no plant id');
-                console.log(item);
+                // console.log('remove item with no plant id');
+                // console.log(item);
                 noPlantIdfiltered.push(item.scientificName);
             }
             return item.plantId;
@@ -176,6 +197,7 @@ exports.getHerbariumFromDataSheet = () => {
             cuid: item[0],
             collectedDate: new Date(item[15]),
             collector: item[10],
+            images: findImages('herbarium', item[0]),
         }))
     return herbariums;
 }
