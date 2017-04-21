@@ -78,6 +78,7 @@
     "eslint-plugin-jsx-a11y": "4.0.0",
     "eslint-plugin-react": "6.10.0",
     "nodemon": "1.11.0",
+    "recursive-readdir": "^2.1.1",
     "standard-version": "4.0.0"
   },
   "jest": {

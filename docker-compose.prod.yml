@@ -1,12 +1,13 @@
 
 web:
-  image: rungsikorn/vivid:1.1.0-beta.2
+  image: rungsikorn/vivid:${VERSION_TAG}
   ports:
     - "3183:3000"
   links:
     - mongo
   environment: 
     MONGO_URI: 'mongo'
+    RAVEN_URL: '${RAVEN_URL}'
     COOKIE_SECRET: '${COOKIE_SECRET}'
     ROOT_EMAIL: '${ROOT_EMAIL}'
     ROOT_PASS: '${ROOT_PASS}'

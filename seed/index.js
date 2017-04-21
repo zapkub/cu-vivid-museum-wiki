@@ -2,11 +2,12 @@ const XLSX = require('node-xlsx').default;
 const path = require('path');
 const _ = require('lodash');
 const fs = require('fs');
+require('dotenv').config();
 const ObjectID = require('mongodb').ObjectID;
 const gardenSheet = XLSX.parse(path.join(__dirname, './garden.xlsx'));
 const herbariumnSheet = XLSX.parse(path.join(__dirname, './herbarium.xlsx'));
 
-let amount = process.env.JSON_PARSE_AMOUNT || 999999999;
+let amount = process.env.JSON_PARSE_AMOUNT || 9999999;
 
 exports.setAmount = function setAmount(_amount) {
     amount = _amount;
@@ -31,7 +32,8 @@ function normailizeScientificName(name) {
         .toLowerCase()
         .trim();
 }
-let _imagePath = '../static/images/stock/';
+let _imagePath = '../static/images/stock';
+let _staticPath = process.env.STATIC_STORAGE
 exports.setImagePath = (path) => {
     _imagePath = path;
 }
@@ -50,14 +52,14 @@ const findImages = (category, nameOrCuid) => {
     switch (category) {
         case 'museum': {
             const dirTest = new RegExp(`${escapeRegExp(words[0])}.*${escapeRegExp(words[1])}`, 'gi');
-            const dirList = fs.readdirSync(path.join(__dirname, `${_imagePath}${category}`));
+            const dirList = fs.readdirSync(path.join(__dirname, `${_imagePath}/${category}`));
             dirList.map(dirName => {
                 if (dirTest.test(dirName)) {
-                    const dirPath = path.join(__dirname, `${_imagePath}${category}/${dirName}`);
+                    const dirPath = path.join(__dirname, `${_imagePath}/${category}/${dirName}`);
                     if (fs.existsSync(dirPath)) {
                         const files = fs.readdirSync(dirPath);
                         images = files.map(file => ({
-                            url: encodeRFC5987ValueChars(`/static/images/stock/${category}/${dirName}/${file}`),
+                            url: encodeRFC5987ValueChars(`${_staticPath}/images/${category}/${dirName}/${file}`),
                         }))
                     }
                 }
@@ -65,11 +67,11 @@ const findImages = (category, nameOrCuid) => {
         }
             break;
         case 'herbarium': {
-            const files = fs.readdirSync(path.join(__dirname, `${_imagePath}herbarium`));
+            const files = fs.readdirSync(path.join(__dirname, `${_imagePath}/herbarium`));
             files.forEach(file => {
                 if ((new RegExp(escapeRegExp(nameOrCuid), 'g')).test(file)) {
                     images.push({
-                        url: encodeRFC5987ValueChars(`/static/images/stock/${category}/${file}`),
+                        url: encodeRFC5987ValueChars(`${_staticPath}/images/${category}/${file}`),
                     })
                 }
             })
@@ -83,6 +85,7 @@ const findImages = (category, nameOrCuid) => {
     }
     return images;
 }
+exports.findImages = findImages;
 const filterOnlyEnglish = (input) => {
     const text = new RegExp(/^[a-zA-Z0-9?><\\;,’éêü{}()[\]\-_+=!@#$%\^&*|'"\s|\.×]*$/, 'i');
     const str = normailizeScientificName(input);
