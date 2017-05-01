@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.4"></a>
+# [1.1.0-beta.4](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.3...v1.1.0-beta.4) (2017-05-01)
+
+
+### Bug Fixes
+
+* **Searching:** [FIX] Category search not working properly ([832c6c4](https://github.com/zapkub/vivid-museum/commit/832c6c4))
+* **Server:** Remove raven config and move to env ([300e966](https://github.com/zapkub/vivid-museum/commit/300e966))
+
+
+### Features
+
+* **Batcher:** Add resizer and thumbnail bathc ([0540e14](https://github.com/zapkub/vivid-museum/commit/0540e14))
+
+
+
 <a name="1.1.0-beta.3"></a>
 # [1.1.0-beta.3](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.0...v1.1.0-beta.3) (2017-04-16)
 
