@@ -1,6 +1,0 @@
-{
-    "extends": "clogii",
-    "rules": {
-        "max-len": ["error", 200]
-    }
-}

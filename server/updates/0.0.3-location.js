@@ -6,7 +6,6 @@
 // const Location = keystone.list('Location');
 // const refSheet = XLSX.parse(path.join(__dirname, '../../seed/Garden.xls'));
 
-
 // function createItem(locations, done) {
 //   Location.model.create(locations.map(item => ({
 //     name: item.trim(),
@@ -23,5 +22,5 @@
 module.exports = (done) => {
   // const locationList = extractLocation(refSheet, 0);
   // createItem(locationList, done);
-  done();
-};
+  done()
+}

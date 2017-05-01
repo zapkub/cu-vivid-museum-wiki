@@ -1,6 +1,5 @@
-const SearchMore = require('../SearchMore').default;
+const SearchMore = require('../SearchMore').default
 
 describe('SearchMore component', () => {
-  it('should render correctly');
+  it('should render correctly')
 })
-;

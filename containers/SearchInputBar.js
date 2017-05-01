@@ -1,57 +1,57 @@
 // @flow
-import React from 'react';
-import { Form, Label, Search } from 'semantic-ui-react';
-import { compose, withReducer, withState, withProps } from 'recompose';
-import Router from 'next/router';
-import queryString from 'query-string';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import objectPath from 'object-path';
+import React from 'react'
+import { Form, Label, Search } from 'semantic-ui-react'
+import { compose, withReducer, withState, withProps } from 'recompose'
+import Router from 'next/router'
+import queryString from 'query-string'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
+import objectPath from 'object-path'
 
-import SearchInputResultItem from '../components/AutocompleteResultItem';
-import Categories from '../category';
+import SearchInputResultItem from '../components/AutocompleteResultItem'
+import Categories from '../category'
 
-const CHECKED = 'input/CHECKED';
-const CHECKED_ALL = 'input/CHECKED_ALL';
+const CHECKED = 'input/CHECKED'
+const CHECKED_ALL = 'input/CHECKED_ALL'
 
 const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch, data, setToggleAutoComplete, isToggleAutoComplete }) => (
-  <Form className={`${small ? 'search-input-small-wrap' : 'search-input-wrap'} ${isToggleAutoComplete ? 'toggle-mobile-input' : ''}`} onSubmit={(e) => { e.preventDefault(); confirmSearch(); }} >
-    <Form.Field className="search-input">
+  <Form className={`${small ? 'search-input-small-wrap' : 'search-input-wrap'} ${isToggleAutoComplete ? 'toggle-mobile-input' : ''}`} onSubmit={(e) => { e.preventDefault(); confirmSearch() }} >
+    <Form.Field className='search-input'>
       <Search
         fluid
         resultRenderer={props => <SearchInputResultItem
           searchText={[texts || '']}
           {...props}
         />}
-        placeholder="ชื่อ, ชื่อวิทยาศาสตร์ หรือ ชื่อวงศ์..."
+        placeholder='ชื่อ, ชื่อวิทยาศาสตร์ หรือ ชื่อวงศ์...'
         onFocus={() => setToggleAutoComplete(true)}
         onBlur={() => setTimeout(() => setToggleAutoComplete(false), 500)}
         loading={data.get('loading', false)}
         onSearchChange={(e, value) => onTextChange(value)}
-        onResultSelect={(e, result) => { e.preventDefault(); onTextChange(`${result.name} ${result.description} ${result.title}`); setToggleAutoComplete(false); }}
+        onResultSelect={(e, result) => { e.preventDefault(); onTextChange(`${result.name} ${result.description} ${result.title}`); setToggleAutoComplete(false) }}
         value={texts}
         icon={false}
         showNoResults={false}
         results={data.get('autoCompletion', []).map(item => ({
           name: item.name,
           title: item.scientificName,
-          description: item.familyName,
+          description: item.familyName
         }))}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            confirmSearch();
-            setToggleAutoComplete(false);
+            confirmSearch()
+            setToggleAutoComplete(false)
           }
         }}
-        className="search"
+        className='search'
       />
-      <Form.Button color="blue" icon={'search'} />
+      <Form.Button color='blue' icon={'search'} />
     </Form.Field>
-    <Form.Group className="checkbox-input-wrap" inline id="size">
+    <Form.Group className='checkbox-input-wrap' inline id='size'>
       { Categories ? Object.keys(Categories).map(
                 key => (
                   <Form.Checkbox
-                    className="checkbox-input"
+                    className='checkbox-input'
                     key={Categories[key].value}
                     label={Categories[key].name}
                     checked={state[key]}
@@ -60,9 +60,9 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
                       payload: { key, value: checked } })
                     }
                   />
-                ),
+                )
             ) : null }
-      <Label className="select-all-button" style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
+      <Label className='select-all-button' style={{ cursor: 'pointer' }} onClick={() => dispatch({ type: CHECKED_ALL })} >{'Select all'}</Label>
     </Form.Group>
     <style jsx global>{`
         .search {
@@ -185,35 +185,34 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
         }
     `}</style>
   </Form>
-);
+)
 
-
-function categoriesSelectorReducer(state, { type, payload }) {
-  const nextState = Object.assign(state, {});
+function categoriesSelectorReducer (state, { type, payload }) {
+  const nextState = Object.assign(state, {})
   switch (type) {
     case CHECKED:
-      nextState[payload.key] = payload.value;
-      break;
+      nextState[payload.key] = payload.value
+      break
     case CHECKED_ALL:
       Object.keys(nextState).forEach((id) => {
-        nextState[id] = true;
-      });
-      break;
+        nextState[id] = true
+      })
+      break
     default:
-      break;
+      break
   }
-  return nextState;
+  return nextState
 }
 
 const SearchInputBar = compose(
        withState('isToggleAutoComplete', 'setToggleAutoComplete', false),
        withState('texts', 'onTextChange', () => {
-         if (!Router.router) return '';
-         const { query } = Router.router;
+         if (!Router.router) return ''
+         const { query } = Router.router
          if (!query.searchTexts) {
-           return '';
+           return ''
          }
-         return query.searchTexts;
+         return query.searchTexts
        }),
        graphql(gql`
           query ($text: String) {
@@ -227,55 +226,55 @@ const SearchInputBar = compose(
        `, {
          options: ({ texts }) => ({
            variables: {
-             text: texts,
-           },
-         }),
+             text: texts
+           }
+         })
        }),
        withReducer('state', 'dispatch', categoriesSelectorReducer, ({ initCategories }) => {
-         const initState = {};
+         const initState = {}
          Object.keys(Categories).forEach((key) => {
-           if (!Router.router) return;
-           const { query } = Router.router;
+           if (!Router.router) return
+           const { query } = Router.router
            if (query.categories) {
-             const selectedCategories = query.categories.split(',');
+             const selectedCategories = query.categories.split(',')
              if (selectedCategories.indexOf(key) > -1) {
-               initState[key] = true;
+               initState[key] = true
              } else {
-               initState[key] = false;
+               initState[key] = false
              }
            } else {
-             initState[key] = true;
+             initState[key] = true
            }
-         });
+         })
 
          if (initCategories) {
            initCategories.forEach((key) => {
-             initState[key] = true;
-           });
+             initState[key] = true
+           })
          }
 
-         return initState;
+         return initState
        }),
        withProps(({ state, texts, data }) => ({
          data: objectPath(data),
          confirmSearch: () => {
-           const categories = [];
+           const categories = []
            Object.keys(state).forEach((key) => {
              if (state[key]) {
-               categories.push(key);
+               categories.push(key)
              }
-           });
+           })
 
            const queryParam = {
              searchTexts: texts,
-             categories: categories.join(','),
-           };
-           if (categories.length < 1) {
-             queryParam.categories = Object.keys(Categories).join(',');
+             categories: categories.join(',')
            }
-           Router.push(`/results?${queryString.stringify(queryParam)}`);
-         },
-       })),
-)(Component);
+           if (categories.length < 1) {
+             queryParam.categories = Object.keys(Categories).join(',')
+           }
+           Router.push(`/results?${queryString.stringify(queryParam)}`)
+         }
+       }))
+)(Component)
 
-export default SearchInputBar;
+export default SearchInputBar

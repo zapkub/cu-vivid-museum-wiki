@@ -1,33 +1,33 @@
-import React from 'react';
+import React from 'react'
 
 export default class StaticPage extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      html: '',
-    };
-    this.reloadChanglog = this.reloadChanglog.bind(this);
+      html: ''
+    }
+    this.reloadChanglog = this.reloadChanglog.bind(this)
   }
-  componentDidMount() {
-    this.reloadChanglog();
+  componentDidMount () {
+    this.reloadChanglog()
   }
-  async reloadChanglog() {
+  async reloadChanglog () {
     try {
-      const response = await window.fetch(this.props.source);
-      const html = await response.text();
-      this.setState({ html });
+      const response = await window.fetch(this.props.source)
+      const html = await response.text()
+      this.setState({ html })
     } catch (e) {
-      this.setState({ html: 'Not found' });
+      this.setState({ html: 'Not found' })
     }
   }
-  render() {
-    return (<div className="static-wrap" style={{ padding: 10 }} >
+  render () {
+    return (<div className='static-wrap' style={{ padding: 10 }} >
       <div dangerouslySetInnerHTML={{ __html: this.state.html }} />
       <style jsx>{`
         .static-wrap {
             border-top: 5px solid #548031;
         }
     `}</style>
-    </div>);
+    </div>)
   }
 }

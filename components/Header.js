@@ -1,17 +1,17 @@
 // @flow
-import React from 'react';
-import Link from 'next/link';
+import React from 'react'
+import Link from 'next/link'
 
 export default class Header extends React.Component {
-  render() {
+  render () {
     return (
-      <header className="container">
-        <Link href="/"><img className="logo" alt="" src={this.props.logoURL || '/static/images/logo.png'} /></Link>
-        <div className="title-container">
-          <div className="title">
+      <header className='container'>
+        <Link href='/'><img className='logo' alt='' src={this.props.logoURL || '/static/images/logo.png'} /></Link>
+        <div className='title-container'>
+          <div className='title'>
             {'Museum Search Engine'}
           </div>
-          <div className="subtitle">
+          <div className='subtitle'>
             {'ระบบค้นข้อมูลภายในพิพิธภัณฑ์ คณะเภสัชศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย'}
           </div>
         </div>
@@ -70,6 +70,6 @@ export default class Header extends React.Component {
             }
            `}</style>
       </header>
-    );
+    )
   }
 }

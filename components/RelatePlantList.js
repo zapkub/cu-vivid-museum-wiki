@@ -1,13 +1,13 @@
-import React from 'react';
-import { compose } from 'recompose';
-import { Header, Divider } from 'semantic-ui-react';
-import gql from 'graphql-tag';
-import PlantGridList from './PlantGridList';
+import React from 'react'
+import { compose } from 'recompose'
+import { Header, Divider } from 'semantic-ui-react'
+import gql from 'graphql-tag'
+import PlantGridList from './PlantGridList'
 
 const RelatePlantList = compose(
 
 )(({ displayLocation, Related, category }) => !Related ? <div /> : (
-  <div className="container">
+  <div className='container'>
     <Header>{'ในพื้นที่จัดแสดงเดียวกัน'}</Header>
     <Divider />
     <PlantGridList
@@ -21,7 +21,7 @@ const RelatePlantList = compose(
       } 
     `}</style>
   </div>
-));
+))
 
 const plantFragment = gql`
         fragment RelateList on Plant {
@@ -31,7 +31,7 @@ const plantFragment = gql`
             _id
             key
         }
-    `;
+    `
 
 RelatePlantList.fragments = {
   relateList: {
@@ -67,8 +67,8 @@ RelatePlantList.fragments = {
         ...RelateList
       }
     }
-  `,
+  `
 
-  },
-};
-export default RelatePlantList;
+  }
+}
+export default RelatePlantList

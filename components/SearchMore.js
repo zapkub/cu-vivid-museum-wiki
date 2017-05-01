@@ -1,19 +1,19 @@
-import React from 'react';
-import { Header } from 'semantic-ui-react';
-import Link from 'next/link';
+import React from 'react'
+import { Header } from 'semantic-ui-react'
+import Link from 'next/link'
 
-import categories from '../category';
+import categories from '../category'
 
 export default ({ category = '', text }) => (
-  <div className="container">
+  <div className='container'>
     <Header>{'ค้นหาเพิ่มเติม'}</Header>
-    <div className="wrap">
+    <div className='wrap'>
       { Object.keys(categories)
             .filter(key => key !== category.toUpperCase())
             .map(key => (
               <Link key={key} href={`/results?categories=${key}&searchTexts=${text}`} >
-                <a className="search-button">
-                  <div className="category-name">{key}</div>
+                <a className='search-button'>
+                  <div className='category-name'>{key}</div>
                 </a>
               </Link>
             )) }
@@ -60,4 +60,4 @@ export default ({ category = '', text }) => (
         }
     `}</style>
   </div>
-);
+)

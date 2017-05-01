@@ -1,9 +1,9 @@
-import gql from 'graphql-tag';
-import { compose } from 'recompose';
-import React from 'react';
-import Link from 'next/link';
+import gql from 'graphql-tag'
+import { compose } from 'recompose'
+import React from 'react'
+import Link from 'next/link'
 import { Image, Header,  Message, Icon } from 'semantic-ui-react';  // eslint-disable-line
-import HighlightText from 'react-highlight-words';
+import HighlightText from 'react-highlight-words'
 
 const PlantGridList = compose(
     // Flatten plantlist
@@ -11,52 +11,52 @@ const PlantGridList = compose(
     ({ plantList, highlightTexts, displayLocation }) => {
       try {
         return (
-          <div className="list-wrap">
+          <div className='list-wrap'>
             { !plantList ? null : plantList.map((plant) => {
-              const query = { s: plant.plant.key };
-              const searchFields = ['cuid', 'zone', 'museumLocation'];
-              query.category = plant.__typename.toLowerCase();
+              const query = { s: plant.plant.key }
+              const searchFields = ['cuid', 'zone', 'museumLocation']
+              query.category = plant.__typename.toLowerCase()
               searchFields.forEach((key) => {
                 if (plant[key]) {
-                  query[key] = plant[key];
+                  query[key] = plant[key]
                 }
-              });
+              })
               return (
-                <div key={plant._id} className="container">
-                  <div className="wrap">
-                    <div className="thumbnail" style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
-                    <div className="detail">
-                      <div className="detail-wrap">
+                <div key={plant._id} className='container'>
+                  <div className='wrap'>
+                    <div className='thumbnail' style={{ backgroundImage: `url(${plant.thumbnailImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }} />
+                    <div className='detail'>
+                      <div className='detail-wrap'>
                         <Link
                           style={{ cursor: 'pointer' }}
                           href={{
                             pathname: 'detail',
-                            query,
+                            query
                           }}
                         >
-                          <a className="plant-title" style={{ color: '#4d876d', cursor: 'pointer' }} as="a" >
+                          <a className='plant-title' style={{ color: '#4d876d', cursor: 'pointer' }} as='a' >
                             <HighlightText searchWords={highlightTexts || []} textToHighlight={`${plant.plant.name ? plant.plant.name : 'ไม่ระบุ'}`} />
                           </a>
                         </Link>
-                        <div className="field">
-                          <span className="name">{'ชื่อวิทยาศาสตร์'}</span><span className="value">
+                        <div className='field'>
+                          <span className='name'>{'ชื่อวิทยาศาสตร์'}</span><span className='value'>
                             <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.scientificName || 'ไม่ระบุ'} />
                           </span>
                         </div>
-                        <div className="field">
-                          <span className="name">{'ชื่อวงศ์'}</span>
-                          <span className="value">
+                        <div className='field'>
+                          <span className='name'>{'ชื่อวงศ์'}</span>
+                          <span className='value'>
                             <HighlightText searchWords={highlightTexts || []} textToHighlight={plant.plant.familyName || 'ไม่ระบุ'} />
                           </span>
                         </div>
                       </div>
-                      <div className="footer">
+                      <div className='footer'>
                         <div>
                           {'พื้นที่จัดแสดง : '}<span style={{ color: '#e896ab', fontWeight: 'bold' }}>{plant.displayLocation || plant.zone || plant.museumLocation || displayLocation || '-'}</span>
                         </div>
                       </div>
                     </div>
-                  </div></div>);
+                  </div></div>)
             })}
             <style jsx>{`
             .list-wrap {
@@ -149,19 +149,18 @@ const PlantGridList = compose(
             }
         `}</style>
           </div>
-        );
+        )
       } catch (e) {
-        console.error(e);
+        console.error(e)
         return (<Message negative icon>
-          <Icon name="warning sign" />
+          <Icon name='warning sign' />
           <Message.Content>
             <Message.Header>Problem occurs with results</Message.Header>
             <p>we are truely apologize for this</p>
           </Message.Content>
-        </Message>);
+        </Message>)
       }
-    });
-
+    })
 
 PlantGridList.fragments = {
   plantList: gql`
@@ -201,7 +200,7 @@ PlantGridList.fragments = {
                 }
             }
      }
-    `,
-};
+    `
+}
 
-export default PlantGridList;
+export default PlantGridList

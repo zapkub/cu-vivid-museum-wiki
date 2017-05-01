@@ -1,26 +1,25 @@
-import React from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import { compose } from 'recompose';
-import { Header } from 'semantic-ui-react';
-import Router from 'next/router';
+import React from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import { compose } from 'recompose'
+import { Header } from 'semantic-ui-react'
+import Router from 'next/router'
 
-import HeroImage from '../components/HeroImage';
-import withLoading from '../lib/withLoading';
-import SearchInputBar from '../containers/SearchInputBar';
-import PlantGridList from '../components/PlantGridList';
-import categories from '../category';
-import Paginate from '../components/Pagination';
-
+import HeroImage from '../components/HeroImage'
+import withLoading from '../lib/withLoading'
+import SearchInputBar from '../containers/SearchInputBar'
+import PlantGridList from '../components/PlantGridList'
+import categories from '../category'
+import Paginate from '../components/Pagination'
 
 const CategoryPage = ({ data, category, url: { query: { page } } }) => (
   <div>
-    { !data.loading ?
-    (<div>
+    { !data.loading
+    ? (<div>
       <HeroImage category={category} heroImageURL={categories[category.toUpperCase()].heroImage}>
         <SearchInputBar small initCategories={[category]} />
       </HeroImage>
-      <div className="wrap">
+      <div className='wrap'>
         <Header>ตัวอย่างล่าสุดในหมวด {category} </Header>
         <PlantGridList plantList={data.findByCategory.result} />
         <Paginate
@@ -39,8 +38,7 @@ const CategoryPage = ({ data, category, url: { query: { page } } }) => (
           }
     `}</style>
   </div>
-);
-
+)
 
 export default compose(
     graphql(gql`
@@ -55,18 +53,18 @@ export default compose(
         }
     `, {
       options: ({ category, url: { query: { page } } }) => {
-        let skip = 0;
+        let skip = 0
         if (page > 0) {
-          skip = page ? parseInt(page - 1, 10) * 20 : 0;
+          skip = page ? parseInt(page - 1, 10) * 20 : 0
         }
         if (isNaN(skip)) {
-          skip = 1;
+          skip = 1
         }
         return { variables: {
           categories: [category],
-          skip,
-        } };
-      },
+          skip
+        } }
+      }
     }),
-    withLoading(({ data }) => data.loading),
-)(CategoryPage);
+    withLoading(({ data }) => data.loading)
+)(CategoryPage)

@@ -1,22 +1,21 @@
 
-
 module.exports = (externalContext) => {
-  const { keystone } = externalContext;
+  const { keystone } = externalContext
       // create schema from models
-  const schema = require('./schema')(externalContext);
+  const schema = require('./schema')(externalContext)
   const context = Object.assign({
-    schema,
-  }, externalContext);
+    schema
+  }, externalContext)
 
   keystone.set('routes', (app) => {
-    require('./routes')(app, context);
-  });
+    require('./routes')(app, context)
+  })
 
   return {
-    start(callback) {
+    start (callback) {
       keystone.start(3000, () => {
-        if (callback) callback();
-      });
-    },
-  };
-};
+        if (callback) callback()
+      })
+    }
+  }
+}

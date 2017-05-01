@@ -1,4 +1,4 @@
-const schema = require('../schema');
+const schema = require('../schema')
 describe('Schema test', () => {
-  it('should contain every schema as client need');
-});
+  it('should contain every schema as client need')
+})

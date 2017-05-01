@@ -1,30 +1,29 @@
-const NextJS = require('next');
-require('dotenv').config();
-
+const NextJS = require('next')
+require('dotenv').config()
 
 // Sentry io error log management
 if (process.env.RAVEN_URL) {
-  const Raven = require('raven-js');
+  const Raven = require('raven-js')
   Raven
     .config(process.env.RAVEN_URL)
-    .install();
+    .install()
 }
 // Require our core node modules.
-const chalk = require('chalk');
-const path = require('path');
-const cloudinary = require('cloudinary-core');
+const chalk = require('chalk')
+const path = require('path')
+const cloudinary = require('cloudinary-core')
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
 // ENV Var check
-const requiredEnv = ['MONGO_URI', 'COOKIE_SECRET', 'CLOUDINARY_URL'];
-const missingEnv = [];
+const requiredEnv = ['MONGO_URI', 'COOKIE_SECRET', 'CLOUDINARY_URL']
+const missingEnv = []
 requiredEnv.forEach((key) => {
   if (!process.env[key]) {
-    missingEnv.push(key);
+    missingEnv.push(key)
   }
-});
+})
 if (missingEnv.length > 0) {
-  throw new Error(`Environment variable is missing : ${missingEnv.join(', ')}`);
+  throw new Error(`Environment variable is missing : ${missingEnv.join(', ')}`)
 }
 
 // Added in Node.js v1.4.1, this is a global event handler that will be notified of
@@ -35,19 +34,19 @@ if (missingEnv.length > 0) {
 
 process.on('unhandledRejection',
     (reason) => {
-      console.log(chalk.red.bold('[PROCESS] Unhandled Promise Rejection'));
-      console.log(chalk.red.bold('- - - - - - - - - - - - - - - - - - -'));
-      console.log(reason);
-      console.log(chalk.red.bold('- -'));
-    });
+      console.log(chalk.red.bold('[PROCESS] Unhandled Promise Rejection'))
+      console.log(chalk.red.bold('- - - - - - - - - - - - - - - - - - -'))
+      console.log(reason)
+      console.log(chalk.red.bold('- -'))
+    })
 
-const dev = process.env.NODE_ENV !== 'production';
-const next = NextJS({ dev });
+const dev = process.env.NODE_ENV !== 'production'
+const next = NextJS({ dev })
 // Setup keystone
 
-const keystone = require('keystone');
+const keystone = require('keystone')
 
-require('dotenv').config();
+require('dotenv').config()
 
 keystone.init({
   name: 'VividMuseam',
@@ -62,27 +61,26 @@ keystone.init({
   session: true,
   auth: true,
   'user model': 'User',
-  'cookie secret': process.env.COOKIE_SECRET || 'development secret',
-});
-keystone.set('cloudinary config', process.env.CLOUDINARY_URL);
-keystone.import('./models');
+  'cookie secret': process.env.COOKIE_SECRET || 'development secret'
+})
+keystone.set('cloudinary config', process.env.CLOUDINARY_URL)
+keystone.import('./models')
 
 keystone.set('locals', {
   env: keystone.get('env'),
   utils: keystone.utils,
   editable: keystone.content.editable,
-  _: require('lodash'),
+  _: require('lodash')
 })
-;
+
 keystone.set('nav', {
-  users: 'users',
-});
+  users: 'users'
+})
 
-
-const cl = cloudinary.Cloudinary.new();
+const cl = cloudinary.Cloudinary.new()
 cl.fromEnvironment();
 (async () => {
-  await next.prepare();
+  await next.prepare()
   const context = {
     keystone,
     cl,
@@ -91,10 +89,10 @@ cl.fromEnvironment();
     Museum: keystone.list('Museum').model,
     Garden: keystone.list('Garden').model,
     Herbarium: keystone.list('Herbarium').model,
-    Report: keystone.list('Report').model,
-  };
-  const server = require('./server')(context);
+    Report: keystone.list('Report').model
+  }
+  const server = require('./server')(context)
   server.start(3000, () => {
     console.log(`Start app on 3000`);  // eslint-disable-line
-  });
-})();
+  })
+})()

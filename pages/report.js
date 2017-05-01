@@ -1,5 +1,4 @@
-import withApp from '../lib/withApp';
-import ReportPage from '../containers/ReportPage';
+import withApp from '../lib/withApp'
+import ReportPage from '../containers/ReportPage'
 
-
-export default withApp()(ReportPage);
+export default withApp()(ReportPage)
