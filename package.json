@@ -1,7 +1,7 @@
 {
   "name": "@rungsikorn/vivid",
   "image-name": "rungsikorn/vivid",
-  "version": "1.1.0-beta.4",
+  "version": "1.1.0-beta.5",
   "main": "index.js",
   "repository": "https://github.com/zapkub/vivid-museum",
   "author": "Softever co. <info@softever.co.th>",

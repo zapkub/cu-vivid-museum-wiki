@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.5"></a>
+# [1.1.0-beta.5](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.4...v1.1.0-beta.5) (2017-05-02)
+
+
+### Bug Fixes
+
+* **Build:** Fix missing file in dockerfile, update docker-compose use force recreate, add .git to do ([91627c7](https://github.com/zapkub/vivid-museum/commit/91627c7))
+
+
+
 <a name="1.1.0-beta.4"></a>
 # [1.1.0-beta.4](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.3...v1.1.0-beta.4) (2017-05-01)
 
