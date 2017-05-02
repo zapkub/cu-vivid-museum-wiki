@@ -2,7 +2,10 @@ node_modules
 npm-debug.log
 design
 .vscode
-/node_modules/
+node_modules
 db
 .db
 docs
+static/images/stock
+__backup__
+__test__

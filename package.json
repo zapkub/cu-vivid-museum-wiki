@@ -1,5 +1,6 @@
 {
-  "name": "vivid-museum",
+  "name": "@rungsikorn/vivid",
+  "image-name": "rungsikorn/vivid",
   "version": "1.1.0-beta.4",
   "main": "index.js",
   "repository": "https://github.com/zapkub/vivid-museum",
@@ -14,7 +15,7 @@
     "json": "node ./seed/convertToJson.js",
     "clean": "sh .bin/clean.sh",
     "up": "bash .bin/up-prod.sh",
-    "build-image": "bash .bin/build.sh",
+    "build-image": "npm run build && docker-build || true",
     "down": "bash .bin/down-prod.sh",
     "test": "jest",
     "commit": "git-cz || true",
