@@ -7,7 +7,7 @@
   "author": "Softever co. <info@softever.co.th>",
   "license": "BSD-3",
   "scripts": {
-    "start": "node ./entry.js",
+    "start": "NODE_ENV=production node ./entry.js",
     "dev": "sh ./.bin/dev.sh",
     "watch": "nodemon --debug -w ./entry -w ./server ./entry.js",
     "build": "next build",

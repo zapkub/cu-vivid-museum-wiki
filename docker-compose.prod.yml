@@ -1,6 +1,6 @@
 
 web:
-  image: rungsikorn/vivid:${VERSION_TAG}
+  image: rungsikorn/vivid:latest
   ports:
     - "3183:3000"
   links:

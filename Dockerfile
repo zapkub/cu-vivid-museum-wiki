@@ -18,6 +18,8 @@ ADD \.next/ /app/.next
 ADD ./server /app/server
 ADD ./entry.js /app/entry.js
 ADD ./category.js /app/category.js
+ADD ./docs /app/docs
+ADD ./CHANGELOG.md /app/CHANGELOG.md
 
 ## Clean and lean
 # RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
