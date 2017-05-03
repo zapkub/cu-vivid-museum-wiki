@@ -12,6 +12,7 @@ WORKDIR /app
 ADD ./package.json /app/package.json
 
 ## build
+WORKDIR /app
 ADD ./static /app/static
 ADD \.next/ /app/.next
 ADD ./server /app/server
@@ -25,6 +26,7 @@ RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
 ## Copy seed
 WORKDIR /app/seed
 ADD ./seed/json /app/seed/json
+ADD ./seed/json /json
 
 ## RETURN TO /app
 WORKDIR /app

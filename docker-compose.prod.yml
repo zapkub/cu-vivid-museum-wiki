@@ -6,7 +6,7 @@ web:
   links:
     - mongo
   environment: 
-    MONGO_URI: 'mongo'
+    MONGO_URI: 'mongo/vivid3'
     RAVEN_URL: '${RAVEN_URL}'
     COOKIE_SECRET: '${COOKIE_SECRET}'
     ROOT_EMAIL: '${ROOT_EMAIL}'

@@ -16,7 +16,7 @@
     "clean": "sh .bin/clean.sh",
     "up": "bash .bin/up-prod.sh",
     "push-image": "npm run docker-push",
-    "build-image": "npm run build && docker-build || true",
+    "build-image": "npm run build && docker-build - --no-cache",
     "down": "bash .bin/down-prod.sh",
     "test": "jest",
     "commit": "git-cz || true",

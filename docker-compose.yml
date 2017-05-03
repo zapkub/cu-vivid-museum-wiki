@@ -4,8 +4,8 @@ mongo:
   volumes_from:
     - mongo-data
   ports:
-    - "27017:27017"
-  command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
+    - "3184:27017"
+  command: "--smallfiles --setParameter failIndexKeyTooLong=false"
 
 mongo-data:
   image: mongo:3.2.12
