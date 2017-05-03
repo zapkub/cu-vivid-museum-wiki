@@ -1,4 +1,7 @@
 # CU Vivid Museum Wiki
+[![Build Status](https://travis-ci.org/zapkub/cu-vivid-museum-wiki.svg?branch=master)](https://travis-ci.org/zapkub/cu-vivid-museum-wiki)
+[![Coverage Status](https://coveralls.io/repos/github/zapkub/cu-vivid-museum-wiki/badge.svg?branch=develop)](https://coveralls.io/github/zapkub/cu-vivid-museum-wiki?branch=develop)
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 This project is created for normalize Plant data from Faculty of Pharmaceutical sciences, Chulalongkorn University to Web based application provide an easier way to search for information, available at [CU Vivid Museum website]().
@@ -99,8 +102,8 @@ This project use Docker as main process and server manager
 > NOTE : Step 5-6 is already created as bash script file you can just run `npm run dev`
 
 # LICENSE
-- In process of opensourcing
+BSD-3
 
 # CONTRIBUTOR
- 1. Softever co.
+ 1. [Softever co.](http://www.softever.co.th/)
  2. [Rungsikorn Rungsikavanich](https://github.com/zapkub)

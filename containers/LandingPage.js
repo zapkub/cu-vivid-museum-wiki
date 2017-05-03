@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 
 import HeroImage from '../components/HeroImage';
 import CategoryThumbnailList from '../components/CategoryThumbnailList';
-import SearchInputBar from '../components/SearchInputBar';
+import SearchInputBar from '../containers/SearchInputBar';
 
 const LandingPage = ({ data }) => {
   if (data.loading) return <div />;

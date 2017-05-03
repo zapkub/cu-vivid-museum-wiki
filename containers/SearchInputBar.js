@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import objectPath from 'object-path';
 
-import SearchInputResultItem from './AutocompleteResultItem';
+import SearchInputResultItem from '../components/AutocompleteResultItem';
 import Categories from '../category';
 
 const CHECKED = 'input/CHECKED';
@@ -23,6 +23,7 @@ const Component = ({ small, dispatch, state, onTextChange, texts, confirmSearch,
           searchText={[texts || '']}
           {...props}
         />}
+        placeholder="ชื่อ, ชื่อวิทยาศาสตร์ หรือ ชื่อวงศ์..."
         onFocus={() => setToggleAutoComplete(true)}
         onBlur={() => setTimeout(() => setToggleAutoComplete(false), 500)}
         loading={data.get('loading', false)}

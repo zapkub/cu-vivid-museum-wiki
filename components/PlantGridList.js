@@ -175,31 +175,31 @@ PlantGridList.fragments = {
 
         fragment PlantGridList on PlantSearchResultItem {
             __typename
-        ... on Herbarium {
-            _id
-            cuid
-            thumbnailImage
-            displayLocation
-            plant {
-                ...PlantDetail
+            ... on Herbarium {
+                _id
+                cuid
+                thumbnailImage
+                displayLocation
+                plant {
+                    ...PlantDetail
+                }
             }
-        }
-        ... on Garden {
-            _id
-            zone
-            thumbnailImage
-            plant {
-                ...PlantDetail
+            ... on Garden {
+                _id
+                zone
+                thumbnailImage
+                plant {
+                    ...PlantDetail
+                }
             }
-        }
-        ... on Museum {
-            _id
-            museumLocation
-            thumbnailImage
-            plant {
-                ...PlantDetail
+            ... on Museum {
+                _id
+                museumLocation
+                thumbnailImage
+                plant {
+                    ...PlantDetail
+                }
             }
-        }
      }
     `,
 };

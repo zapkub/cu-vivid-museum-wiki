@@ -70,7 +70,7 @@ GardenDetail.type = `
   zone
 `;
 
-const HerbariumDetail = ({ _id, plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
+const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
   <PlantDetailList {...plant} />
   <List size={'big'}>
@@ -100,6 +100,7 @@ HerbariumDetail.type = `
   _id
   plantId
   plant {
+    _id
     scientificName
     name
     familyName
@@ -140,7 +141,7 @@ const PlantDetail = ({ plant, category }) => {
               showFullscreenButton={false}
               showNav={false}
               showPlayButton={false}
-              items={plant.images.map(image => ({ original: image.url, thumbnail: 'http://placehold.it/100x100' }))}
+              items={plant.images.map(image => ({ original: image.url, thumbnail: image.url }))}
             /> : <div className="no-image">{'ไม่มีรูปภาพ'}</div>
         }
 
@@ -151,7 +152,12 @@ const PlantDetail = ({ plant, category }) => {
 
         <Divider />
         <SearchMore category={category} text={plant.plant.scientificName} />
-        <div style={{ textAlign: 'right', color: 'grey', fontSize: 10 }}> {'ข้อมูลผิดพลาดหรือเปล่า,'} <Link href={`/report?url=${encodeURIComponent(Router.router.as)}`}><a>{'โปรดบอกเรา'}</a></Link></div>
+        <div style={{ textAlign: 'right', color: 'grey', fontSize: 10 }}>
+          {'ข้อมูลผิดพลาดหรือเปล่า,'}
+          <Link href={`/report?url=${encodeURIComponent(Router.router.as)}`}>
+            <a>{'โปรดบอกเรา'}</a>
+          </Link>
+        </div>
       </div>
       <style jsx>{`
       .container {
@@ -203,16 +209,19 @@ const PlantDetail = ({ plant, category }) => {
 PlantDetail.fragments = {
   museum: gql`
     fragment PlantDetail on Museum {
+      _id
       ${MuseumDetail.type}
     }
   `,
   garden: gql`
   fragment PlantDetail on Garden {
+    _id
     ${GardenDetail.type}
   }
 `,
   herbarium: gql`
   fragment PlantDetail on Herbarium {
+    _id
     ${HerbariumDetail.type}
   }
 `,

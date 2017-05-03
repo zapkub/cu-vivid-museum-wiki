@@ -8,7 +8,7 @@ import Categories from '../category';
 
 const CategoryThumbnailList = ({ counts }) => (
   <div className="container">
-    <h1 style={{ textAlign: 'center' }}> {'ค้นหาตามหมวดหมู่'} </h1>
+    <h1 style={{ textAlign: 'center' }}> {'หมวดหมู่'} </h1>
     <div className="category-container" >
       {
           Categories ? Object.keys(Categories).map(key =>

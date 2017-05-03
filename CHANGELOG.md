@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0-beta.3"></a>
+# [1.1.0-beta.3](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.0...v1.1.0-beta.3) (2017-04-16)
+
+
+### Bug Fixes
+
+* **Autocomplete:** Scientific name in autocomplete must be nomalized ([ebf18bf](https://github.com/zapkub/vivid-museum/commit/ebf18bf))
+* **Pagination:** Mobile UI Pagination number is not working properly ([1d88e16](https://github.com/zapkub/vivid-museum/commit/1d88e16))
+* **Web:** Fix _id missing in each query cause apollo crash ([a5cca93](https://github.com/zapkub/vivid-museum/commit/a5cca93))
+
+
+### Features
+
+* **Search:** Autocomplete search UI Improvment ([88d6718](https://github.com/zapkub/vivid-museum/commit/88d6718))
+* **Seed:** Add image batch resizer ([c3ea48d](https://github.com/zapkub/vivid-museum/commit/c3ea48d))
+* **Server:** Add sentry io error log management ([08ee0f7](https://github.com/zapkub/vivid-museum/commit/08ee0f7))
+* **Web:** Add github, policy, terms link ([2d70b36](https://github.com/zapkub/vivid-museum/commit/2d70b36))
+* **Web:** Add terms, changelog, policy page ([854bc6e](https://github.com/zapkub/vivid-museum/commit/854bc6e))
+
+
+
 <a name="1.1.0-beta.2"></a>
 # [1.1.0-beta.2](https://github.com/zapkub/vivid-museum/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2017-03-29)
 
