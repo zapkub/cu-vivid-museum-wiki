@@ -10,7 +10,6 @@ RUN mkdir -p /app/src && cp -a /tmp/node_modules /app/
 ## copy meta
 WORKDIR /app
 ADD ./package.json /app/package.json
-ADD ./seed /app/seed
 
 ## build
 ADD ./static /app/static
@@ -20,10 +19,15 @@ ADD ./entry.js /app/entry.js
 ADD ./category.js /app/category.js
 ADD ./docs /app/docs
 ADD ./CHANGELOG.md /app/CHANGELOG.md
-
 ## Clean and lean
-# RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
-RUN npm run json
+RUN npm i -g modclean && modclean -r -D ./node_modules && npm r -g modclean
+
+## Copy seed
+WORKDIR /app/seed
+ADD ./seed/json /app/seed/json
+
+## RETURN TO /app
+WORKDIR /app
 
 EXPOSE 3000
 CMD ["npm", "start"]

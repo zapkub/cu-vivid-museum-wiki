@@ -2476,6 +2476,10 @@ dnd-core@^2.0.1:
     lodash "^4.2.0"
     redux "^3.2.0"
 
+docker-build-run-push@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/docker-build-run-push/-/docker-build-run-push-3.0.0.tgz#b87f77d25a895b2eb9d72789ff2ba8e6d0bd741c"
+
 doctrine@1.5.0, doctrine@^1.2.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
