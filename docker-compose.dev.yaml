@@ -1,0 +1,16 @@
+mongo:
+  container_name: museum-dev-db 
+  image: mongo:3.4
+  ports:
+    - "27017:27017"
+  command: "--smallfiles --setParameter failIndexKeyTooLong=false"
+
+## Elastic service for development purpose
+elastic:
+  container_name: museum-dev-elastic
+  image: docker.elastic.co/elasticsearch/elasticsearch:6.1.3
+  ports: 
+    - "9200:9200"
+    - "9300:9300"
+  environment: 
+    - "discovery.type=single-node"

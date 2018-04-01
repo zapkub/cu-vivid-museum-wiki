@@ -1,0 +1,4 @@
+port: 3000
+elasticURI: "http://127.0.0.1:9200"
+corsWhiteList:
+  - "http://localhost:8080"

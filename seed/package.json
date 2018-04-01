@@ -1,0 +1,12 @@
+{
+  "name": "seed",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.5",
+    "mongodb": "^3.0.5",
+    "mongoose": "^5.0.12",
+    "node-xlsx": "^0.12.0"
+  }
+}

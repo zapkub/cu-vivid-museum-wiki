@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": false,
+    "target": "es2015",
+    "jsx": "react",
+    "allowJs": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "es2015.core",
+      "es2015.collection",
+      "es2015.generator",
+      "es2015.iterable",
+      "es2015.promise",
+      "es2015.proxy",
+      "es2015.reflect",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "esnext.asynciterable"
+    ]
+  },
+  "include": [
+    ".storybook/**/*",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "exclude": [
+    "../common/node_modules/@types/mongoose/index.d.ts",
+    "node_modules",
+    "node_modules/**",
+    "dist",
+    ".next"
+  ]
+}
