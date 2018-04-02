@@ -59,12 +59,12 @@ var plantMetaType = graphql.NewObject(graphql.ObjectConfig{
 type Plant struct {
 	Name           string `json:"name,omitempty"`
 	ScientificName string `json:"scientificName,omitempty"`
-	ID             string `json:"id,omitempty"`
 	FamilyName     string `json:"familyName,omitempty"`
+	ID             string `json:"id,omitempty"`
 
-	Herbariums []PlantMeta `json:"herbariums,omitempty"`
-	Gardens    []PlantMeta `json:"gardens,omitempty"`
-	Museums    []PlantMeta `json:"museums,omitempty"`
+	// Herbariums []PlantMeta `json:"herbariums,omitempty"`
+	// Gardens    []PlantMeta `json:"gardens,omitempty"`
+	// Museums    []PlantMeta `json:"museums,omitempty"`
 }
 
 var plantType = graphql.NewObject(graphql.ObjectConfig{
@@ -107,5 +107,6 @@ var plantInputType = graphql.NewInputObject(graphql.InputObjectConfig{
 		"name":           &stringRequiredInputType,
 		"scientificName": &stringRequiredInputType,
 		"familyName":     &stringRequiredInputType,
+		"id":             &stringRequiredInputType,
 	},
 })

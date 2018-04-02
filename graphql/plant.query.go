@@ -57,7 +57,7 @@ func createSearchPlantField() graphql.Field {
 			}
 			q := adapter.ElasticSearchQuery{}
 			q.Match = s
-			result, err := ctx.client.Search(ctx.config.IndexName, adapter.ElasticSeachPayload{Query: q})
+			result, err := ctx.client.Search(ctx.config.IndexName, adapter.ElasticSearchPayload{Query: q})
 			if err != nil {
 				return nil, err
 			}
@@ -71,6 +71,7 @@ func createSearchPlantField() graphql.Field {
 
 			data := []Plant{}
 			for _, hit := range hits {
+				hit.Source.ID = hit.ID
 				data = append(data, hit.Source)
 			}
 

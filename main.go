@@ -29,7 +29,12 @@ func main() {
 	if err != nil {
 		log.Fatalln("[server] bulks.json read error")
 	}
-	elasticClient.Bulk(string(bulksFile))
+
+	bulkInstructions := string(bulksFile)
+	err = elasticClient.Bulk(bulkInstructions)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	fmt.Println("[server] done!!")
 
 	// Initial GraphQL schema handler

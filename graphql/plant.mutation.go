@@ -1,6 +1,11 @@
 package graphql
 
-import "github.com/graphql-go/graphql"
+import (
+	"encoding/json"
+	"strings"
+
+	"github.com/graphql-go/graphql"
+)
 
 var plantCreateInputArgs = graphql.FieldConfigArgument{
 	"record": &graphql.ArgumentConfig{
@@ -21,9 +26,16 @@ func createInsertPlantField() graphql.Field {
 			},
 		}),
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			// ctx := getContextFromParams(p)
-
+			var plant Plant
+			d, _ := json.Marshal(p.Args["record"])
+			json.Unmarshal(d, &plant)
+			// if isOK {
+			ctx := getContextFromParams(p)
+			ctx.client.Insert(ctx.config.IndexName, strings.Replace(plant.ScientificName, " ", "-", -1), plant)
 			return nil, nil
+			// }
+			// return nil, fmt.Errorf("Error")
+
 		},
 	}
 }

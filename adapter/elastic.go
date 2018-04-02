@@ -1,10 +1,13 @@
 package adapter
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"net/url"
 	"path"
 	"strings"
@@ -49,7 +52,7 @@ type ElasticSearchQuery struct {
 	} `json:"exits,omitempty"`
 }
 
-type ElasticSeachPayload struct {
+type ElasticSearchPayload struct {
 	Query ElasticSearchQuery `json:"query"`
 	From  int                `json:"from,omitempty"`
 	Size  int                `json:"size,omitempty"`
@@ -85,12 +88,13 @@ type ElasticResponseBody struct {
 	Took   int                 `json:"took,omitempty"`
 	Items  []interface{}       `json:"items,omitempty"`
 	Errors bool                `json:"errors"`
+	Error  interface{}         `json:"error,omitempty"`
 	Hits   ElasticResponseHits `json:"hits"`
 }
 
 // Search send search instruction to elastic server
 // and return raw data
-func (c *Client) Search(IndexName string, payload ElasticSeachPayload) (ElasticResponseBody, error) {
+func (c *Client) Search(IndexName string, payload ElasticSearchPayload) (ElasticResponseBody, error) {
 	var result ElasticResponseBody
 	u, _ := url.Parse(c.uri)
 
@@ -120,6 +124,56 @@ func (c *Client) Search(IndexName string, payload ElasticSeachPayload) (ElasticR
 
 }
 
+func (c *Client) Insert(indexName string, id string, v interface{}) error {
+
+	jsonData, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	var result ElasticResponseBody
+	u, _ := url.Parse(c.uri)
+
+	u.Path = path.Join(u.Path, indexName, defaultTypeName, indexName)
+	resp, b, errs := postRequest(u.String(), string(jsonData), &result)
+	fmt.Println(string(b))
+	if len(errs) > 0 {
+		return errs[0]
+	}
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("[elastic] error with code %d", resp.StatusCode)
+	}
+
+	fmt.Printf("[elastic] insert complete, took %d ms ", result.Took)
+	return nil
+
+}
+
+// Update call document update api
+func (c *Client) Update(indexName string, id string, v interface{}) error {
+
+	jsonData, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	var result ElasticResponseBody
+	u, _ := url.Parse(c.uri)
+
+	u.Path = path.Join(u.Path, indexName, defaultTypeName, indexName, "_update")
+	resp, _, errs := postRequest(u.String(), string(jsonData), &result)
+	if len(errs) > 0 {
+		return errs[0]
+	}
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("[elastic] error with code %d", resp.StatusCode)
+	}
+
+	fmt.Printf("[elastic] update complete, took %d ms ", result.Took)
+	return nil
+
+}
+
 type ElasticError struct {
 	Type     string        `json:"type"`
 	Reason   string        `json:"reason"`
@@ -142,33 +196,42 @@ func createBulkPayloadFromInstructions(s []ElasticBulkInstruction) string {
 		b, _ := json.Marshal(instruction)
 		payload = append(payload, string(b))
 	}
-	return strings.Join(payload[:], "\n")
+	return strings.Join(payload[:], "\n") + "\n"
 }
 
 // Bulk send bulk command to elastic
 // payload must be instruction list
 // split by newline (\n)
 func (c *Client) Bulk(payload string) error {
+
+	u, _ := url.Parse(c.uri)
+	u.Path = path.Join(u.Path, "_bulk")
+
 	var result ElasticResponseBody
-	resp, _, err := gorequest.New().Timeout(5*time.Second).
-		Post(c.uri).
-		Set("Content-Type", "application/x-ndjson").
-		SendString(payload).
-		EndStruct(&result)
+	j := []byte(payload)
 
+	req, err := http.NewRequest("POST", u.String(), bytes.NewBuffer(j))
+	req.Header.Set("Content-Type", "application/x-ndjson")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("[elastic] %s", err)
-		return err[0]
+		return err
 	}
 
-	if resp.StatusCode > 400 {
-		fmt.Printf("[elastic] bulk request reponse %d...", resp.StatusCode)
-	} else {
-		if result.Errors {
-			return errors.New("there is error occur")
-		}
-		fmt.Printf("[elastic] bulk complete, took %d ms ", result.Took)
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	json.Unmarshal(body, &result)
+
+	if resp.StatusCode >= 400 {
+		fmt.Println(string(string(body)))
+		return (fmt.Errorf("[elastic] bulk request reponse %d", resp.StatusCode))
 	}
+	if result.Errors {
+		return errors.New("there is error occur")
+	}
+	fmt.Printf("[elastic] bulk complete, took %d ms ", result.Took)
 
 	return nil
 }

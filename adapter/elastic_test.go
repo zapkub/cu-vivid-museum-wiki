@@ -16,7 +16,9 @@ func TestSearch(t *testing.T) {
 	q := ElasticSearchQuery{}
 	q.Exits.Field = "title"
 
-	_, err := c.Search("1234h", q)
+	_, err := c.Search("1234h", ElasticSearchPayload{
+		Query: q,
+	})
 	if err != nil {
 		t.Fatalf("search error %s", err)
 	}
@@ -47,8 +49,13 @@ func TestBulkFactory(t *testing.T) {
 		doc,
 	}
 	r := createBulkPayloadFromInstructions(operations)
+	escl := Dial("http://localhost:9200")
+	err = escl.Bulk(r)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	expect := instruction1 + "\n" + instruction2
+	expect := instruction1 + "\n" + instruction2 + "\n"
 	if r != expect {
 		fmt.Println(index.Doc)
 		t.Fatalf("Bulk instruction factory output is invalid\n(result)\n%s\n(expect)\n%s", r, expect)
