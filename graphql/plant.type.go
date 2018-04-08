@@ -101,12 +101,24 @@ var plantType = graphql.NewObject(graphql.ObjectConfig{
 var stringRequiredInputType = graphql.InputObjectFieldConfig{
 	Type: graphql.NewNonNull(graphql.String),
 }
-var plantInputType = graphql.NewInputObject(graphql.InputObjectConfig{
-	Name: "PlantInputType",
+var stringInputType = graphql.InputObjectFieldConfig{
+	Type: graphql.String,
+}
+var plantCreateInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+	Name: "PlantCreateInputType",
 	Fields: graphql.InputObjectConfigFieldMap{
 		"name":           &stringRequiredInputType,
 		"scientificName": &stringRequiredInputType,
 		"familyName":     &stringRequiredInputType,
 		"id":             &stringRequiredInputType,
+	},
+})
+
+var plantUpdateInputType = graphql.NewInputObject(graphql.InputObjectConfig{
+	Name: "PlantUpdateInputType",
+	Fields: graphql.InputObjectConfigFieldMap{
+		"name":           &stringInputType,
+		"scientificName": &stringInputType,
+		"familyName":     &stringInputType,
 	},
 })

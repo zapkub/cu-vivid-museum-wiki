@@ -31,6 +31,7 @@ type Config struct {
 	IndexName     string `yaml:"indexName"`
 	IsDevelopment bool
 	CorsWhiteList []string `yaml:"corsWhiteList"`
+	Secret        string   `yaml:"secret"`
 }
 
 var config Config

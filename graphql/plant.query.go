@@ -53,7 +53,7 @@ func createSearchPlantField() graphql.Field {
 
 			// Prepare search query object
 			s := &Plant{
-				Name: "ตะเคียน",
+				Name: p.Args["value"].(string),
 			}
 			q := adapter.ElasticSearchQuery{}
 			q.Match = s

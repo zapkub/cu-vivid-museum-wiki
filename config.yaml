@@ -1,5 +1,0 @@
-port: 3000
-indexName: plants
-elasticURI: "http://127.0.0.1:9200"
-corsWhiteList:
-  - "http://localhost:8080"

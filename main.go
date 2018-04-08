@@ -20,6 +20,15 @@ func main() {
 	fmt.Println("[server] start server...")
 	r := gin.Default()
 
+	jwt := createJWTAuthentication(appConfig)
+	r.Use(func(c *gin.Context) {
+		err := jwt.CheckJWT(c.Writer, c.Request)
+		if err != nil {
+			fmt.Println(err)
+		}
+		c.Next()
+
+	})
 	// Connect to Elastic server
 	elasticClient := adapter.Dial(appConfig.ElasticURI)
 
@@ -45,8 +54,12 @@ func main() {
 		w := c.Writer
 		r := c.Request
 
-		ctx := context.WithValue(r.Context(), "elasticClient", elasticClient)
-		ctx = context.WithValue(ctx, "config", *appConfig)
+		ctx := context.WithValue(r.Context(), graphql.ElasticClientContextKey, elasticClient)
+		ctx = context.WithValue(ctx, graphql.ConfigContextKey, *appConfig)
+		user, exits := c.Get("user")
+		if exits {
+			ctx = context.WithValue(ctx, graphql.UserContextKey, user)
+		}
 		gqlH.ContextHandler(ctx, w, r)
 	})
 

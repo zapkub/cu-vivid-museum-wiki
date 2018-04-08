@@ -53,11 +53,26 @@ type resolverContext struct {
 	config config.Config
 }
 
+// ContextKey for context in GraphQL
+type ContextKey string
+
+const (
+
+	// ElasticClientContextKey key for elastic client in graphql context
+	ElasticClientContextKey = ContextKey("elastic")
+
+	// ConfigContextKey key for config in graphql context
+	ConfigContextKey = ContextKey("config")
+
+	// UserContextKey key for user data in graphql context
+	UserContextKey = ContextKey("user")
+)
+
 func getContextFromParams(p graphql.ResolveParams) resolverContext {
 	var cl adapter.Client
 	var cf config.Config
-	cl = p.Context.Value("elasticClient").(adapter.Client)
-	cf = p.Context.Value("config").(config.Config)
+	cl = p.Context.Value(ElasticClientContextKey).(adapter.Client)
+	cf = p.Context.Value(ConfigContextKey).(config.Config)
 	return resolverContext{
 		client: cl,
 		config: cf,
@@ -76,8 +91,11 @@ func createGraphQLSchema() graphql.Schema {
 	}
 
 	InsertPlantField := createInsertPlantField()
+	wrapFieldWithAuthorization(InsertPlantField, adminAccess)
+	UpdatePlantField := createUpdatePlantField()
 	rootMutationFields := graphql.Fields{
-		"insertPlant": &InsertPlantField,
+		"insertPlant":     &InsertPlantField,
+		"updatePlantById": &UpdatePlantField,
 	}
 	rootMutation := graphql.ObjectConfig{
 		Name:   "Mutation",
@@ -100,8 +118,8 @@ func createGraphQLSchema() graphql.Schema {
 
 var schema = createGraphQLSchema()
 
+// CreateGraphQLHandler create new grpahql http handler
 func CreateGraphQLHandler() *handler.Handler {
-
 	h := handler.New(&handler.Config{
 		Schema: &schema,
 		Pretty: true,

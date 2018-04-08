@@ -94,6 +94,7 @@ type ElasticResponseBody struct {
 
 // Search send search instruction to elastic server
 // and return raw data
+// Payload reference to elastic 6.1.3
 func (c *Client) Search(IndexName string, payload ElasticSearchPayload) (ElasticResponseBody, error) {
 	var result ElasticResponseBody
 	u, _ := url.Parse(c.uri)
@@ -124,6 +125,8 @@ func (c *Client) Search(IndexName string, payload ElasticSearchPayload) (Elastic
 
 }
 
+// Insert create new Document in Index
+// if exists will replace the document
 func (c *Client) Insert(indexName string, id string, v interface{}) error {
 
 	jsonData, err := json.Marshal(v)
@@ -134,9 +137,8 @@ func (c *Client) Insert(indexName string, id string, v interface{}) error {
 	var result ElasticResponseBody
 	u, _ := url.Parse(c.uri)
 
-	u.Path = path.Join(u.Path, indexName, defaultTypeName, indexName)
-	resp, b, errs := postRequest(u.String(), string(jsonData), &result)
-	fmt.Println(string(b))
+	u.Path = path.Join(u.Path, indexName, defaultTypeName, id)
+	resp, _, errs := postRequest(u.String(), string(jsonData), &result)
 	if len(errs) > 0 {
 		return errs[0]
 	}
@@ -150,6 +152,8 @@ func (c *Client) Insert(indexName string, id string, v interface{}) error {
 }
 
 // Update call document update api
+// api also create new document
+// if the document doesnt exists in elastic Index
 func (c *Client) Update(indexName string, id string, v interface{}) error {
 
 	jsonData, err := json.Marshal(v)
@@ -160,8 +164,10 @@ func (c *Client) Update(indexName string, id string, v interface{}) error {
 	var result ElasticResponseBody
 	u, _ := url.Parse(c.uri)
 
-	u.Path = path.Join(u.Path, indexName, defaultTypeName, indexName, "_update")
-	resp, _, errs := postRequest(u.String(), string(jsonData), &result)
+	u.Path = path.Join(u.Path, indexName, defaultTypeName, id, "_update")
+	fmt.Println(u.String())
+	resp, b, errs := postRequest(u.String(), string(jsonData), &result)
+	fmt.Println(string(b))
 	if len(errs) > 0 {
 		return errs[0]
 	}
