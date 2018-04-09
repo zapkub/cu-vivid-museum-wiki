@@ -57,7 +57,14 @@ func createSearchPlantField() graphql.Field {
 			}
 			q := adapter.ElasticSearchQuery{}
 			q.Match = s
-			result, err := ctx.client.Search(ctx.config.IndexName, adapter.ElasticSearchPayload{Query: q})
+
+			boolQuery := adapter.ElasticSearchQuery{
+				Bool: &adapter.ElasticSearchBoolQuery{
+					Should: []adapter.ElasticSearchQuery{q},
+				},
+			}
+
+			result, err := ctx.client.Search(ctx.config.IndexName, adapter.ElasticSearchPayload{Query: boolQuery})
 			if err != nil {
 				return nil, err
 			}

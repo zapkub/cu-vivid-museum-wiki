@@ -1,17 +1,40 @@
 package main
 
 import (
-	"context"
 	"cu-vivid-museum-wiki/adapter"
 	"cu-vivid-museum-wiki/config"
 	"cu-vivid-museum-wiki/graphql"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"time"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
+func reverseProxy(target string) gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		url, _ := url.Parse(target)
+		handler := httputil.NewSingleHostReverseProxy(url)
+
+		handler.FlushInterval = 100 * time.Millisecond
+		handler.Transport = &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
+			Dial: (&net.Dialer{
+				Timeout:   24 * time.Hour,
+				KeepAlive: 24 * time.Hour,
+			}).Dial,
+			TLSHandshakeTimeout: 60 * time.Second,
+		}
+		handler.ServeHTTP(c.Writer, c.Request)
+	}
+}
 func main() {
 	// Get config
 	appConfig := config.LoadConfig()
@@ -20,15 +43,10 @@ func main() {
 	fmt.Println("[server] start server...")
 	r := gin.Default()
 
-	jwt := createJWTAuthentication(appConfig)
-	r.Use(func(c *gin.Context) {
-		err := jwt.CheckJWT(c.Writer, c.Request)
-		if err != nil {
-			fmt.Println(err)
-		}
-		c.Next()
+	// Add static server file path
+	staticHandler := static.Serve("/static", static.LocalFile("./static", false))
+	r.Use(staticHandler)
 
-	})
 	// Connect to Elastic server
 	elasticClient := adapter.Dial(appConfig.ElasticURI)
 
@@ -47,24 +65,41 @@ func main() {
 	fmt.Println("[server] done!!")
 
 	// Initial GraphQL schema handler
-	// with extra context
-	// elasticClient
-	gqlH := graphql.CreateGraphQLHandler()
-	r.Any("/graphql", func(c *gin.Context) {
-		w := c.Writer
-		r := c.Request
+	graphql.CreateGraphQLHandler(elasticClient, appConfig)
+	// r.Any("/graphql", gqlH)
 
-		ctx := context.WithValue(r.Context(), graphql.ElasticClientContextKey, elasticClient)
-		ctx = context.WithValue(ctx, graphql.ConfigContextKey, *appConfig)
-		user, exits := c.Get("user")
-		if exits {
-			ctx = context.WithValue(ctx, graphql.UserContextKey, user)
-		}
-		gqlH.ContextHandler(ctx, w, r)
-	})
+	// Create reverse proxy fallback
+	// to serve client application
+	// or you can setup from NGINX
+	target := fmt.Sprintf("http://localhost:%s", appConfig.ClientPort)
+	r.NoRoute(reverseProxy(target))
 
-	err = r.Run(fmt.Sprintf(":%s", appConfig.Port))
-	if err != nil {
-		log.Fatal(err)
-	}
+	r.Run(fmt.Sprintf(":%s", appConfig.Port))
+
+	// server := &http.Server{
+	// 	Addr:    fmt.Sprintf(":%s", appConfig.Port),
+	// 	Handler: r,
+	// }
+
+	// quit := make(chan os.Signal)
+	// signal.Notify(quit, os.Interrupt)
+
+	// go func() {
+	// 	<-quit
+	// 	log.Println("receive interrupt signal")
+	// 	if err := server.Close(); err != nil {
+	// 		log.Fatal("Server Close:", err)
+	// 	}
+	// }()
+
+	// if err := server.ListenAndServe(); err != nil {
+	// 	if err == http.ErrServerClosed {
+	// 		log.Println("Server closed under request")
+	// 	} else {
+	// 		log.Fatalf("Server closed unexpect \n %s", err)
+	// 	}
+	// }
+
+	log.Println("Server exiting")
+
 }

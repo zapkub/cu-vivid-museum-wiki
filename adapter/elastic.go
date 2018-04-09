@@ -45,11 +45,16 @@ type Client struct {
 type ElasticMapping struct {
 }
 
+type ElasticSearchBoolQuery struct {
+	Should []ElasticSearchQuery `json:"should,omitempty"`
+	Must   []ElasticSearchQuery `json:"must,omitempty"`
+}
 type ElasticSearchQuery struct {
 	Match interface{} `json:"match,omitempty"`
 	Exits *struct {
 		Field string `json:"field,omitempty"`
 	} `json:"exits,omitempty"`
+	Bool *ElasticSearchBoolQuery `json:"bool,omitempty"`
 }
 
 type ElasticSearchPayload struct {

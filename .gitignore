@@ -79,6 +79,9 @@ node_modules
 # Ignore .env configuration files
 .env
 config.yaml
+yarn.lock
+tmp
+main
 
 # Ignore .DS_Store files on OS X
 .DS_Store

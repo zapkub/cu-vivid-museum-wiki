@@ -44,3 +44,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/auth0/go-jwt-middleware"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gin-contrib/static"

@@ -20,16 +20,20 @@ func wrapFieldWithAuthorization(f graphql.Field, l authorizationKey) {
 	oldResolve := f.Resolve
 
 	f.Resolve = graphql.FieldResolveFn(func(p graphql.ResolveParams) (interface{}, error) {
+		ctx := getContextFromParams(p)
+
 		switch l {
 		case publicAccess:
 			return oldResolve(p)
 		case adminAccess:
 			{
-
+				if ctx.user != nil {
+					return oldResolve(p)
+				}
+				return nil, fmt.Errorf("Unauthorization")
 			}
 		default:
 			return oldResolve(p)
 		}
-		return nil, fmt.Errorf("Authorization unknow error")
 	})
 }

@@ -10,7 +10,8 @@ import (
 )
 
 func getConfig(configPath string, outConfig interface{}) {
-	log.Print("create config file")
+
+	log.Print("[config] create config file")
 	// read service whitelist yaml
 	b, err := ioutil.ReadFile(configPath)
 	if err != nil {
@@ -27,6 +28,7 @@ func getConfig(configPath string, outConfig interface{}) {
 // Config main config object
 type Config struct {
 	Port          string `yaml:"port"`
+	ClientPort    string `yaml:"clientPort"`
 	ElasticURI    string `yaml:"elasticURI"`
 	IndexName     string `yaml:"indexName"`
 	IsDevelopment bool

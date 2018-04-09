@@ -1,4 +1,4 @@
-package main
+package graphql
 
 import (
 	"cu-vivid-museum-wiki/config"
@@ -10,9 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UserSession graphql User session shape
+type UserSession struct {
+	id string
+}
+
 func createJWTMiddleware(c *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		c.Next()
 	}
 }
