@@ -1,20 +1,20 @@
 
-import React from 'react';
+import React from 'react'
 
 const HeroImage = ({ category, heroImageURL, children, small }) => {
-  let style = { };
+  let style = { }
   if (heroImageURL) {
-    style = Object.assign(style, { backgroundImage: `url(${heroImageURL})`, backgroundSize: 'cover', backgroundPosition: 'center center' });
+    style = Object.assign(style, { backgroundImage: `url(${heroImageURL})`, backgroundSize: 'cover', backgroundPosition: 'center center' })
   }
   if (small) {
-    style.height = 250;
+    style.height = 250
   }
   return (
-    <div className="background-wrap" style={style}>
-      <div className="children-wrap">
+    <div className='background-wrap' style={style}>
+      <div className='children-wrap'>
         {children}
       </div>
-      <div className="category-title">
+      <div className='category-title'>
         {category}
       </div>
       <style jsx>{`
@@ -67,6 +67,6 @@ const HeroImage = ({ category, heroImageURL, children, small }) => {
                 }
     `}</style>
     </div>
-  );
-};
-export default HeroImage;
+  )
+}
+export default HeroImage

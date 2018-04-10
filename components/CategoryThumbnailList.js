@@ -1,23 +1,23 @@
 // @flow
-import Link from 'next/link';
-import React from 'react';
-import gql from 'graphql-tag';
-import { Statistic } from 'semantic-ui-react';
+import Link from 'next/link'
+import React from 'react'
+import gql from 'graphql-tag'
+import { Statistic } from 'semantic-ui-react'
 
-import Categories from '../category';
+import Categories from '../category'
 
 const CategoryThumbnailList = ({ counts }) => (
-  <div className="container">
+  <div className='container'>
     <h1 style={{ textAlign: 'center' }}> {'หมวดหมู่'} </h1>
-    <div className="category-container" >
+    <div className='category-container' >
       {
           Categories ? Object.keys(Categories).map(key =>
           (<Link
             key={key}
             href={{ pathname: Categories[key].value }}
           >
-            <a style={{ color: 'black' }} className="item-wrap" >
-              <div className="category-item" >
+            <a style={{ color: 'black' }} className='item-wrap' >
+              <div className='category-item' >
                 <div
                   style={{
                     border: '1px #eeeeee solid',
@@ -26,7 +26,7 @@ const CategoryThumbnailList = ({ counts }) => (
                     width: 200,
                     height: 150 }}
                 />
-                <div className="category-name">
+                <div className='category-name'>
                   <p>
                     {Categories[key].name} <br />
                     <span>{`${counts[`${Categories[key].value}Count`]} items`}</span>
@@ -93,7 +93,7 @@ const CategoryThumbnailList = ({ counts }) => (
         }
     `}</style>
   </div>
-  );
+  )
 
 CategoryThumbnailList.fragments = {
   counts: gql`
@@ -103,6 +103,6 @@ CategoryThumbnailList.fragments = {
             gardenCount
             museumCount
         }
-    `,
-};
-export default CategoryThumbnailList;
+    `
+}
+export default CategoryThumbnailList

@@ -1,9 +1,9 @@
 // @flow
 
-import React from 'react';
-import withApp from '../lib/withApp';
-import CategoryPage from '../containers/CategoryPage';
+import React from 'react'
+import withApp from '../lib/withApp'
+import CategoryPage from '../containers/CategoryPage'
 
-const HerbariumPage = props => (<CategoryPage category="HERBARIUM" {...props} />);
+const HerbariumPage = props => (<CategoryPage category='HERBARIUM' {...props} />)
 
-export default withApp()(HerbariumPage);
+export default withApp()(HerbariumPage)

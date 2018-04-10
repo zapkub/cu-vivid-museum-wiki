@@ -1,11 +1,11 @@
 // @flow
-import React from 'react';
-import ReactPaginate from 'react-paginate';
-import { Button } from 'semantic-ui-react';
+import React from 'react'
+import ReactPaginate from 'react-paginate'
+import { Button } from 'semantic-ui-react'
 
 export default ({ totalPages, currentPage, onPageChange }) => (
   <div
-    id="react-paginate"
+    id='react-paginate'
   >
     <ReactPaginate
       pageCount={totalPages}
@@ -14,10 +14,10 @@ export default ({ totalPages, currentPage, onPageChange }) => (
       initialPage={currentPage}
       onPageChange={onPageChange}
     />
-    <div className="mobile-paginate">
-      { currentPage > 1 ? <Button onClick={() => onPageChange({ selected: currentPage - 1 })} circular icon="chevron left" /> : null }
-      <div className="page-number">{`Page ${isNaN(currentPage) ? 1 : currentPage}`}</div>
-      { totalPages > 1 ? <Button onClick={() => onPageChange({ selected: currentPage + 1 })} circular icon="chevron right" /> : null }
+    <div className='mobile-paginate'>
+      { currentPage > 1 ? <Button onClick={() => onPageChange({ selected: currentPage - 1 })} circular icon='chevron left' /> : null }
+      <div className='page-number'>{`Page ${isNaN(currentPage) ? 1 : currentPage}`}</div>
+      { totalPages > 1 ? <Button onClick={() => onPageChange({ selected: currentPage + 1 })} circular icon='chevron right' /> : null }
     </div>
     <style jsx global>
       {
@@ -82,4 +82,4 @@ export default ({ totalPages, currentPage, onPageChange }) => (
    }
     </style>
   </div>
-);
+)

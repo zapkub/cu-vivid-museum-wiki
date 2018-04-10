@@ -1,97 +1,96 @@
-const _ = require('lodash');
-const mongoose = require('mongoose');
-const { TypeComposer } = require('graphql-compose');
-const { GraphQLList } = require('graphql');
+const _ = require('lodash')
+const mongoose = require('mongoose')
+const { TypeComposer } = require('graphql-compose')
+const { GraphQLList } = require('graphql')
 
-const FileType = TypeComposer.create('File');
+const FileType = TypeComposer.create('File')
 FileType.addFields({
-  url: { type: 'String' },
-});
+  url: { type: 'String' }
+})
 exports.AddTypeToImageField = (TC) => {
-  TC.removeField('images');
+  TC.removeField('images')
   TC.addFields({
     images: {
       type: new GraphQLList(FileType.getType()),
-      resolve: source => source.images,
+      resolve: source => source.images
     },
     thumbnailImage: {
       projection: { images: 1 },
       type: 'String',
       resolve: (source) => {
         if (source.images.length === 0) {
-          return '/static/images/placeholder150x150.png';
+          return '/static/images/placeholder150x150.png'
         }
-        return source.images[0].url;
-      },
-    },
-  });
-};
-exports.getReference = function getReference() {
+        return source.images[0].url
+      }
+    }
+  })
+}
+exports.getReference = function getReference () {
   return {
-  };
-};
-exports.scientificSplit = function scientificSplit(input) {
-  const name = input.match(/^[a-zA-Z]+(\s|\ )[a-zA-Z]+/, 'g');
-  if (!name) return input;
-  if (name.length === 0) return input;
-  return name[0];
-};
+  }
+}
+exports.scientificSplit = function scientificSplit (input) {
+  const name = input.match(/^[a-zA-Z]+(\s|\ )[a-zA-Z]+/, 'g')
+  if (!name) return input
+  if (name.length === 0) return input
+  return name[0]
+}
 
-exports.extractLocation = function extractLocation(document, sheetIndex) {
+exports.extractLocation = function extractLocation (document, sheetIndex) {
 // find ref columns index
-  const sheet = document[sheetIndex];
-  const columns = sheet.data.filter((r, i) => i === 0)[0];
-  const indexOfColumns = columns.indexOf('สถานที่');
+  const sheet = document[sheetIndex]
+  const columns = sheet.data.filter((r, i) => i === 0)[0]
+  const indexOfColumns = columns.indexOf('สถานที่')
 
   if (indexOfColumns) {
-    const result = sheet.data.filter((r, i) => i > 0).map((cols, i) => cols[indexOfColumns]);
-    return _.uniq(result.filter(item => item));
+    const result = sheet.data.filter((r, i) => i > 0).map((cols, i) => cols[indexOfColumns])
+    return _.uniq(result.filter(item => item))
   }
-  return [];
-};
+  return []
+}
 
 exports.addRelationWith = (TC, fieldName, targetName, relateTC) => {
   TC.addRelation(fieldName, () => ({
     resolver: relateTC.getResolver('findById'),
     args: {
-      _id: source => source[targetName],
+      _id: source => source[targetName]
     },
-    projection: { [targetName]: 1 },
-  }));
-  return TC;
-};
+    projection: { [targetName]: 1 }
+  }))
+  return TC
+}
 exports.addScientificNameSearch = (TC) => {
   TC.getResolver('findOne')
     .addArgs({
-      key: { type: 'String' },
-    });
+      key: { type: 'String' }
+    })
   TC.setResolver('findOne', TC.getResolver('findOne')
     .wrapResolve(next => async (rp) => {
-      const result = await rp.context.Plant.findOne({ $or: [{ key: rp.args.key }] });
+      const result = await rp.context.Plant.findOne({ $or: [{ key: rp.args.key }] })
       if (result) {
         rp.args.filter = Object.assign({ plantId: result._id.toString() }, rp.args.filter) // eslint-disable-line
       }
-      return next(rp);
-    }));
-};
+      return next(rp)
+    }))
+}
 exports.createStringMatchFilter = TC => ({
   name: 'search',
   type: '[String]',
   query: (query, arg) => {
-    const fields = TC.getFieldNames();
+    const fields = TC.getFieldNames()
     query.$or = []; // eslint-disable-line
-    const test = new RegExp(arg.join('|'), 'i');
+    const test = new RegExp(arg.join('|'), 'i')
     fields.forEach((field) => {
-      const type = TC.getFieldType(field).toString();
+      const type = TC.getFieldType(field).toString()
       if (type === 'String') {
-        query.$or.push({ [field]: test });
+        query.$or.push({ [field]: test })
       }
       arg.forEach((text) => {
         if (type === 'MongoID' && mongoose.Types.ObjectId.isValid(text)) {
-          query.$or.push({ [field]: text });
+          query.$or.push({ [field]: text })
         }
-      });
-    });
-  },
+      })
+    })
+  }
 })
-;

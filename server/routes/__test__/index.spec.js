@@ -1,5 +1,5 @@
-const routes = require('..');
+const routes = require('..')
 
 describe('Routes test', () => {
-  it('should contain route correctly');
-});
+  it('should contain route correctly')
+})

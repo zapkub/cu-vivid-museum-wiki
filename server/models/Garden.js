@@ -1,19 +1,18 @@
 // eslint "no-param-reassign": "off"
 
-const keystone = require('keystone');
+const keystone = require('keystone')
 
-const Types = keystone.Field.Types;
+const Types = keystone.Field.Types
 const Garden = new keystone.List('Garden', {
   defaultSort: '-zone',
-  map: { name: 'zone' },
-});
+  map: { name: 'zone' }
+})
 
 Garden.add({
   plantId: { type: Types.Relationship, ref: 'Plant', many: false, index: true },
   zone: { type: String, label: 'Zone' },
-  images: { type: Types.CloudinaryImages },
-});
+  images: { type: Types.CloudinaryImages }
+})
 
-Garden.defaultColumns = 'zone';
-Garden.register();
-
+Garden.defaultColumns = 'zone'
+Garden.register()

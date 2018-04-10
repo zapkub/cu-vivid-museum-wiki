@@ -1,11 +1,11 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import moment from 'moment';
-import ImageGallery from 'react-image-gallery';
-import Link from 'next/link';
-import Router from 'next/router';
-import { Label, List, Header, Divider } from 'semantic-ui-react';
-import SearchMore from './SearchMore';
+import React from 'react'
+import gql from 'graphql-tag'
+import moment from 'moment'
+import ImageGallery from 'react-image-gallery'
+import Link from 'next/link'
+import Router from 'next/router'
+import { Label, List, Header, Divider } from 'semantic-ui-react'
+import SearchMore from './SearchMore'
 
 const PlantDetailList = ({ name, scientificName, familyName }) => (
   <List size={'big'}>
@@ -21,7 +21,7 @@ const PlantDetailList = ({ name, scientificName, familyName }) => (
       <Label horizontal>{'ชื่อวงศ์'}</Label>
       { familyName }
     </List.Item>
-  </List>);
+  </List>)
 
 const MuseumDetail = ({ museumLocation, plant }) =>
 (<div>
@@ -30,7 +30,7 @@ const MuseumDetail = ({ museumLocation, plant }) =>
     <Label horizontal>{'พื้นที่จัดแสดง'}</Label>
     { museumLocation }
   </List>
-</div>);
+</div>)
 MuseumDetail.type = `
   _id
   plantId
@@ -44,7 +44,7 @@ MuseumDetail.type = `
     familyName
     name
   }
-`;
+`
 
 const GardenDetail = ({ zone, plant }) =>
 (<div>
@@ -54,7 +54,7 @@ const GardenDetail = ({ zone, plant }) =>
     <Label horizontal>{'พื้นที่จัดแสดง'}</Label>
     { zone }
   </List>
-</div>);
+</div>)
 GardenDetail.type = `
   _id
   plantId
@@ -68,7 +68,7 @@ GardenDetail.type = `
     name
   }
   zone
-`;
+`
 
 const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, discoverLocation, cuid }) =>
 (<div>
@@ -95,7 +95,7 @@ const HerbariumDetail = ({ plant, collector, displayLocation, collectedDate, dis
       {discoverLocation}
     </List.Item>
   </List>
-</div>);
+</div>)
 HerbariumDetail.type = `
   _id
   plantId
@@ -113,41 +113,41 @@ HerbariumDetail.type = `
   displayLocation
   discoverLocation
   cuid
-`;
+`
 
 const PlantDetail = ({ plant, category }) => {
-  if (!plant) return (<div>{'No data'}</div>);
-  let DetailComponent;
+  if (!plant) return (<div>{'No data'}</div>)
+  let DetailComponent
   switch (category) {
     case 'herbarium':
-      DetailComponent = HerbariumDetail;
-      break;
+      DetailComponent = HerbariumDetail
+      break
     case 'garden':
-      DetailComponent = GardenDetail;
-      break;
+      DetailComponent = GardenDetail
+      break
     case 'museum':
-      DetailComponent = MuseumDetail;
-      break;
+      DetailComponent = MuseumDetail
+      break
     default:
-      DetailComponent = () => (<div />);
-      break;
+      DetailComponent = () => (<div />)
+      break
   }
 
   return (
-    <div className="container">
-      <div className="gallery-wrap">
+    <div className='container'>
+      <div className='gallery-wrap'>
         {
             plant.images.length > 0 ? <ImageGallery
               showFullscreenButton={false}
               showNav={false}
               showPlayButton={false}
               items={plant.images.map(image => ({ original: image.url, thumbnail: image.url }))}
-            /> : <div className="no-image">{'ไม่มีรูปภาพ'}</div>
+            /> : <div className='no-image'>{'ไม่มีรูปภาพ'}</div>
         }
 
       </div>
-      <div className="detail-wrap">
-        <Header style={{ color: 'rgb(77, 135, 109)' }} as="h1">{plant.plant.name || 'ไม่ระบุ'}</Header>
+      <div className='detail-wrap'>
+        <Header style={{ color: 'rgb(77, 135, 109)' }} as='h1'>{plant.plant.name || 'ไม่ระบุ'}</Header>
         <DetailComponent {...plant} />
 
         <Divider />
@@ -204,8 +204,8 @@ const PlantDetail = ({ plant, category }) => {
         transform: translate(-50%, -50%);
       }
     `}</style>
-    </div>);
-};
+    </div>)
+}
 PlantDetail.fragments = {
   museum: gql`
     fragment PlantDetail on Museum {
@@ -224,6 +224,6 @@ PlantDetail.fragments = {
     _id
     ${HerbariumDetail.type}
   }
-`,
-};
-export default PlantDetail;
+`
+}
+export default PlantDetail

@@ -1,8 +1,10 @@
 node_modules
+.git
 npm-debug.log
 design
 .vscode
-/node_modules/
 db
 .db
-docs
+static/images/stock
+__backup__
+__test__

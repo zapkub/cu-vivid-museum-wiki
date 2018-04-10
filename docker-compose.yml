@@ -1,14 +1,14 @@
 
 mongo:
-  image: mongo:3.2.12 
+  image: mongo:3.4
   volumes_from:
     - mongo-data
   ports:
-    - "27017:27017"
-  command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
+    - "3184:27017"
+  command: "--smallfiles --setParameter failIndexKeyTooLong=false"
 
 mongo-data:
-  image: mongo
+  image: mongo:3.4
   volumes:
     - ./.db/:/data/db
   command: "--break-mongo" # break mongod command and use it as data-volume-container

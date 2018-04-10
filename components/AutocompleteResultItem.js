@@ -1,15 +1,15 @@
-import React from 'react';
-import HighlightText from 'react-highlight-words';
+import React from 'react'
+import HighlightText from 'react-highlight-words'
 
 export default ({ title, description, searchText, name }) => (
-  <div className="result-wrap">
-    <div className="name">
+  <div className='result-wrap'>
+    <div className='name'>
       <HighlightText searchWords={searchText} textToHighlight={name || ''} />
     </div>
-    <div className="family-name">
+    <div className='family-name'>
       <HighlightText searchWords={searchText} textToHighlight={description || ''} />
     </div>
-    <div className="scientific-name">
+    <div className='scientific-name'>
       <HighlightText searchWords={searchText} textToHighlight={title} />
     </div>
     <style jsx>{`
@@ -28,5 +28,4 @@ export default ({ title, description, searchText, name }) => (
         }
     `}</style>
   </div>
-);
-
+)

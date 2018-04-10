@@ -1,15 +1,17 @@
 
 web:
-  image: rungsikorn/vivid:1.1.0-beta.2
+  image: rungsikorn/vivid:latest
   ports:
     - "3183:3000"
   links:
     - mongo
   environment: 
-    MONGO_URI: 'mongo'
+    MONGO_URI: 'mongo/vivid3'
+    RAVEN_URL: '${RAVEN_URL}'
     COOKIE_SECRET: '${COOKIE_SECRET}'
     ROOT_EMAIL: '${ROOT_EMAIL}'
     ROOT_PASS: '${ROOT_PASS}'
     CLOUDINARY_URL: '${CLOUDINARY_URL}'
     GRAPHQL: '${GRAPHQL_ENDPOINT}'
+    STATIC_STORAGE: '${STATIC_STORAGE}'
     NODE_ENV: 'production'

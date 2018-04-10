@@ -1,23 +1,23 @@
-import React from 'react';
-import { compose, withProps } from 'recompose';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import { Header } from 'semantic-ui-react';
-import Router from 'next/router';
+import React from 'react'
+import { compose, withProps } from 'recompose'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import { Header } from 'semantic-ui-react'
+import Router from 'next/router'
 
-import HeroImage from '../components/HeroImage';
-import withLoading from '../lib/withLoading';
-import PlantGridList from '../components/PlantGridList';
-import Paginate from '../components/Pagination';
-import SearchInputBar from '../containers/SearchInputBar';
+import HeroImage from '../components/HeroImage'
+import withLoading from '../lib/withLoading'
+import PlantGridList from '../components/PlantGridList'
+import Paginate from '../components/Pagination'
+import SearchInputBar from '../containers/SearchInputBar'
 
-const SearchResultPage = ({ data, texts, categories, goTo, url: { query: { page } } }) => !data.loading ?
-      (<div className="container">
+const SearchResultPage = ({ data, texts, categories, goTo, url: { query: { page } } }) => !data.loading
+      ? (<div className='container'>
         <HeroImage heroImageURL={'/static/images/1_home-18.jpg'} >
           <SearchInputBar categories={data.categories} />
         </HeroImage>
-        {!data.findByCategory ? <div>{'เกิดความผิดพลาด'}</div> :
-        <div className="wrap">
+        {!data.findByCategory ? <div>{'เกิดความผิดพลาด'}</div>
+        : <div className='wrap'>
           <Header><span style={{ fontSize: 38, marginRight: 10 }}>{data.findByCategory.count}</span>{`ผลลัพธ์การค้นหาในหมวด ${categories.join(', ')}`} </Header>
           { data.findByCategory.result.length === 0 ? 'ไม่พบผลลัพธ์' : ''}
           <PlantGridList highlightTexts={texts} plantList={data.findByCategory.result} />
@@ -36,26 +36,25 @@ const SearchResultPage = ({ data, texts, categories, goTo, url: { query: { page 
             margin-top: 30px;
           }
         `}</style>
-      </div>) : null;
-
+      </div>) : null
 
 export default compose(
       withProps(({ url }) => {
-        let texts = [];
+        let texts = []
         if (url.query.searchTexts) {
-          texts = url.query.searchTexts.split(' ');
+          texts = url.query.searchTexts.split(' ')
         }
-        let categories = [];
+        let categories = []
         if (url.query.categories) {
-          categories = url.query.categories.split(',').map(cate => cate.toUpperCase());
+          categories = url.query.categories.split(',').map(cate => cate.toUpperCase())
         } else {
-          categories = ['GARDEN', 'HERBARIUM', 'MUSEUM'];
+          categories = ['GARDEN', 'HERBARIUM', 'MUSEUM']
         }
 
         return {
           texts,
-          categories,
-        };
+          categories
+        }
       }),
     graphql(gql`
         ${PlantGridList.fragments.plantList}
@@ -73,9 +72,9 @@ export default compose(
           variables: ({
             texts,
             categories,
-            skip: parseInt(page, 10) >= 0 ? parseInt(page - 1, 10) * 20 : 0,
-          }),
-        }),
+            skip: parseInt(page, 10) >= 0 ? parseInt(page - 1, 10) * 20 : 0
+          })
+        })
       }),
     withLoading(({ data }) => data.loading),
     withProps(({ data, url: { query: { searchTexts, categories } } }) => {
@@ -89,13 +88,12 @@ export default compose(
               query: {
                 searchTexts,
                 categories,
-                page: `${page}`,
-              },
-            };
-            Router.push(`/results?categories=${categories}&searchTexts=${searchTexts}&page=${page + 1}`);
+                page: `${page}`
+              }
+            }
+            Router.push(`/results?categories=${categories}&searchTexts=${searchTexts}&page=${page + 1}`)
           }
-        },
-      };
-    }),
-)(SearchResultPage);
-
+        }
+      }
+    })
+)(SearchResultPage)
