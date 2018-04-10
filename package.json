@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./entry.js",
     "dev": "sh ./.bin/dev.sh",
-    "watch": "nodemon --debug -w ./entry -w ./server ./entry.js",
+    "watch": "nodemon --inspect -w ./entry -w ./server ./entry.js",
     "build": "next build",
     "resize-image": "node ./lib/batch-resizer.js",
     "json": "node ./seed/convertToJson.js",
